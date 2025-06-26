@@ -119,27 +119,24 @@
 
                 <!-- Add to Cart -->
                 @if($product->stock_quantity > 0)
-                    <form action="{{ route('cart.add') }}" method="POST" class="space-y-4">
-                        @csrf
-                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-
+                    <div class="space-y-4">
                         <div class="flex items-center space-x-4">
                             <label for="quantity" class="text-sm font-medium text-gray-900 dark:text-white">Quantity:</label>
-                            <select name="quantity" id="quantity" class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            <select id="quantity" class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                                 @for($i = 1; $i <= min(10, $product->stock_quantity); $i++)
                                     <option value="{{ $i }}">{{ $i }}</option>
                                 @endfor
                             </select>
                         </div>
 
-                        <button type="submit"
+                        <button onclick="addToCart({{ $product->id }})"
                                 class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 2.5M7 13l2.5 2.5m6-6.5h.01M17 13v.01"></path>
                             </svg>
                             <span>Add to Cart</span>
                         </button>
-                    </form>
+                    </div>
                 @else
                     <button disabled
                             class="w-full bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 font-medium py-3 px-6 rounded-lg cursor-not-allowed">
@@ -243,4 +240,36 @@
         @endif
     </div>
 </div>
+
+@push('scripts')
+<script>
+    function addToCart(productId) {
+        const quantity = document.getElementById('quantity').value;
+
+        fetch('{{ route("cart.add") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({
+                product_id: productId,
+                quantity: parseInt(quantity)
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast(data.message, 'success');
+                updateCartCount();
+            } else {
+                showToast(data.message, 'error');
+            }
+        })
+        .catch(error => {
+            showToast('Error adding product to cart', 'error');
+        });
+    }
+</script>
+@endpush
 </x-app-layout>

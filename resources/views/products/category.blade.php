@@ -200,15 +200,10 @@
 
                             <!-- Add to Cart Button -->
                             @if($product->stock_quantity > 0)
-                                <form action="{{ route('cart.add') }}" method="POST" class="w-full">
-                                    @csrf
-                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                    <input type="hidden" name="quantity" value="1">
-                                    <button type="submit"
-                                            class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
-                                        Add to Cart
-                                    </button>
-                                </form>
+                                <button onclick="addToCart({{ $product->id }})"
+                                        class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+                                    Add to Cart
+                                </button>
                             @else
                                 <button disabled
                                         class="w-full bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 font-medium py-2 px-4 rounded-lg cursor-not-allowed">
@@ -250,4 +245,33 @@
         @endif
     </div>
 </div>
+@push('scripts')
+<script>
+    function addToCart(productId) {
+        fetch('{{ route("cart.add") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({
+                product_id: productId,
+                quantity: 1
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast(data.message, 'success');
+                updateCartCount();
+            } else {
+                showToast(data.message, 'error');
+            }
+        })
+        .catch(error => {
+            showToast('Error adding product to cart', 'error');
+        });
+    }
+</script>
+@endpush
 </x-app-layout>
