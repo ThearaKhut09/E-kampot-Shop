@@ -168,8 +168,72 @@
     </div>
 </div>
 
+<!-- Clear Cart Confirmation Modal -->
+<div id="clear-cart-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full mx-4">
+        <div class="p-6">
+            <div class="flex items-center justify-center w-12 h-12 mx-auto mb-4 bg-red-100 dark:bg-red-900 rounded-full">
+                <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 text-center mb-2">
+                Clear Cart
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400 text-center mb-6">
+                Are you sure you want to clear your entire cart? This action cannot be undone.
+            </p>
+            <div class="flex space-x-3">
+                <button type="button"
+                        onclick="closeClearCartModal()"
+                        class="flex-1 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 font-medium py-2 px-4 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                    Cancel
+                </button>
+                <button type="button"
+                        onclick="confirmClearCart()"
+                        class="flex-1 bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                    Clear Cart
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Remove Item Confirmation Modal -->
+<div id="remove-item-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full mx-4">
+        <div class="p-6">
+            <div class="flex items-center justify-center w-12 h-12 mx-auto mb-4 bg-orange-100 dark:bg-orange-900 rounded-full">
+                <svg class="w-6 h-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 text-center mb-2">
+                Remove Item
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400 text-center mb-6">
+                Are you sure you want to remove this item from your cart?
+            </p>
+            <div class="flex space-x-3">
+                <button type="button"
+                        onclick="closeRemoveItemModal()"
+                        class="flex-1 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 font-medium py-2 px-4 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                    Cancel
+                </button>
+                <button type="button"
+                        onclick="confirmRemoveItem()"
+                        class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                    Remove
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @push('scripts')
 <script>
+let currentCartIdToRemove = null;
+
 function showLoading() {
     document.getElementById('loading-overlay').classList.remove('hidden');
     document.getElementById('loading-overlay').classList.add('flex');
@@ -178,6 +242,28 @@ function showLoading() {
 function hideLoading() {
     document.getElementById('loading-overlay').classList.add('hidden');
     document.getElementById('loading-overlay').classList.remove('flex');
+}
+
+function showClearCartModal() {
+    document.getElementById('clear-cart-modal').classList.remove('hidden');
+    document.getElementById('clear-cart-modal').classList.add('flex');
+}
+
+function closeClearCartModal() {
+    document.getElementById('clear-cart-modal').classList.add('hidden');
+    document.getElementById('clear-cart-modal').classList.remove('flex');
+}
+
+function showRemoveItemModal(cartId) {
+    currentCartIdToRemove = cartId;
+    document.getElementById('remove-item-modal').classList.remove('hidden');
+    document.getElementById('remove-item-modal').classList.add('flex');
+}
+
+function closeRemoveItemModal() {
+    currentCartIdToRemove = null;
+    document.getElementById('remove-item-modal').classList.add('hidden');
+    document.getElementById('remove-item-modal').classList.remove('flex');
 }
 
 function updateQuantity(cartId, newQuantity) {
@@ -208,25 +294,31 @@ function updateQuantity(cartId, newQuantity) {
 
             // Update cart total
             document.getElementById('cart-total').textContent = '$' + parseFloat(data.cart_total).toFixed(2);
+
+            // Show success message
+            showToast('Cart updated successfully', 'success');
         } else {
-            alert(data.message || 'Error updating quantity');
+            showToast(data.message || 'Error updating quantity', 'error');
         }
     })
     .catch(error => {
         hideLoading();
         console.error('Error:', error);
-        alert('Error updating quantity');
+        showToast('Error updating quantity', 'error');
     });
 }
 
 function removeItem(cartId) {
-    if (!confirm('Are you sure you want to remove this item from your cart?')) {
-        return;
-    }
+    showRemoveItemModal(cartId);
+}
 
+function confirmRemoveItem() {
+    if (!currentCartIdToRemove) return;
+
+    closeRemoveItemModal();
     showLoading();
 
-    fetch(`/cart/${cartId}`, {
+    fetch(`/cart/${currentCartIdToRemove}`, {
         method: 'DELETE',
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
@@ -237,32 +329,41 @@ function removeItem(cartId) {
         hideLoading();
         if (data.success) {
             // Remove the item from DOM
-            const cartItem = document.querySelector(`[data-cart-id="${cartId}"]`);
+            const cartItem = document.querySelector(`[data-cart-id="${currentCartIdToRemove}"]`);
             cartItem.remove();
 
             // Update cart total
             document.getElementById('cart-total').textContent = '$' + parseFloat(data.cart_total).toFixed(2);
 
+            // Update cart count in navigation
+            updateCartCount();
+
+            // Show success message
+            showToast('Item removed from cart', 'success');
+
             // Check if cart is empty and reload page if needed
             if (data.cart_count === 0) {
-                window.location.reload();
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
             }
         } else {
-            alert(data.message || 'Error removing item');
+            showToast(data.message || 'Error removing item', 'error');
         }
     })
     .catch(error => {
         hideLoading();
         console.error('Error:', error);
-        alert('Error removing item');
+        showToast('Error removing item', 'error');
     });
 }
 
 function clearCart() {
-    if (!confirm('Are you sure you want to clear your entire cart?')) {
-        return;
-    }
+    showClearCartModal();
+}
 
+function confirmClearCart() {
+    closeClearCartModal();
     showLoading();
 
     fetch('/cart', {
@@ -275,17 +376,42 @@ function clearCart() {
     .then(data => {
         hideLoading();
         if (data.success) {
-            window.location.reload();
+            showToast('Cart cleared successfully', 'success');
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
         } else {
-            alert(data.message || 'Error clearing cart');
+            showToast(data.message || 'Error clearing cart', 'error');
         }
     })
     .catch(error => {
         hideLoading();
         console.error('Error:', error);
-        alert('Error clearing cart');
+        showToast('Error clearing cart', 'error');
     });
 }
+
+// Close modals when clicking outside
+document.addEventListener('click', function(event) {
+    const clearCartModal = document.getElementById('clear-cart-modal');
+    const removeItemModal = document.getElementById('remove-item-modal');
+
+    if (event.target === clearCartModal) {
+        closeClearCartModal();
+    }
+
+    if (event.target === removeItemModal) {
+        closeRemoveItemModal();
+    }
+});
+
+// Close modals with Escape key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeClearCartModal();
+        closeRemoveItemModal();
+    }
+});
 </script>
 @endpush
 </x-app-layout>
