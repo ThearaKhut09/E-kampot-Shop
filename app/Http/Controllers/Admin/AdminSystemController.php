@@ -26,8 +26,88 @@ class AdminSystemController extends Controller
      */
     public function index()
     {
-        $status = $this->getSystemStatus();
-        return view('admin.system', compact('status'));
+        try {
+            $status = $this->getSystemStatus();
+            return view('admin.system', compact('status'));
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            Log::error('System status page error: ' . $e->getMessage(), [
+                'exception' => $e,
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            // Return a fallback status
+            $status = [
+                'overall' => 'error',
+                'app' => [
+                    'name' => config('app.name', 'Laravel'),
+                    'version' => 'Unknown',
+                    'laravel_version' => app()->version(),
+                    'php_version' => PHP_VERSION,
+                    'environment' => config('app.env'),
+                    'debug' => config('app.debug'),
+                    'url' => config('app.url'),
+                    'timezone' => config('app.timezone'),
+                    'maintenance' => false,
+                    'uptime' => 'N/A'
+                ],
+                'database' => [
+                    'status' => 'error',
+                    'connection' => 'Unknown',
+                    'message' => 'Unable to check database status'
+                ],
+                'storage' => [
+                    'status' => 'error',
+                    'storage_writable' => false,
+                    'public_writable' => false,
+                    'storage_size' => 'N/A',
+                    'public_size' => 'N/A',
+                    'free_space' => 'N/A',
+                    'temp_files' => 0,
+                    'total' => 'N/A',
+                    'used' => 'N/A',
+                    'available' => 'N/A',
+                    'percentage' => 0
+                ],
+                'cache' => [
+                    'status' => 'error',
+                    'driver' => config('cache.default'),
+                    'config_cached' => false,
+                    'routes_cached' => false,
+                    'views_cached' => false,
+                    'cache_size' => 'N/A'
+                ],
+                'queue' => [
+                    'driver' => config('queue.default'),
+                    'status' => 'unknown',
+                    'pending' => 0,
+                    'failed' => 0,
+                    'workers' => 0
+                ],
+                'security' => [
+                    'https' => request()->isSecure(),
+                    'csrf_protection' => true,
+                    'debug_mode' => config('app.debug'),
+                    'error_reporting' => ini_get('display_errors') == '1',
+                    'session_secure' => config('session.secure'),
+                    'app_key_set' => !empty(config('app.key')),
+                    'app_key' => !empty(config('app.key')),
+                    'permissions' => 'Unknown',
+                    'headers' => 'Unknown',
+                    'score' => 0
+                ],
+                'logs' => [
+                    'total_files' => 0,
+                    'total_size' => '0 B',
+                    'latest_log' => 'Error accessing logs',
+                    'error_count' => 0,
+                    'last_error' => $e->getMessage(),
+                    'recent_logs' => []
+                ]
+            ];
+
+            return view('admin.system', compact('status'));
+        }
     }
 
     /**
@@ -235,39 +315,56 @@ class AdminSystemController extends Controller
      */
     private function getStorageStatus()
     {
-        $storagePath = storage_path();
-        $publicPath = public_path();
+        try {
+            $storagePath = storage_path();
+            $publicPath = public_path();
 
-        // Calculate storage usage
-        $totalSpace = disk_total_space($storagePath);
-        $freeSpace = disk_free_space($storagePath);
-        $usedSpace = $totalSpace - $freeSpace;
-        $usagePercentage = $totalSpace > 0 ? round(($usedSpace / $totalSpace) * 100, 1) : 0;
+            // Calculate storage usage
+            $totalSpace = disk_total_space($storagePath);
+            $freeSpace = disk_free_space($storagePath);
+            $usedSpace = $totalSpace - $freeSpace;
+            $usagePercentage = $totalSpace > 0 ? round(($usedSpace / $totalSpace) * 100, 1) : 0;
 
-        // Determine status based on usage and writability
-        $storageWritable = is_writable($storagePath);
-        $publicWritable = is_writable($publicPath);
+            // Determine status based on usage and writability
+            $storageWritable = is_writable($storagePath);
+            $publicWritable = is_writable($publicPath);
 
-        $status = 'healthy';
-        if (!$storageWritable || !$publicWritable) {
-            $status = 'error';
-        } elseif ($usagePercentage > 90) {
-            $status = 'warning';
+            $status = 'healthy';
+            if (!$storageWritable || !$publicWritable) {
+                $status = 'error';
+            } elseif ($usagePercentage > 90) {
+                $status = 'warning';
+            }
+
+            return [
+                'status' => $status,
+                'storage_writable' => $storageWritable,
+                'public_writable' => $publicWritable,
+                'storage_size' => $this->formatBytes($this->getDirectorySize($storagePath)),
+                'public_size' => $this->formatBytes($this->getDirectorySize($publicPath)),
+                'free_space' => $this->formatBytes($freeSpace),
+                'temp_files' => count(glob(storage_path('framework/cache/data/*'))),
+                'total' => $this->formatBytes($totalSpace),
+                'used' => $this->formatBytes($usedSpace),
+                'available' => $this->formatBytes($freeSpace),
+                'percentage' => $usagePercentage
+            ];
+        } catch (\Exception $e) {
+            return [
+                'status' => 'error',
+                'storage_writable' => false,
+                'public_writable' => false,
+                'storage_size' => 'N/A',
+                'public_size' => 'N/A',
+                'free_space' => 'N/A',
+                'temp_files' => 0,
+                'total' => 'N/A',
+                'used' => 'N/A',
+                'available' => 'N/A',
+                'percentage' => 0,
+                'error' => $e->getMessage()
+            ];
         }
-
-        return [
-            'status' => $status,
-            'storage_writable' => $storageWritable,
-            'public_writable' => $publicWritable,
-            'storage_size' => $this->formatBytes($this->getDirectorySize($storagePath)),
-            'public_size' => $this->formatBytes($this->getDirectorySize($publicPath)),
-            'free_space' => $this->formatBytes($freeSpace),
-            'temp_files' => count(glob(storage_path('framework/cache/data/*'))),
-            'total' => $this->formatBytes($totalSpace),
-            'used' => $this->formatBytes($usedSpace),
-            'available' => $this->formatBytes($freeSpace),
-            'percentage' => $usagePercentage
-        ];
     }
 
     /**
@@ -390,42 +487,63 @@ class AdminSystemController extends Controller
      */
     private function getLogsStatus()
     {
-        $logPath = storage_path('logs');
-        $logFiles = File::glob($logPath . '/*.log');
+        try {
+            $logPath = storage_path('logs');
+            $logFiles = File::glob($logPath . '/*.log');
 
-        $totalSize = 0;
-        $latestLog = null;
-        $errorCount = 0;
-        $recentLogs = [];
+            $totalSize = 0;
+            $latestLog = null;
+            $errorCount = 0;
+            $recentLogs = [];
 
-        foreach ($logFiles as $file) {
-            $size = File::size($file);
-            $totalSize += $size;
+            foreach ($logFiles as $file) {
+                try {
+                    $size = File::size($file);
+                    $totalSize += $size;
 
-            if (!$latestLog || File::lastModified($file) > File::lastModified($latestLog)) {
-                $latestLog = $file;
+                    if (!$latestLog || File::lastModified($file) > File::lastModified($latestLog)) {
+                        $latestLog = $file;
+                    }
+                } catch (\Exception $e) {
+                    // Skip this file if we can't read it
+                    continue;
+                }
             }
 
             // Count errors in latest log
-            if ($file === $latestLog) {
-                $content = File::get($file);
-                $errorCount = substr_count(strtolower($content), 'error');
+            if ($latestLog) {
+                try {
+                    $content = File::get($latestLog);
+                    $errorCount = substr_count(strtolower($content), 'error');
+                } catch (\Exception $e) {
+                    $errorCount = 0;
+                }
             }
-        }
 
-        // Parse recent log entries from the latest log file
-        if ($latestLog && File::exists($latestLog)) {
-            $recentLogs = $this->parseRecentLogEntries($latestLog);
-        }
+            // Parse recent log entries from the latest log file
+            if ($latestLog && File::exists($latestLog)) {
+                $recentLogs = $this->parseRecentLogEntries($latestLog);
+            }
 
-        // Return both summary data and recent log entries for the table
-        return array_merge([
-            'total_files' => count($logFiles),
-            'total_size' => $this->formatBytes($totalSize),
-            'latest_log' => $latestLog ? basename($latestLog) : 'None',
-            'error_count' => $errorCount,
-            'last_error' => $this->getLastError()
-        ], $recentLogs);
+            // Return proper structure - summary data separate from log entries
+            return [
+                'total_files' => count($logFiles),
+                'total_size' => $this->formatBytes($totalSize),
+                'latest_log' => $latestLog ? basename($latestLog) : 'None',
+                'error_count' => $errorCount,
+                'last_error' => $this->getLastError(),
+                'recent_logs' => $recentLogs
+            ];
+        } catch (\Exception $e) {
+            return [
+                'total_files' => 0,
+                'total_size' => '0 B',
+                'latest_log' => 'Error reading logs',
+                'error_count' => 0,
+                'last_error' => 'Unable to access log files',
+                'recent_logs' => []
+            ];
+        }
     }
 
     /**
@@ -459,10 +577,15 @@ class AdminSystemController extends Controller
     private function getDirectorySize($directory)
     {
         $size = 0;
-        if (File::isDirectory($directory)) {
-            foreach (File::allFiles($directory) as $file) {
-                $size += $file->getSize();
+        try {
+            if (File::exists($directory) && File::isDirectory($directory)) {
+                foreach (File::allFiles($directory) as $file) {
+                    $size += $file->getSize();
+                }
             }
+        } catch (\Exception $e) {
+            // If we can't read the directory, return 0
+            return 0;
         }
         return $size;
     }
@@ -510,16 +633,11 @@ class AdminSystemController extends Controller
                 }
             }
 
+            // Return entries in chronological order (newest first)
             return $entries;
         } catch (\Exception $e) {
-            // If parsing fails, return some dummy entries so the table doesn't break
-            return [
-                [
-                    'time' => date('Y-m-d H:i:s'),
-                    'level' => 'info',
-                    'message' => 'Unable to parse log entries'
-                ]
-            ];
+            // If parsing fails, return empty array
+            return [];
         }
     }
 
@@ -536,17 +654,25 @@ class AdminSystemController extends Controller
             return !$latest || File::lastModified($file) > File::lastModified($latest) ? $file : $latest;
         });
 
-        $content = File::get($latestLog);
-        $lines = explode("\n", $content);
-
-        // Find last error line
-        for ($i = count($lines) - 1; $i >= 0; $i--) {
-            if (stripos($lines[$i], 'error') !== false) {
-                return trim($lines[$i]);
-            }
+        if (!File::exists($latestLog)) {
+            return 'None';
         }
 
-        return 'None';
+        try {
+            $content = File::get($latestLog);
+            $lines = explode("\n", $content);
+
+            // Find last error line
+            for ($i = count($lines) - 1; $i >= 0; $i--) {
+                if (stripos($lines[$i], 'error') !== false) {
+                    return Str::limit(trim($lines[$i]), 100);
+                }
+            }
+
+            return 'None';
+        } catch (\Exception $e) {
+            return 'Unable to read log file';
+        }
     }
 
     private function createStorageBackup($zipPath)

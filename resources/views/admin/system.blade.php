@@ -240,7 +240,7 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-600">
-                        @forelse($status['logs'] as $log)
+                        @forelse($status['logs']['recent_logs'] as $log)
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full
