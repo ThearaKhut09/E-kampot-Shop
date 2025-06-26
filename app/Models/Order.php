@@ -74,6 +74,14 @@ class Order extends Model
     }
 
     /**
+     * Get the order items (alias for items method).
+     */
+    public function orderItems(): HasMany
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    /**
      * Scope to filter orders by status.
      */
     public function scopeStatus($query, string $status)
