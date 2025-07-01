@@ -30,6 +30,15 @@ class AdminProductController extends Controller
 
     public function store(Request $request)
     {
+        // Custom validation for case-insensitive product name uniqueness
+        $existingProduct = Product::whereRaw('LOWER(name) = ?', [strtolower($request->name)])->first();
+
+        if ($existingProduct) {
+            return back()->withErrors([
+                'name' => 'A product with this name already exists: "' . $existingProduct->name . '" (ID: ' . $existingProduct->id . '). Please choose a different name, modify the existing product, or add a variation (e.g., model number, color, size).'
+            ])->withInput();
+        }
+
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
@@ -48,11 +57,13 @@ class AdminProductController extends Controller
             'dimensions' => 'nullable|string|max:100',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500',
+        ], [
+            'sku.unique' => 'This SKU is already in use. Please enter a unique SKU.',
         ]);
 
         $product = new Product();
         $product->name = $request->name;
-        $product->slug = Str::slug($request->name);
+        // Remove manual slug generation - let the model handle it
         $product->description = $request->description;
         $product->price = $request->price;
         $product->sale_price = $request->sale_price;
@@ -102,6 +113,17 @@ class AdminProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
+        // Custom validation for case-insensitive product name uniqueness (excluding current product)
+        $existingProduct = Product::whereRaw('LOWER(name) = ?', [strtolower($request->name)])
+            ->where('id', '!=', $product->id)
+            ->first();
+
+        if ($existingProduct) {
+            return back()->withErrors([
+                'name' => 'A product with this name already exists: "' . $existingProduct->name . '" (ID: ' . $existingProduct->id . '). Please choose a different name, modify the existing product, or add a variation (e.g., model number, color, size).'
+            ])->withInput();
+        }
+
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
@@ -120,10 +142,12 @@ class AdminProductController extends Controller
             'dimensions' => 'nullable|string|max:100',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500',
+        ], [
+            'sku.unique' => 'This SKU is already in use. Please enter a unique SKU.',
         ]);
 
         $product->name = $request->name;
-        $product->slug = Str::slug($request->name);
+        // Remove manual slug generation - let the model handle it
         $product->description = $request->description;
         $product->price = $request->price;
         $product->sale_price = $request->sale_price;
