@@ -129,7 +129,8 @@
                 Continue Shopping
             </a>
             <a href="#"
-               class="flex-1 bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-6 rounded-lg text-center transition-colors shadow-lg hover:shadow-xl">
+               class="flex-1 bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-6 rounded-lg text-center transition-colors shadow-lg hover:shadow-xl"
+               onclick="proceedToCheckout()">
                 Proceed to Checkout
             </a>
         </div>
@@ -412,6 +413,17 @@ document.addEventListener('keydown', function(event) {
         closeRemoveItemModal();
     }
 });
+
+// Proceed to checkout function
+function proceedToCheckout() {
+    @auth
+        window.location.href = '{{ route("checkout.index") }}';
+    @else
+        if (confirm('You need to log in to proceed with checkout. Would you like to log in now?')) {
+            window.location.href = '{{ route("login") }}?redirect=' + encodeURIComponent('{{ route("checkout.index") }}');
+        }
+    @endauth
+}
 </script>
 @endpush
 </x-app-layout>
