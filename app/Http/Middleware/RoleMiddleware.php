@@ -16,6 +16,15 @@ class RoleMiddleware
     public function handle(Request $request, Closure $next, string $role): Response
     {
         if (!$request->user() || !$request->user()->hasRole($role)) {
+            // Handle AJAX requests with JSON response
+            if ($request->ajax() || $request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Access denied. You do not have the required permissions.',
+                    'error' => 'insufficient_permissions'
+                ], 403);
+            }
+
             abort(403, 'Access denied. You do not have the required permissions.');
         }
 

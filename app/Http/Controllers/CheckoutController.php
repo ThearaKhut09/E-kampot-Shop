@@ -392,10 +392,22 @@ class CheckoutController extends Controller
      */
     public function quickCheckout(Request $request)
     {
+        // Ensure user is authenticated
+        if (!Auth::check()) {
+            if ($request->ajax() || $request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Please log in to continue.',
+                    'redirect_url' => route('login')
+                ], 401);
+            }
+            return redirect()->route('login');
+        }
+
         $cartItems = $this->getCartItems();
 
         if ($cartItems->isEmpty()) {
-            if ($request->ajax()) {
+            if ($request->ajax() || $request->expectsJson()) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Your cart is empty.',

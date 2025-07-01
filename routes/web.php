@@ -17,6 +17,8 @@ use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\AdminAnalyticsController;
 use App\Http\Controllers\Admin\AdminBulkController;
 use App\Http\Controllers\Admin\AdminSystemController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 // Public Routes
@@ -52,9 +54,7 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
     Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count');
 
     // Checkout Routes (Customer only) - Simplified
-    Route::post('/checkout/quick', [CheckoutController::class, 'quickCheckout'])
-        ->middleware('ajax.auth')
-        ->name('checkout.quick');
+    Route::post('/checkout/quick', [CheckoutController::class, 'quickCheckout'])->name('checkout.quick');
 });
 
 // User Dashboard and Orders (Authenticated Users Only)
@@ -123,5 +123,17 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('settings', [AdminSettingController::class, 'index'])->name('settings.index');
     Route::put('settings', [AdminSettingController::class, 'update'])->name('settings.update');
 });
+
+// Debug route to test AJAX responses
+Route::post('/debug/ajax', function(Request $request) {
+    return response()->json([
+        'success' => true,
+        'message' => 'AJAX test successful',
+        'user_authenticated' => Auth::check(),
+        'request_ajax' => $request->ajax(),
+        'request_expects_json' => $request->expectsJson(),
+        'headers' => $request->headers->all()
+    ]);
+})->name('debug.ajax');
 
 require __DIR__.'/auth.php';

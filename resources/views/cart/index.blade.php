@@ -499,34 +499,50 @@ function proceedToCheckout() {
         // Show loading state
         button.disabled = true;
         btnText.classList.add('hidden');
-        btnLoading.classList.remove('hidden');
-
-        // Make AJAX request for quick checkout
+        btnLoading.classList.remove('hidden');        // Make AJAX request for quick checkout
         fetch('{{ route("checkout.quick") }}', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
             },
             body: JSON.stringify({})
         })
         .then(response => {
+            console.log('Response status:', response.status);
+            console.log('Response headers:', response.headers.get('content-type'));
+
             // Check if response is JSON
             const contentType = response.headers.get('content-type');
+
+            // Handle different response types
+            if (response.status === 401) {
+                // Authentication required
+                throw new Error('authentication_required');
+            }
+
+            if (response.status === 403) {
+                // Access denied
+                throw new Error('access_denied');
+            }
+
+            if (response.status === 419) {
+                // CSRF token mismatch
+                throw new Error('csrf_error');
+            }
+
             if (!contentType || !contentType.includes('application/json')) {
-                // Likely a redirect to login - handle as authentication error
-                if (response.status === 302 || response.status === 401) {
+                // Log the actual response for debugging
+                response.text().then(text => {
+                    console.log('Non-JSON response received:', text.substring(0, 200));
+                });
+
+                if (response.status === 302) {
                     throw new Error('authentication_required');
                 }
                 throw new Error('invalid_response');
-            }
-
-            // Handle 401 status code
-            if (response.status === 401) {
-                return response.json().then(data => {
-                    throw new Error('authentication_required');
-                });
             }
 
             return response.json();
@@ -564,6 +580,13 @@ function proceedToCheckout() {
                 if (confirm('Your session has expired. Please log in again to continue.')) {
                     window.location.href = '{{ route("login") }}?redirect=' + encodeURIComponent(window.location.href);
                 }
+            } else if (error.message === 'access_denied') {
+                showErrorToast('You do not have permission to perform this action.');
+            } else if (error.message === 'csrf_error') {
+                showErrorToast('Security token expired. Please refresh the page and try again.');
+                setTimeout(() => {
+                    location.reload();
+                }, 2000);
             } else if (error.message === 'invalid_response') {
                 showErrorToast('Server returned an unexpected response. Please try again.');
             } else {
