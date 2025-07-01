@@ -41,6 +41,16 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        // Assign customer role to new users
+        try {
+            // Create the role if it doesn't exist
+            $customerRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'customer']);
+            $user->assignRole('customer');
+        } catch (\Exception $e) {
+            // Log the error but don't prevent registration
+            \Illuminate\Support\Facades\Log::warning('Failed to assign customer role to new user: ' . $e->getMessage());
+        }
+
         event(new Registered($user));
 
         Auth::login($user);

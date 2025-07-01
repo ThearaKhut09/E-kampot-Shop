@@ -117,32 +117,55 @@
                     </div>
                 @endif
 
-                <!-- Add to Cart -->
-                @if($product->stock_quantity > 0)
-                    <div class="space-y-4">
-                        <div class="flex items-center space-x-4">
-                            <label for="quantity" class="text-sm font-medium text-gray-900 dark:text-white">Quantity:</label>
-                            <select id="quantity" class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
-                                @for($i = 1; $i <= min(10, $product->stock_quantity); $i++)
-                                    <option value="{{ $i }}">{{ $i }}</option>
-                                @endfor
-                            </select>
-                        </div>
+                <!-- Add to Cart (Customer Only) -->
+                @auth
+                    @if(auth()->user()->hasRole('customer'))
+                        @if($product->stock_quantity > 0)
+                            <div class="space-y-4">
+                                <div class="flex items-center space-x-4">
+                                    <label for="quantity" class="text-sm font-medium text-gray-900 dark:text-white">Quantity:</label>
+                                    <select id="quantity" class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                        @for($i = 1; $i <= min(10, $product->stock_quantity); $i++)
+                                            <option value="{{ $i }}">{{ $i }}</option>
+                                        @endfor
+                                    </select>
+                                </div>
 
-                        <button onclick="addToCart({{ $product->id }})"
-                                class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 2.5M7 13l2.5 2.5m6-6.5h.01M17 13v.01"></path>
+                                <button onclick="addToCart({{ $product->id }})"
+                                        class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 2.5M7 13l2.5 2.5m6-6.5h.01M17 13v.01"></path>
+                                    </svg>
+                                    <span>Add to Cart</span>
+                                </button>
+                            </div>
+                        @else
+                            <button disabled
+                                    class="w-full bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 font-medium py-3 px-6 rounded-lg cursor-not-allowed">
+                                Out of Stock
+                            </button>
+                        @endif
+                    @else
+                        <div class="w-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 font-medium py-3 px-6 rounded-lg text-center border border-dashed border-gray-300 dark:border-gray-600">
+                            <svg class="w-5 h-5 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                             </svg>
-                            <span>Add to Cart</span>
-                        </button>
-                    </div>
+                            Admin View Only - Product Information
+                        </div>
+                    @endif
                 @else
-                    <button disabled
-                            class="w-full bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 font-medium py-3 px-6 rounded-lg cursor-not-allowed">
-                        Out of Stock
-                    </button>
-                @endif
+                    @if($product->stock_quantity > 0)
+                        <a href="{{ route('login') }}" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2">
+                            <span>Login to Purchase</span>
+                        </a>
+                    @else
+                        <button disabled
+                                class="w-full bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 font-medium py-3 px-6 rounded-lg cursor-not-allowed">
+                            Out of Stock
+                        </button>
+                    @endif
+                @endauth
             </div>
         </div>
 
@@ -244,31 +267,42 @@
 @push('scripts')
 <script>
     function addToCart(productId) {
-        const quantity = document.getElementById('quantity').value;
+        @auth
+            @if(auth()->user()->hasRole('customer'))
+                const quantity = document.getElementById('quantity').value;
 
-        fetch('{{ route("cart.add") }}', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({
-                product_id: productId,
-                quantity: parseInt(quantity)
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                showToast(data.message, 'success');
-                updateCartCount();
-            } else {
-                showToast(data.message, 'error');
-            }
-        })
-        .catch(error => {
-            showToast('Error adding product to cart', 'error');
-        });
+                fetch('{{ route("cart.add") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        product_id: productId,
+                        quantity: parseInt(quantity)
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showToast(data.message, 'success');
+                        updateCartCount();
+                    } else {
+                        showToast(data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    showToast('Error adding product to cart', 'error');
+                });
+            @else
+                showToast('Only customers can add items to cart', 'error');
+            @endif
+        @else
+            showToast('Please login to add items to cart', 'error');
+            setTimeout(() => {
+                window.location.href = '{{ route("login") }}';
+            }, 1500);
+        @endauth
     }
 </script>
 @endpush

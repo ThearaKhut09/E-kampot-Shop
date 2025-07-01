@@ -247,10 +247,22 @@
                                         ${{ number_format($product->price, 2) }}
                                     </span>
                                 </div>
-                                <button onclick="addToCart({{ $product->id }})"
-                                        class="bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">
-                                    Add to Cart
-                                </button>
+                                @auth
+                                    @if(auth()->user()->hasRole('customer'))
+                                        <button onclick="addToCart({{ $product->id }})"
+                                                class="bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                                            Add to Cart
+                                        </button>
+                                    @else
+                                        <span class="text-xs text-gray-500 dark:text-gray-400 px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded-md">
+                                            Admin View
+                                        </span>
+                                    @endif
+                                @else
+                                    <a href="{{ route('login') }}" class="bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                                        Login
+                                    </a>
+                                @endauth
                             </div>
                         </div>
                     </div>
@@ -263,29 +275,40 @@
     @push('scripts')
     <script>
         function addToCart(productId) {
-            fetch('{{ route("cart.add") }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({
-                    product_id: productId,
-                    quantity: 1
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showToast(data.message, 'success');
-                    updateCartCount();
-                } else {
-                    showToast(data.message, 'error');
-                }
-            })
-            .catch(error => {
-                showToast('Error adding product to cart', 'error');
-            });
+            @auth
+                @if(auth()->user()->hasRole('customer'))
+                    fetch('{{ route("cart.add") }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify({
+                            product_id: productId,
+                            quantity: 1
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showToast(data.message, 'success');
+                            updateCartCount();
+                        } else {
+                            showToast(data.message, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        showToast('Error adding product to cart', 'error');
+                    });
+                @else
+                    showToast('Only customers can add items to cart', 'error');
+                @endif
+            @else
+                showToast('Please login to add items to cart', 'error');
+                setTimeout(() => {
+                    window.location.href = '{{ route("login") }}';
+                }, 1500);
+            @endauth
         }
     </script>
     @endpush

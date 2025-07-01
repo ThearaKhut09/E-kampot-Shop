@@ -106,15 +106,17 @@
                                 </svg>
                             </button>
 
-                            <!-- Cart -->
-                            <a href="{{ route('cart.index') }}" class="relative p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
-                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13v8a2 2 0 002 2h9.5M9 19.5h.01M20 19.5h.01"></path>
-                                </svg>
-                                <span class="absolute -top-1 -right-1 bg-primary-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                                    <span id="cart-count">0</span>
-                                </span>
-                            </a>
+                            <!-- Cart (Only for customers and guests) -->
+                            @if(!auth()->check() || !auth()->user()->hasRole('admin'))
+                                <a href="{{ route('cart.index') }}" class="relative p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
+                                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13v8a2 2 0 002 2h9.5M9 19.5h.01M20 19.5h.01"></path>
+                                    </svg>
+                                    <span class="absolute -top-1 -right-1 bg-primary-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                                        <span id="cart-count">0</span>
+                                    </span>
+                                </a>
+                            @endif
 
                             <!-- Authentication -->
                             @auth
@@ -319,11 +321,14 @@
             });
 
             function updateCartCount() {
-                fetch('{{ route("cart.count") }}')
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById('cart-count').textContent = data.count;
-                    });
+                const cartCountElement = document.getElementById('cart-count');
+                if (cartCountElement) {
+                    fetch('{{ route("cart.count") }}')
+                        .then(response => response.json())
+                        .then(data => {
+                            cartCountElement.textContent = data.count;
+                        });
+                }
             }
 
             function showToast(message, type = 'success') {

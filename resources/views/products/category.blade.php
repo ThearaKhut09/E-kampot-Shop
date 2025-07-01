@@ -198,18 +198,30 @@
                                 </div>
                             </div>
 
-                            <!-- Add to Cart Button -->
-                            @if($product->stock_quantity > 0)
-                                <button onclick="addToCart({{ $product->id }})"
-                                        class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
-                                    Add to Cart
-                                </button>
+                            <!-- Add to Cart Button (Customer Only) -->
+                            @auth
+                                @if(auth()->user()->hasRole('customer'))
+                                    @if($product->stock_quantity > 0)
+                                        <button onclick="addToCart({{ $product->id }})"
+                                                class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+                                            Add to Cart
+                                        </button>
+                                    @else
+                                        <button disabled
+                                                class="w-full bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 font-medium py-2 px-4 rounded-lg cursor-not-allowed">
+                                            Out of Stock
+                                        </button>
+                                    @endif
+                                @else
+                                    <div class="w-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 font-medium py-2 px-4 rounded-lg text-center border border-dashed border-gray-300 dark:border-gray-600">
+                                        Admin View Only
+                                    </div>
+                                @endif
                             @else
-                                <button disabled
-                                        class="w-full bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 font-medium py-2 px-4 rounded-lg cursor-not-allowed">
-                                    Out of Stock
-                                </button>
-                            @endif
+                                <a href="{{ route('login') }}" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 block text-center">
+                                    Login to Purchase
+                                </a>
+                            @endauth
                         </div>
                     </div>
                 @endforeach
@@ -248,29 +260,40 @@
 @push('scripts')
 <script>
     function addToCart(productId) {
-        fetch('{{ route("cart.add") }}', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({
-                product_id: productId,
-                quantity: 1
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                showToast(data.message, 'success');
-                updateCartCount();
-            } else {
-                showToast(data.message, 'error');
-            }
-        })
-        .catch(error => {
-            showToast('Error adding product to cart', 'error');
-        });
+        @auth
+            @if(auth()->user()->hasRole('customer'))
+                fetch('{{ route("cart.add") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        product_id: productId,
+                        quantity: 1
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showToast(data.message, 'success');
+                        updateCartCount();
+                    } else {
+                        showToast(data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    showToast('Error adding product to cart', 'error');
+                });
+            @else
+                showToast('Only customers can add items to cart', 'error');
+            @endif
+        @else
+            showToast('Please login to add items to cart', 'error');
+            setTimeout(() => {
+                window.location.href = '{{ route("login") }}';
+            }, 1500);
+        @endauth
     }
 </script>
 @endpush
