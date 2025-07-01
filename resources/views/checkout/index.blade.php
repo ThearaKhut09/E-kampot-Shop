@@ -12,6 +12,30 @@
             </p>
         </div>
 
+        <!-- Error Messages -->
+        @if($errors->any() || session('error'))
+        <div class="mb-8 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg p-4">
+            <div class="flex items-start">
+                <svg class="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div>
+                    <h3 class="text-sm font-medium text-red-800 dark:text-red-200 mb-2">
+                        There were some problems with your submission
+                    </h3>
+                    <ul class="text-sm text-red-700 dark:text-red-300 space-y-1">
+                        @if(session('error'))
+                        <li>{{ session('error') }}</li>
+                        @endif
+                        @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+        @endif
+
         <form method="POST" action="{{ route('checkout.store') }}" id="checkout-form">
             @csrf
 
@@ -561,15 +585,53 @@
                         <!-- Place Order Button -->
                         <button type="submit"
                                 id="place-order-btn"
-                                class="w-full mt-6 bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed">
-                            <span id="btn-text">Place Order</span>
-                            <span id="btn-loading" class="hidden">Processing...</span>
+                                class="w-full mt-6 bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transform hover:-translate-y-0.5">
+                            <span id="btn-text" class="flex items-center justify-center">
+                                <svg id="btn-icon" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                </svg>
+                                Place Order
+                            </span>
+                            <span id="btn-loading" class="hidden flex items-center justify-center">
+                                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Processing Payment...
+                            </span>
                         </button>
+
+                        <!-- Payment Processing Overlay -->
+                        <div id="payment-overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                            <div class="bg-white dark:bg-gray-800 rounded-lg p-8 max-w-md mx-4 text-center">
+                                <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full mb-4">
+                                    <svg class="animate-spin w-8 h-8 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">Processing Your Payment</h3>
+                                <p class="text-gray-600 dark:text-gray-400">Please wait while we securely process your payment...</p>
+                                <div class="mt-4">
+                                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                        <div class="bg-blue-600 h-2 rounded-full animate-pulse" style="width: 45%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="mt-4 text-center">
                             <p class="text-xs text-gray-500 dark:text-gray-400">
                                 🔒 Your payment information is secure and encrypted
                             </p>
+                            <!-- Demo Button for Testing (Development Only) -->
+                            @if(config('app.debug'))
+                            <button type="button"
+                                    onclick="showFakePaymentSuccess()"
+                                    class="mt-2 text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 underline">
+                                🧪 Demo: Show Success Message
+                            </button>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -624,15 +686,73 @@
             input.value = value;
         }
 
+        // Add fake payment success demo for instant feedback
+        function showFakePaymentSuccess() {
+            // Create success overlay
+            const successOverlay = document.createElement('div');
+            successOverlay.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50';
+            successOverlay.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-8 max-w-md mx-4 text-center transform scale-0 transition-transform duration-300">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full mb-4">
+                        <svg class="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">Payment Successful!</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Your payment has been processed successfully.</p>
+                    <p class="text-sm text-green-600 dark:text-green-400 font-medium">Transaction ID: TXN_${Date.now()}</p>
+                    <button onclick="this.parentElement.parentElement.remove()" class="mt-4 bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition-colors">
+                        Continue
+                    </button>
+                </div>
+            `;
+
+            document.body.appendChild(successOverlay);
+
+            // Animate in
+            setTimeout(() => {
+                successOverlay.querySelector('div > div').classList.add('scale-100');
+                successOverlay.querySelector('div > div').classList.remove('scale-0');
+            }, 100);
+
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (successOverlay.parentElement) {
+                    successOverlay.remove();
+                }
+            }, 5000);
+        }
+
         // Form submission handling
         document.getElementById('checkout-form').addEventListener('submit', function(e) {
             const button = document.getElementById('place-order-btn');
             const btnText = document.getElementById('btn-text');
             const btnLoading = document.getElementById('btn-loading');
+            const overlay = document.getElementById('payment-overlay');
 
+            // Disable button and show loading state
             button.disabled = true;
             btnText.classList.add('hidden');
             btnLoading.classList.remove('hidden');
+
+            // Show payment processing overlay after a short delay
+            setTimeout(() => {
+                overlay.classList.remove('hidden');
+            }, 500);
+
+            // Simulate successful payment for demo (remove in production)
+            setTimeout(() => {
+                // Hide payment processing overlay
+                overlay.classList.add('hidden');
+
+                // Show fake payment success message
+                showFakePaymentSuccess();
+
+                // Re-enable button and show success state
+                button.disabled = false;
+                btnText.classList.remove('hidden');
+                btnLoading.classList.add('hidden');
+            }, 3000);
         });
 
         // Initialize on page load

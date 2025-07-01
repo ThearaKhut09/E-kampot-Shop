@@ -123,7 +123,8 @@ class CheckoutController extends Controller
 
             if (!$paymentResult['success']) {
                 DB::rollBack();
-                return back()->withErrors(['payment' => $paymentResult['message']]);
+                return back()->withErrors(['payment' => $paymentResult['message']])
+                            ->with('error', 'Payment failed: ' . $paymentResult['message']);
             }
 
             // Create order
@@ -142,6 +143,14 @@ class CheckoutController extends Controller
                 'payment_status' => $paymentResult['status'],
                 'payment_id' => $paymentResult['transaction_id'] ?? null,
                 'notes' => $request->notes,
+            ]);
+
+            // Store payment success message in session for success page
+            session()->flash('payment_message', $paymentResult['message']);
+            session()->flash('payment_details', [
+                'transaction_id' => $paymentResult['transaction_id'] ?? null,
+                'last_four' => $paymentResult['last_four'] ?? null,
+                'card_type' => $paymentResult['card_type'] ?? null,
             ]);
 
             // Create order items
@@ -256,9 +265,19 @@ class CheckoutController extends Controller
             case 'paypal':
                 return $this->processPayPalPayment($request, $total);
             case 'bank_transfer':
-                return ['success' => true, 'status' => 'pending', 'message' => 'Please complete bank transfer'];
+                return [
+                    'success' => true,
+                    'status' => 'pending',
+                    'transaction_id' => 'BT_' . strtoupper(uniqid()),
+                    'message' => 'Bank transfer initiated successfully! Please complete the transfer within 24 hours.'
+                ];
             case 'cash_on_delivery':
-                return ['success' => true, 'status' => 'pending', 'message' => 'Cash on delivery order placed'];
+                return [
+                    'success' => true,
+                    'status' => 'pending',
+                    'transaction_id' => 'COD_' . strtoupper(uniqid()),
+                    'message' => 'Cash on delivery order placed successfully! Pay when your order arrives.'
+                ];
             default:
                 return ['success' => false, 'message' => 'Invalid payment method'];
         }
@@ -279,20 +298,24 @@ class CheckoutController extends Controller
             return ['success' => false, 'message' => 'Invalid card number'];
         }
 
-        // Demo: Simulate payment processing
-        // In real implementation, you would make API calls to payment processor
-        $transactionId = 'TXN_' . uniqid();
+        // Demo: Simulate payment processing with a slight delay for realism
+        sleep(1);
 
-        // Simulate some payment failures for testing
+        $transactionId = 'TXN_' . strtoupper(uniqid());
+
+        // Simulate some payment failures for testing (cards ending in 0000)
         if (substr($cardNumber, -4) === '0000') {
             return ['success' => false, 'message' => 'Payment declined. Please try a different card.'];
         }
 
+        // Simulate successful payment
         return [
             'success' => true,
             'status' => 'paid',
             'transaction_id' => $transactionId,
-            'message' => 'Payment processed successfully'
+            'message' => 'Payment processed successfully! Your card has been charged $' . number_format($total, 2),
+            'last_four' => substr($cardNumber, -4),
+            'card_type' => $this->detectCardType($cardNumber)
         ];
     }
 
@@ -304,12 +327,35 @@ class CheckoutController extends Controller
         // This is a demo implementation
         // In production, integrate with PayPal API
 
+        // Simulate processing delay
+        sleep(1);
+
         return [
             'success' => true,
             'status' => 'paid',
-            'transaction_id' => 'PP_' . uniqid(),
-            'message' => 'PayPal payment processed successfully'
+            'transaction_id' => 'PP_' . strtoupper(uniqid()),
+            'message' => 'PayPal payment processed successfully! Amount charged: $' . number_format($total, 2)
         ];
+    }
+
+    /**
+     * Detect card type from card number.
+     */
+    private function detectCardType($cardNumber)
+    {
+        $cardNumber = preg_replace('/\D/', '', $cardNumber);
+
+        if (preg_match('/^4/', $cardNumber)) {
+            return 'Visa';
+        } elseif (preg_match('/^5[1-5]/', $cardNumber)) {
+            return 'Mastercard';
+        } elseif (preg_match('/^3[47]/', $cardNumber)) {
+            return 'American Express';
+        } elseif (preg_match('/^6(?:011|5)/', $cardNumber)) {
+            return 'Discover';
+        } else {
+            return 'Unknown';
+        }
     }
 
     /**
@@ -338,6 +384,131 @@ class CheckoutController extends Controller
         } catch (\Exception $e) {
             // Log the error but don't fail the order
             Log::error('Failed to send order confirmation email: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Quick checkout - simplified process that clears cart and shows success message.
+     */
+    public function quickCheckout(Request $request)
+    {
+        $cartItems = $this->getCartItems();
+
+        if ($cartItems->isEmpty()) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Your cart is empty.',
+                    'redirect_url' => route('cart.index')
+                ]);
+            }
+            return redirect()->route('cart.index')->with('error', 'Your cart is empty.');
+        }
+
+        DB::beginTransaction();
+
+        try {
+            // Calculate totals
+            $subtotal = $cartItems->sum(function ($item) {
+                return $item->quantity * $item->product->current_price;
+            });
+            $shippingAmount = $this->calculateShipping($subtotal);
+            $taxAmount = $this->calculateTax($subtotal);
+            $total = $subtotal + $shippingAmount + $taxAmount;
+
+            // Use current user's information for billing
+            $user = Auth::user();
+            $billingAddress = [
+                'first_name' => $user->first_name ?? 'Customer',
+                'last_name' => $user->last_name ?? 'User',
+                'email' => $user->email,
+                'phone' => $user->phone ?? 'N/A',
+                'address' => 'Default Address',
+                'city' => 'Kampot',
+                'postal_code' => '07000',
+                'country' => 'Cambodia',
+            ];
+
+            // Simulate successful payment
+            $paymentResult = [
+                'success' => true,
+                'status' => 'paid',
+                'transaction_id' => 'QUICK_' . strtoupper(uniqid()),
+                'message' => 'Quick checkout completed successfully! Your order has been processed.',
+            ];
+
+            // Create order
+            $order = Order::create([
+                'order_number' => $this->generateOrderNumber(),
+                'user_id' => Auth::id(),
+                'status' => 'pending',
+                'subtotal' => $subtotal,
+                'tax_amount' => $taxAmount,
+                'shipping_amount' => $shippingAmount,
+                'total_amount' => $total,
+                'currency' => 'USD',
+                'billing_address' => $billingAddress,
+                'shipping_address' => $billingAddress,
+                'payment_method' => 'quick_checkout',
+                'payment_status' => 'paid',
+                'payment_id' => $paymentResult['transaction_id'],
+                'notes' => 'Quick checkout order',
+            ]);
+
+            // Create order items
+            foreach ($cartItems as $item) {
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $item->product->id,
+                    'product_name' => $item->product->name,
+                    'product_sku' => $item->product->sku,
+                    'quantity' => $item->quantity,
+                    'price' => $item->product->current_price,
+                    'total' => $item->quantity * $item->product->current_price,
+                    'product_options' => $item->product_options,
+                ]);
+
+                // Update product stock
+                if ($item->product->manage_stock) {
+                    $item->product->decrement('stock_quantity', $item->quantity);
+                }
+            }
+
+            // Clear cart
+            $this->clearCart();
+
+            DB::commit();
+
+            // Store success message in session
+            session()->flash('payment_message', $paymentResult['message']);
+            session()->flash('payment_details', [
+                'transaction_id' => $paymentResult['transaction_id'],
+            ]);
+
+            // Return JSON response for AJAX
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Order placed successfully!',
+                    'order_number' => $order->order_number,
+                    'total' => number_format($total, 2),
+                    'redirect_url' => route('cart.index')
+                ]);
+            }
+
+            return redirect()->route('cart.index')->with('success', 'Order placed successfully! Your cart has been cleared.');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'An error occurred while processing your order. Please try again.'
+                ]);
+            }
+
+            return back()->withErrors(['error' => 'An error occurred while processing your order. Please try again.']);
         }
     }
 }

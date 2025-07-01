@@ -141,6 +141,54 @@
             </div>
         </div>
 
+        <!-- Payment Confirmation -->
+        @if(session('payment_message'))
+        <div class="bg-green-50 dark:bg-green-900 border border-green-200 dark:border-green-700 rounded-lg p-6 mb-8">
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div class="ml-3 flex-1">
+                    <h3 class="text-lg font-semibold text-green-800 dark:text-green-200 mb-2">
+                        Payment Successful!
+                    </h3>
+                    <p class="text-green-700 dark:text-green-300 mb-4">
+                        {{ session('payment_message') }}
+                    </p>
+                    @if(session('payment_details.transaction_id'))
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-green-200 dark:border-green-600">
+                        <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">Payment Details</h4>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">Transaction ID:</span>
+                                <span class="font-mono text-gray-900 dark:text-gray-100">{{ session('payment_details.transaction_id') }}</span>
+                            </div>
+                            @if(session('payment_details.card_type') && session('payment_details.last_four'))
+                            <div class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">Payment Method:</span>
+                                <span class="text-gray-900 dark:text-gray-100">{{ session('payment_details.card_type') }} •••• •••• •••• {{ session('payment_details.last_four') }}</span>
+                            </div>
+                            @endif
+                            <div class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">Amount:</span>
+                                <span class="font-semibold text-green-600 dark:text-green-400">${{ number_format($order->total_amount, 2) }}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">Status:</span>
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-200">
+                                    {{ ucfirst($order->payment_status) }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+        @endif
+
         <!-- Addresses -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
             <!-- Billing Address -->
@@ -268,4 +316,69 @@
             </a>
         </div>
     </div>
+
+    @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show success animation
+            const successHeader = document.querySelector('.text-center');
+            if (successHeader) {
+                successHeader.style.opacity = '0';
+                successHeader.style.transform = 'translateY(-20px)';
+
+                setTimeout(() => {
+                    successHeader.style.transition = 'all 0.6s ease-out';
+                    successHeader.style.opacity = '1';
+                    successHeader.style.transform = 'translateY(0)';
+                }, 100);
+            }
+
+            // Animate payment confirmation if present
+            const paymentConfirmation = document.querySelector('.bg-green-50');
+            if (paymentConfirmation) {
+                paymentConfirmation.style.opacity = '0';
+                paymentConfirmation.style.transform = 'scale(0.95)';
+
+                setTimeout(() => {
+                    paymentConfirmation.style.transition = 'all 0.5s ease-out';
+                    paymentConfirmation.style.opacity = '1';
+                    paymentConfirmation.style.transform = 'scale(1)';
+                }, 300);
+            }
+
+            // Show success toast notification
+            @if(session('payment_message'))
+            showSuccessToast('🎉 {{ session('payment_message') }}');
+            @endif
+        });
+
+        function showSuccessToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-4 right-4 z-50 max-w-sm bg-green-500 text-white p-4 rounded-lg shadow-lg transform transition-all duration-500 translate-x-full';
+            toast.innerHTML = `
+                <div class="flex items-center">
+                    <svg class="w-6 h-6 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span class="font-medium">${message}</span>
+                </div>
+            `;
+
+            document.body.appendChild(toast);
+
+            // Slide in
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full');
+            }, 100);
+
+            // Slide out after 5 seconds
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+                setTimeout(() => {
+                    toast.remove();
+                }, 500);
+            }, 5000);
+        }
+    </script>
+    @endpush
 </x-app-layout>
