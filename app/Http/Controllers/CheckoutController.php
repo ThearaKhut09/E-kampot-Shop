@@ -21,6 +21,11 @@ class CheckoutController extends Controller
      */
     public function index()
     {
+        // Ensure user is authenticated
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Please log in to proceed with checkout.');
+        }
+
         $cartItems = $this->getCartItems();
 
         if ($cartItems->isEmpty()) {
@@ -31,54 +36,54 @@ class CheckoutController extends Controller
             return $item->quantity * $item->product->current_price;
         });
 
-        $shippingAmount = $this->calculateShipping($subtotal);
-        $taxAmount = $this->calculateTax($subtotal);
-        $total = $subtotal + $shippingAmount + $taxAmount;
+        $shipping = $this->calculateShipping($subtotal);
+        $tax = $this->calculateTax($subtotal);
+        $total = $subtotal + $shipping + $tax;
 
-        return view('checkout.index', compact('cartItems', 'subtotal', 'shippingAmount', 'taxAmount', 'total'));
+        return view('checkout.payment', compact('cartItems', 'subtotal', 'shipping', 'tax', 'total'));
     }
 
     /**
-     * Process the checkout and create order.
+     * Process payment for the new checkout flow.
      */
-    public function store(Request $request)
+    public function processPayment(Request $request)
     {
+        // Ensure user is authenticated
+        if (!Auth::check()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Please log in to continue.',
+                'redirect_url' => route('login')
+            ], 401);
+        }
+
         $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'phone' => 'required|string|max:20',
-            'address' => 'required|string|max:500',
-            'city' => 'required|string|max:255',
-            'postal_code' => 'required|string|max:20',
-            'country' => 'required|string|max:255',
-            'payment_method' => 'required|in:credit_card,paypal,bank_transfer,cash_on_delivery',
-            'terms' => 'accepted',
-            'shipping_different' => 'boolean',
-            // Shipping address fields (optional)
-            'shipping_first_name' => 'required_if:shipping_different,1|string|max:255',
-            'shipping_last_name' => 'required_if:shipping_different,1|string|max:255',
-            'shipping_address' => 'required_if:shipping_different,1|string|max:500',
-            'shipping_city' => 'required_if:shipping_different,1|string|max:255',
-            'shipping_postal_code' => 'required_if:shipping_different,1|string|max:20',
-            'shipping_country' => 'required_if:shipping_different,1|string|max:255',
-            // Credit card fields (required if payment method is credit card)
-            'card_number' => 'required_if:payment_method,credit_card|string',
-            'card_expiry' => 'required_if:payment_method,credit_card|string',
-            'card_cvc' => 'required_if:payment_method,credit_card|string',
-            'card_name' => 'required_if:payment_method,credit_card|string|max:255',
+            'payment_method' => 'required|in:visa,paypal',
+            'total' => 'required|numeric|min:0',
+            // Visa fields
+            'card_number' => 'required_if:payment_method,visa|string',
+            'card_expiry' => 'required_if:payment_method,visa|string',
+            'card_cvv' => 'required_if:payment_method,visa|string',
+            'card_name' => 'required_if:payment_method,visa|string|max:255',
         ]);
 
         $cartItems = $this->getCartItems();
 
         if ($cartItems->isEmpty()) {
-            return redirect()->route('cart.index')->with('error', 'Your cart is empty.');
+            return response()->json([
+                'success' => false,
+                'message' => 'Your cart is empty.',
+                'redirect_url' => route('cart.index')
+            ]);
         }
 
         // Check stock availability
         foreach ($cartItems as $item) {
             if ($item->product->manage_stock && $item->product->stock_quantity < $item->quantity) {
-                return back()->withErrors(['stock' => "Sorry, we don't have enough stock for {$item->product->name}."]);
+                return response()->json([
+                    'success' => false,
+                    'message' => "Sorry, we don't have enough stock for {$item->product->name}."
+                ]);
             }
         }
 
@@ -93,38 +98,36 @@ class CheckoutController extends Controller
             $taxAmount = $this->calculateTax($subtotal);
             $total = $subtotal + $shippingAmount + $taxAmount;
 
-            // Create billing address
-            $billingAddress = [
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'email' => $request->email,
-                'phone' => $request->phone,
-                'address' => $request->address,
-                'city' => $request->city,
-                'postal_code' => $request->postal_code,
-                'country' => $request->country,
-            ];
-
-            // Create shipping address
-            $shippingAddress = $billingAddress;
-            if ($request->shipping_different) {
-                $shippingAddress = [
-                    'first_name' => $request->shipping_first_name,
-                    'last_name' => $request->shipping_last_name,
-                    'address' => $request->shipping_address,
-                    'city' => $request->shipping_city,
-                    'postal_code' => $request->shipping_postal_code,
-                    'country' => $request->shipping_country,
-                ];
+            // Verify total matches request
+            if (abs($total - $request->total) > 0.01) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Order total mismatch. Please refresh and try again.'
+                ]);
             }
 
-            // Process payment
-            $paymentResult = $this->processPayment($request, $total);
+            // Use current user's information for billing
+            $user = Auth::user();
+            $billingAddress = [
+                'first_name' => $user->first_name ?? 'Customer',
+                'last_name' => $user->last_name ?? 'User',
+                'email' => $user->email,
+                'phone' => $user->phone ?? 'N/A',
+                'address' => 'Default Address',
+                'city' => 'Kampot',
+                'postal_code' => '07000',
+                'country' => 'Cambodia',
+            ];
+
+            // Process fake payment
+            $paymentResult = $this->processFakePayment($request, $total);
 
             if (!$paymentResult['success']) {
                 DB::rollBack();
-                return back()->withErrors(['payment' => $paymentResult['message']])
-                            ->with('error', 'Payment failed: ' . $paymentResult['message']);
+                return response()->json([
+                    'success' => false,
+                    'message' => $paymentResult['message']
+                ]);
             }
 
             // Create order
@@ -138,19 +141,11 @@ class CheckoutController extends Controller
                 'total_amount' => $total,
                 'currency' => 'USD',
                 'billing_address' => $billingAddress,
-                'shipping_address' => $shippingAddress,
+                'shipping_address' => $billingAddress,
                 'payment_method' => $request->payment_method,
-                'payment_status' => $paymentResult['status'],
-                'payment_id' => $paymentResult['transaction_id'] ?? null,
-                'notes' => $request->notes,
-            ]);
-
-            // Store payment success message in session for success page
-            session()->flash('payment_message', $paymentResult['message']);
-            session()->flash('payment_details', [
-                'transaction_id' => $paymentResult['transaction_id'] ?? null,
-                'last_four' => $paymentResult['last_four'] ?? null,
-                'card_type' => $paymentResult['card_type'] ?? null,
+                'payment_status' => 'paid',
+                'payment_id' => $paymentResult['transaction_id'],
+                'notes' => 'Payment processed via ' . ucfirst($request->payment_method),
             ]);
 
             // Create order items
@@ -177,14 +172,101 @@ class CheckoutController extends Controller
 
             DB::commit();
 
-            // Send confirmation email
-            $this->sendOrderConfirmationEmail($order);
+            // Send order confirmation email (in background)
+            try {
+                $this->sendOrderConfirmationEmail($order);
+            } catch (\Exception $e) {
+                Log::error('Failed to send order confirmation email: ' . $e->getMessage());
+            }
 
-            return redirect()->route('checkout.success', $order->id)->with('success', 'Order placed successfully!');
+            // Send admin notification email (in background)
+            try {
+                $this->sendAdminOrderNotification($order);
+            } catch (\Exception $e) {
+                Log::error('Failed to send admin order notification: ' . $e->getMessage());
+            }
+
+            // Return success response
+            $response = [
+                'success' => true,
+                'message' => 'Payment processed successfully!',
+                'order_number' => $order->order_number,
+                'total' => number_format($total, 2),
+                'payment_method' => $request->payment_method,
+            ];
+
+            // Add payment-specific details
+            if ($request->payment_method === 'visa') {
+                $response['card_type'] = $paymentResult['card_type'] ?? 'Card';
+                $response['last_four'] = $paymentResult['last_four'] ?? '****';
+            }
+
+            return response()->json($response);
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->withErrors(['error' => 'An error occurred while processing your order. Please try again.']);
+            Log::error('Payment processing error: ' . $e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while processing your payment. Please try again.'
+            ]);
+        }
+    }
+
+    /**
+     * Process fake payment for demo purposes.
+     */
+    private function processFakePayment($request, $total)
+    {
+        // Simulate processing delay
+        sleep(1);
+
+        if ($request->payment_method === 'visa') {
+            $cardNumber = str_replace(' ', '', $request->card_number);
+
+            // Basic validation
+            if (strlen($cardNumber) < 13 || strlen($cardNumber) > 19) {
+                return ['success' => false, 'message' => 'Invalid card number'];
+            }
+
+            // Simulate payment failure for cards ending in 0000
+            if (substr($cardNumber, -4) === '0000') {
+                return ['success' => false, 'message' => 'Payment declined. Please try a different card.'];
+            }
+
+            return [
+                'success' => true,
+                'transaction_id' => 'VISA_' . strtoupper(uniqid()),
+                'message' => 'Visa payment processed successfully!',
+                'last_four' => substr($cardNumber, -4),
+                'card_type' => $this->detectCardType($cardNumber)
+            ];
+        } elseif ($request->payment_method === 'paypal') {
+            return [
+                'success' => true,
+                'transaction_id' => 'PP_' . strtoupper(uniqid()),
+                'message' => 'PayPal payment processed successfully!'
+            ];
+        }
+
+        return ['success' => false, 'message' => 'Invalid payment method'];
+    }
+
+    /**
+     * Send admin order notification.
+     */
+    private function sendAdminOrderNotification($order)
+    {
+        try {
+            // Get admin users
+            $admins = User::role('admin')->get();
+
+            foreach ($admins as $admin) {
+                Mail::to($admin->email)->send(new \App\Mail\AdminOrderNotification($order));
+            }
+        } catch (\Exception $e) {
+            Log::error('Failed to send admin order notification: ' . $e->getMessage());
         }
     }
 
@@ -252,90 +334,6 @@ class CheckoutController extends Controller
         } while (Order::where('order_number', $orderNumber)->exists());
 
         return $orderNumber;
-    }
-
-    /**
-     * Process payment based on selected method.
-     */
-    private function processPayment($request, $total)
-    {
-        switch ($request->payment_method) {
-            case 'credit_card':
-                return $this->processCreditCardPayment($request, $total);
-            case 'paypal':
-                return $this->processPayPalPayment($request, $total);
-            case 'bank_transfer':
-                return [
-                    'success' => true,
-                    'status' => 'pending',
-                    'transaction_id' => 'BT_' . strtoupper(uniqid()),
-                    'message' => 'Bank transfer initiated successfully! Please complete the transfer within 24 hours.'
-                ];
-            case 'cash_on_delivery':
-                return [
-                    'success' => true,
-                    'status' => 'pending',
-                    'transaction_id' => 'COD_' . strtoupper(uniqid()),
-                    'message' => 'Cash on delivery order placed successfully! Pay when your order arrives.'
-                ];
-            default:
-                return ['success' => false, 'message' => 'Invalid payment method'];
-        }
-    }
-
-    /**
-     * Process credit card payment (Demo implementation).
-     */
-    private function processCreditCardPayment($request, $total)
-    {
-        // This is a demo implementation
-        // In production, integrate with actual payment gateways like Stripe, Square, etc.
-
-        $cardNumber = str_replace(' ', '', $request->card_number);
-
-        // Basic validation
-        if (strlen($cardNumber) < 13 || strlen($cardNumber) > 19) {
-            return ['success' => false, 'message' => 'Invalid card number'];
-        }
-
-        // Demo: Simulate payment processing with a slight delay for realism
-        sleep(1);
-
-        $transactionId = 'TXN_' . strtoupper(uniqid());
-
-        // Simulate some payment failures for testing (cards ending in 0000)
-        if (substr($cardNumber, -4) === '0000') {
-            return ['success' => false, 'message' => 'Payment declined. Please try a different card.'];
-        }
-
-        // Simulate successful payment
-        return [
-            'success' => true,
-            'status' => 'paid',
-            'transaction_id' => $transactionId,
-            'message' => 'Payment processed successfully! Your card has been charged $' . number_format($total, 2),
-            'last_four' => substr($cardNumber, -4),
-            'card_type' => $this->detectCardType($cardNumber)
-        ];
-    }
-
-    /**
-     * Process PayPal payment (Demo implementation).
-     */
-    private function processPayPalPayment($request, $total)
-    {
-        // This is a demo implementation
-        // In production, integrate with PayPal API
-
-        // Simulate processing delay
-        sleep(1);
-
-        return [
-            'success' => true,
-            'status' => 'paid',
-            'transaction_id' => 'PP_' . strtoupper(uniqid()),
-            'message' => 'PayPal payment processed successfully! Amount charged: $' . number_format($total, 2)
-        ];
     }
 
     /**

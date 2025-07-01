@@ -53,7 +53,9 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
     Route::delete('/cart', [CartController::class, 'clear'])->name('cart.clear');
     Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count');
 
-    // Checkout Routes (Customer only) - Simplified
+    // Checkout Routes (Customer only) - Enhanced
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout/process', [CheckoutController::class, 'processPayment'])->name('checkout.process');
     Route::post('/checkout/quick', [CheckoutController::class, 'quickCheckout'])->name('checkout.quick');
 });
 
