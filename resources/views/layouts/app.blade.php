@@ -322,13 +322,21 @@
 
             function updateCartCount() {
                 const cartCountElement = document.getElementById('cart-count');
-                if (cartCountElement) {
-                    fetch('{{ route("cart.count") }}')
-                        .then(response => response.json())
-                        .then(data => {
-                            cartCountElement.textContent = data.count;
-                        });
-                }
+                // Only update cart count for customers, not for admin users
+                @auth
+                    @if(Auth::user()->hasRole('customer'))
+                        if (cartCountElement) {
+                            fetch('{{ route("cart.count") }}')
+                                .then(response => response.json())
+                                .then(data => {
+                                    cartCountElement.textContent = data.count;
+                                })
+                                .catch(error => {
+                                    console.log('Cart count fetch error:', error);
+                                });
+                        }
+                    @endif
+                @endauth
             }
 
             function showToast(message, type = 'success') {
