@@ -39,12 +39,6 @@
                             <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Price</dt>
                             <dd class="text-sm text-gray-900 dark:text-white">${{ number_format($product->price, 2) }}</dd>
                         </div>
-                        @if($product->sale_price)
-                        <div>
-                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Sale Price</dt>
-                            <dd class="text-sm text-gray-900 dark:text-white">${{ number_format($product->sale_price, 2) }}</dd>
-                        </div>
-                        @endif
                         <div>
                             <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Stock Quantity</dt>
                             <dd class="text-sm text-gray-900 dark:text-white {{ $product->stock_quantity < 10 ? 'text-red-600 dark:text-red-400' : '' }}">

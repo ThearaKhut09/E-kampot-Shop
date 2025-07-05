@@ -31,18 +31,10 @@ class HomeController extends Controller
             ->take(8)
             ->get();
 
-        $onSaleProducts = Product::with('categories')
-            ->active()
-            ->inStock()
-            ->whereNotNull('sale_price')
-            ->take(8)
-            ->get();
-
         return view('home', compact(
             'featuredProducts',
             'categories',
-            'newProducts',
-            'onSaleProducts'
+            'newProducts'
         ));
     }
 

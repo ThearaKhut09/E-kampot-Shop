@@ -40,17 +40,11 @@
             </div>
 
             <!-- Pricing -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label for="price" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Price ($)</label>
                     <input type="number" name="price" id="price" step="0.01" min="0" value="{{ old('price') }}" class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
                     @error('price')<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>@enderror
-                </div>
-
-                <div>
-                    <label for="sale_price" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sale Price ($)</label>
-                    <input type="number" name="sale_price" id="sale_price" step="0.01" min="0" value="{{ old('sale_price') }}" class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                    @error('sale_price')<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>@enderror
                 </div>
 
                 <div>

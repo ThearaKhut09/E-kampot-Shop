@@ -19,7 +19,6 @@ class Product extends Model
         'slug',
         'sku',
         'price',
-        'sale_price',
         'stock_quantity',
         'manage_stock',
         'in_stock',
@@ -40,7 +39,6 @@ class Product extends Model
 
     protected $casts = [
         'price' => 'decimal:2',
-        'sale_price' => 'decimal:2',
         'stock_quantity' => 'integer',
         'manage_stock' => 'boolean',
         'in_stock' => 'boolean',
@@ -140,31 +138,11 @@ class Product extends Model
     }
 
     /**
-     * Get the current price (sale price if available, otherwise regular price).
+     * Get the current price (just the regular price).
      */
     public function getCurrentPriceAttribute(): float
     {
-        return $this->sale_price ?? $this->price;
-    }
-
-    /**
-     * Check if product is on sale.
-     */
-    public function getIsOnSaleAttribute(): bool
-    {
-        return !is_null($this->sale_price) && $this->sale_price < $this->price;
-    }
-
-    /**
-     * Get the discount percentage.
-     */
-    public function getDiscountPercentageAttribute(): int
-    {
-        if (!$this->is_on_sale) {
-            return 0;
-        }
-
-        return round((($this->price - $this->sale_price) / $this->price) * 100);
+        return $this->price;
     }
 
     /**

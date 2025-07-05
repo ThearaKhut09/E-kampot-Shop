@@ -43,7 +43,6 @@ class AdminProductController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
-            'sale_price' => 'nullable|numeric|min:0|lt:price',
             'stock_quantity' => 'required|integer|min:0',
             'sku' => 'required|string|max:100|unique:products',
             'categories' => 'required|array|min:1',
@@ -66,7 +65,6 @@ class AdminProductController extends Controller
         // Remove manual slug generation - let the model handle it
         $product->description = $request->description;
         $product->price = $request->price;
-        $product->sale_price = $request->sale_price;
         $product->stock_quantity = $request->stock_quantity;
         $product->sku = $request->sku;
         $product->status = $request->status;
@@ -128,7 +126,6 @@ class AdminProductController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
-            'sale_price' => 'nullable|numeric|min:0|lt:price',
             'stock_quantity' => 'required|integer|min:0',
             'sku' => 'required|string|max:100|unique:products,sku,' . $product->id,
             'categories' => 'required|array|min:1',
@@ -150,7 +147,6 @@ class AdminProductController extends Controller
         // Remove manual slug generation - let the model handle it
         $product->description = $request->description;
         $product->price = $request->price;
-        $product->sale_price = $request->sale_price;
         $product->stock_quantity = $request->stock_quantity;
         $product->sku = $request->sku;
         $product->status = $request->status;

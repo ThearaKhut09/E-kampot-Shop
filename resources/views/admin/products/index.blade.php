@@ -48,9 +48,6 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm text-gray-900 dark:text-white">
                                     ${{ number_format($product->price, 2) }}
-                                    @if($product->sale_price)
-                                        <br><span class="text-xs text-red-600 dark:text-red-400">Sale: ${{ number_format($product->sale_price, 2) }}</span>
-                                    @endif
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">

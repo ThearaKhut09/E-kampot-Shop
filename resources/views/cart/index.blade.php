@@ -68,14 +68,6 @@
                                     <span class="text-lg font-bold text-primary-600 dark:text-primary-400">
                                         ${{ number_format($item->product->current_price, 2) }}
                                     </span>
-                                    @if($item->product->is_on_sale)
-                                        <span class="text-sm text-gray-500 line-through">
-                                            ${{ number_format($item->product->price, 2) }}
-                                        </span>
-                                        <span class="bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 text-xs font-semibold px-2 py-1 rounded">
-                                            {{ $item->product->discount_percentage }}% OFF
-                                        </span>
-                                    @endif
                                 </div>
                             </div>
 

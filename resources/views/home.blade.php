@@ -104,18 +104,9 @@
                             <p class="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">{{ $product->short_description }}</p>
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center space-x-2">
-                                    @if($product->is_on_sale)
-                                        <span class="text-lg font-bold text-primary-600 dark:text-primary-400">
-                                            ${{ number_format($product->sale_price, 2) }}
-                                        </span>
-                                        <span class="text-sm line-through text-gray-500">
-                                            ${{ number_format($product->price, 2) }}
-                                        </span>
-                                    @else
-                                        <span class="text-lg font-bold text-gray-900 dark:text-white">
-                                            ${{ number_format($product->price, 2) }}
-                                        </span>
-                                    @endif
+                                    <span class="text-lg font-bold text-gray-900 dark:text-white">
+                                        ${{ number_format($product->price, 2) }}
+                                    </span>
                                 </div>
                                 <button onclick="addToCart({{ $product->id }})"
                                         class="bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">
@@ -195,74 +186,6 @@
                                         class="bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">
                                     Add to Cart
                                 </button>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
-    @endif
-
-    <!-- Sale Products -->
-    @if($onSaleProducts->count() > 0)
-    <section class="py-16 bg-gray-50 dark:bg-gray-800 transition-colors duration-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Special Offers</h2>
-                <p class="text-lg text-gray-600 dark:text-gray-400">Limited time deals you won't want to miss</p>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                @foreach($onSaleProducts as $product)
-                    <div class="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-200">
-                        <div class="aspect-square overflow-hidden relative">
-                            <span class="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 text-xs rounded z-10">
-                                -{{ $product->discount_percentage }}%
-                            </span>
-                            <img src="{{ $product->primary_image ?? 'https://via.placeholder.com/400x400/e5e7eb/6b7280?text=No+Image' }}"
-                                 alt="{{ $product->name }}"
-                                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-200">
-                        </div>
-                        <div class="p-4">
-                            <div class="flex flex-wrap gap-1 mb-2">
-                                @foreach($product->categories->take(2) as $category)
-                                    <span class="px-2 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 text-xs rounded">
-                                        {{ $category->name }}
-                                    </span>
-                                @endforeach
-                            </div>
-                            <h3 class="font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">
-                                <a href="{{ route('products.show', $product->slug) }}" class="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-                                    {{ $product->name }}
-                                </a>
-                            </h3>
-                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">{{ $product->short_description }}</p>
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center space-x-2">
-                                    <span class="text-lg font-bold text-primary-600 dark:text-primary-400">
-                                        ${{ number_format($product->sale_price, 2) }}
-                                    </span>
-                                    <span class="text-sm line-through text-gray-500">
-                                        ${{ number_format($product->price, 2) }}
-                                    </span>
-                                </div>
-                                @auth
-                                    @if(auth()->user()->hasRole('customer'))
-                                        <button onclick="addToCart({{ $product->id }})"
-                                                class="bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">
-                                            Add to Cart
-                                        </button>
-                                    @else
-                                        <span class="text-xs text-gray-500 dark:text-gray-400 px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded-md">
-                                            Admin View
-                                        </span>
-                                    @endif
-                                @else
-                                    <a href="{{ route('login') }}" class="bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">
-                                        Login
-                                    </a>
-                                @endauth
                             </div>
                         </div>
                     </div>
