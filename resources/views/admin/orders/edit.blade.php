@@ -186,7 +186,7 @@
                     <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 mt-6">
                         <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Shipping Address</h3>
                         <div class="text-sm text-gray-600 dark:text-gray-400">
-                            {!! nl2br(e($order->shipping_address)) !!}
+                            {!! nl2br(e($order->formatted_shipping_address)) !!}
                         </div>
                     </div>
                 @endif
@@ -196,7 +196,7 @@
                     <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 mt-6">
                         <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Billing Address</h3>
                         <div class="text-sm text-gray-600 dark:text-gray-400">
-                            {!! nl2br(e($order->billing_address)) !!}
+                            {!! nl2br(e($order->formatted_billing_address)) !!}
                         </div>
                     </div>
                 @endif
@@ -235,7 +235,7 @@
                                                 </div>
                                                 @if($item->product_options)
                                                     <div class="text-sm text-gray-500 dark:text-gray-400">
-                                                        {{ $item->product_options }}
+                                                        {{ $item->formatted_product_options }}
                                                     </div>
                                                 @endif
                                             </div>

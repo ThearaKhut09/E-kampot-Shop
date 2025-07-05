@@ -50,6 +50,22 @@ class Cart extends Model
     }
 
     /**
+     * Get the formatted product options for display.
+     */
+    public function getFormattedProductOptionsAttribute(): ?string
+    {
+        if (!$this->product_options) {
+            return null;
+        }
+
+        if (is_array($this->product_options)) {
+            return implode(', ', $this->product_options);
+        }
+
+        return $this->product_options;
+    }
+
+    /**
      * Scope to get cart items for a specific user.
      */
     public function scopeForUser($query, $userId)

@@ -81,7 +81,7 @@
                                     </p>
                                     @if($item->product_options)
                                         <p class="text-sm text-gray-500 dark:text-gray-400">
-                                            Options: {{ $item->product_options }}
+                                            Options: {{ $item->formatted_product_options }}
                                         </p>
                                     @endif
                                 </div>

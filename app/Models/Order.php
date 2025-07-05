@@ -112,4 +112,36 @@ class Order extends Model
     {
         return $this->status === 'delivered';
     }
+
+    /**
+     * Get the formatted shipping address for display.
+     */
+    public function getFormattedShippingAddressAttribute(): ?string
+    {
+        if (!$this->shipping_address) {
+            return null;
+        }
+
+        if (is_array($this->shipping_address)) {
+            return implode("\n", array_filter($this->shipping_address));
+        }
+
+        return $this->shipping_address;
+    }
+
+    /**
+     * Get the formatted billing address for display.
+     */
+    public function getFormattedBillingAddressAttribute(): ?string
+    {
+        if (!$this->billing_address) {
+            return null;
+        }
+
+        if (is_array($this->billing_address)) {
+            return implode("\n", array_filter($this->billing_address));
+        }
+
+        return $this->billing_address;
+    }
 }

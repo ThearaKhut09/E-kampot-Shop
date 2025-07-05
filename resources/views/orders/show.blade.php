@@ -82,7 +82,7 @@
                                             <p>Price: ${{ number_format($item->price, 2) }}</p>
                                             <p>Quantity: {{ $item->quantity }}</p>
                                             @if($item->product_options)
-                                                <p>Options: {{ is_array($item->product_options) ? implode(', ', $item->product_options) : $item->product_options }}</p>
+                                                <p>Options: {{ $item->formatted_product_options }}</p>
                                             @endif
                                         </div>
                                     </div>

@@ -43,4 +43,20 @@ class OrderItem extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    /**
+     * Get the formatted product options for display.
+     */
+    public function getFormattedProductOptionsAttribute(): ?string
+    {
+        if (!$this->product_options) {
+            return null;
+        }
+
+        if (is_array($this->product_options)) {
+            return implode(', ', $this->product_options);
+        }
+
+        return $this->product_options;
+    }
 }

@@ -33,11 +33,17 @@ class AdminOrderController extends Controller
     {
         $request->validate([
             'status' => 'required|in:pending,processing,shipped,delivered,cancelled,refunded',
+            'payment_status' => 'nullable|in:pending,paid,failed,refunded',
             'notes' => 'nullable|string|max:1000',
         ]);
 
         $oldStatus = $order->status;
         $order->status = $request->status;
+        
+        if ($request->has('payment_status')) {
+            $order->payment_status = $request->payment_status;
+        }
+        
         $order->notes = $request->notes;
         $order->save();
 
