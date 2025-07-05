@@ -47,7 +47,7 @@
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Product IDs (comma-separated)</label>
                         <textarea name="product_ids" rows="3" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white" placeholder="1,2,3 or leave empty to apply to all products in category"></textarea>
                     </div>
-                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium">
+                    <button type="button" onclick="handleBulkAction(this.form)" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium">
                         Execute Action
                     </button>
                 </form>
@@ -220,9 +220,13 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" onclick="return confirm('Are you sure you want to execute this maintenance task?')" class="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md font-medium">
-                        Execute Task
-                    </button>
+                    <form method="POST" action="{{ route('admin.bulk.maintenance') }}" id="maintenance-form">
+                        @csrf
+                        <input type="hidden" name="action" value="maintenance">
+                        <button type="button" onclick="confirmDelete(document.getElementById('maintenance-form'), 'Maintenance Task', 'Maintenance Task')" class="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md font-medium">
+                            Execute Task
+                        </button>
+                    </form>
                 </form>
             </div>
         </div>
@@ -337,5 +341,20 @@ document.querySelectorAll('select[name="action"]').forEach(select => {
         }
     });
 });
+
+// Handle bulk actions with confirmation for destructive operations
+function handleBulkAction(form) {
+    const actionSelect = form.querySelector('select[name="action"]');
+    const action = actionSelect.value;
+    
+    if (action === 'delete') {
+        const itemType = form.querySelector('select[name="action"]').closest('form').querySelector('h3').textContent.includes('Product') ? 'Products' : 'Items';
+        confirmDelete(form, 'selected ' + itemType.toLowerCase(), itemType);
+    } else if (action === 'cancelled') {
+        confirmDelete(form, 'selected orders', 'Orders');
+    } else {
+        form.submit();
+    }
+}
 </script>
 @endsection

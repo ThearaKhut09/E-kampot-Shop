@@ -241,11 +241,11 @@
                         @endif
 
                         @if($user->is_active)
-                            <form action="{{ route('admin.users.deactivate', $user) }}" method="POST" class="w-full">
+                            <form action="{{ route('admin.users.deactivate', $user) }}" method="POST" class="w-full" id="deactivate-form-user-{{ $user->id }}">
                                 @csrf
                                 @method('PATCH')
-                                <button type="submit"
-                                        onclick="return confirm('Are you sure you want to deactivate this user?')"
+                                <button type="button"
+                                        onclick="confirmDelete(document.getElementById('deactivate-form-user-{{ $user->id }}'), '{{ $user->name }}', 'User Account')"
                                         class="w-full bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
                                     Deactivate Account
                                 </button>
@@ -262,11 +262,11 @@
                         @endif
 
                         @if(!$user->hasRole('admin') || ($user->hasRole('admin') && \App\Models\User::role('admin')->count() > 1))
-                            <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="w-full">
+                            <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="w-full" id="delete-form-user-show-{{ $user->id }}">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit"
-                                        onclick="return confirm('Are you sure you want to delete this user? This action cannot be undone.')"
+                                <button type="button"
+                                        onclick="confirmDelete(document.getElementById('delete-form-user-show-{{ $user->id }}'), '{{ $user->name }}', 'User')"
                                         class="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
                                     Delete User
                                 </button>

@@ -154,11 +154,11 @@
                         </a>
 
                         @if($category->children->count() === 0 && $category->products_count === 0)
-                            <form action="{{ route('admin.categories.destroy', $category) }}" method="POST" class="w-full">
+                            <form action="{{ route('admin.categories.destroy', $category) }}" method="POST" class="w-full" id="delete-form-category-{{ $category->id }}">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit"
-                                        onclick="return confirm('Are you sure you want to delete this category?')"
+                                <button type="button"
+                                        onclick="confirmDelete(document.getElementById('delete-form-category-{{ $category->id }}'), '{{ $category->name }}', 'Category')"
                                         class="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
                                     Delete Category
                                 </button>

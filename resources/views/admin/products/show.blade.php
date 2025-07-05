@@ -6,7 +6,16 @@
 <div class="space-y-6">
     <!-- Header -->
     <div class="flex justify-between items-center">
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">{{ $product->name }}</h2>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white"                    <a href="{{ route('admin.products.edit', $product) }}" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium text-center inline-block">
+                        Edit Product
+                    </a>
+                    <form method="POST" action="{{ route('admin.products.destroy', $product) }}" class="w-full" id="delete-form-product-{{ $product->id }}">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button" class="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium" onclick="confirmDelete(document.getElementById('delete-form-product-{{ $product->id }}'), '{{ $product->name }}', 'Product')">
+                            Delete Product
+                        </button>
+                    </form>ct->name }}</h2>
         <div class="space-x-2">
             <a href="{{ route('admin.products.edit', $product) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium">
                 Edit Product
@@ -249,10 +258,10 @@
                     <a href="{{ route('admin.products.edit', $product) }}" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium text-center block">
                         Edit Product
                     </a>
-                    <form method="POST" action="{{ route('admin.products.destroy', $product) }}" class="w-full">
+                    <form method="POST" action="{{ route('admin.products.destroy', $product) }}" class="w-full" id="delete-form-product-sidebar-{{ $product->id }}">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium" onclick="return confirm('Are you sure you want to delete this product?')">
+                        <button type="button" class="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium" onclick="confirmDelete(document.getElementById('delete-form-product-sidebar-{{ $product->id }}'), '{{ $product->name }}', 'Product')">
                             Delete Product
                         </button>
                     </form>

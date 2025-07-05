@@ -100,10 +100,10 @@
                                         </form>
                                     @endif
                                     <a href="{{ route('admin.reviews.show', $review) }}" class="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300">View</a>
-                                    <form method="POST" action="{{ route('admin.reviews.destroy', $review) }}" class="inline">
+                                    <form method="POST" action="{{ route('admin.reviews.destroy', $review) }}" class="inline" id="delete-form-review-{{ $review->id }}">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300" onclick="return confirm('Are you sure you want to delete this review?')">Delete</button>
+                                        <button type="button" class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300" onclick="confirmDelete(document.getElementById('delete-form-review-{{ $review->id }}'), 'Review for {{ $review->product->name }}', 'Review')">Delete</button>
                                     </form>
                                 </div>
                             </td>

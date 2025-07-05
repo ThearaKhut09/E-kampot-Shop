@@ -82,10 +82,10 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                                 <a href="{{ route('admin.products.show', $product) }}" class="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300">View</a>
                                 <a href="{{ route('admin.products.edit', $product) }}" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300">Edit</a>
-                                <form method="POST" action="{{ route('admin.products.destroy', $product) }}" class="inline">
+                                <form method="POST" action="{{ route('admin.products.destroy', $product) }}" class="inline" id="delete-form-{{ $product->id }}">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300" onclick="return confirm('Are you sure you want to delete this product?')">Delete</button>
+                                    <button type="button" class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300" onclick="confirmDelete(document.getElementById('delete-form-{{ $product->id }}'), '{{ $product->name }}', 'Product')">Delete</button>
                                 </form>
                             </td>
                         </tr>

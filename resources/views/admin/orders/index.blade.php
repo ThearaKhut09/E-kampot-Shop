@@ -87,10 +87,10 @@
                                 <a href="{{ route('admin.orders.show', $order) }}" class="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300">View</a>
                                 <a href="{{ route('admin.orders.edit', $order) }}" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300">Edit</a>
                                 @if(in_array($order->status, ['cancelled', 'refunded']))
-                                    <form method="POST" action="{{ route('admin.orders.destroy', $order) }}" class="inline">
+                                    <form method="POST" action="{{ route('admin.orders.destroy', $order) }}" class="inline" id="delete-form-order-{{ $order->id }}">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300" onclick="return confirm('Are you sure you want to delete this order?')">Delete</button>
+                                        <button type="button" class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300" onclick="confirmDelete(document.getElementById('delete-form-order-{{ $order->id }}'), 'Order #{{ $order->id }}', 'Order')">Delete</button>
                                     </form>
                                 @endif
                             </td>

@@ -80,10 +80,10 @@
                                 <a href="{{ route('admin.users.show', $user) }}" class="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300">View</a>
                                 <a href="{{ route('admin.users.edit', $user) }}" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300">Edit</a>
                                 @if($user->id !== auth()->id())
-                                    <form method="POST" action="{{ route('admin.users.destroy', $user) }}" class="inline">
+                                    <form method="POST" action="{{ route('admin.users.destroy', $user) }}" class="inline" id="delete-form-user-{{ $user->id }}">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300" onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
+                                        <button type="button" class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300" onclick="confirmDelete(document.getElementById('delete-form-user-{{ $user->id }}'), '{{ $user->name }}', 'User')">Delete</button>
                                     </form>
                                 @endif
                             </td>

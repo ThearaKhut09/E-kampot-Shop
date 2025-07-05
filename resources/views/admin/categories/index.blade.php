@@ -68,10 +68,10 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                                 <a href="{{ route('admin.categories.show', $category) }}" class="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300">View</a>
                                 <a href="{{ route('admin.categories.edit', $category) }}" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300">Edit</a>
-                                <form method="POST" action="{{ route('admin.categories.destroy', $category) }}" class="inline">
+                                <form method="POST" action="{{ route('admin.categories.destroy', $category) }}" class="inline" id="delete-form-category-idx-{{ $category->id }}">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300" onclick="return confirm('Are you sure? This will also delete all subcategories and move products to uncategorized.')">Delete</button>
+                                    <button type="button" class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300" onclick="confirmDelete(document.getElementById('delete-form-category-idx-{{ $category->id }}'), '{{ $category->name }} (and all subcategories)', 'Category')">Delete</button>
                                 </form>
                             </td>
                         </tr>
