@@ -21,15 +21,15 @@ class AdminCategoryController extends Controller
 
     public function create()
     {
-        $categories = Category::whereNull('parent_id')->get();
-        return view('admin.categories.create', compact('categories'));
+        $parentCategories = Category::whereNull('parent_id')->get();
+        return view('admin.categories.create', compact('parentCategories'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:categories,slug',
+            'slug' => 'nullable|string|max:255|unique:categories,slug',
             'description' => 'nullable|string|max:1000',
             'parent_id' => 'nullable|exists:categories,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -39,7 +39,7 @@ class AdminCategoryController extends Controller
 
         $category = new Category();
         $category->name = $request->name;
-        $category->slug = $request->slug;
+        $category->slug = $request->slug ?: Str::slug($request->name);
         $category->description = $request->description;
         $category->parent_id = $request->parent_id;
         $category->is_active = $request->has('is_active');
@@ -66,11 +66,11 @@ class AdminCategoryController extends Controller
 
     public function edit(Category $category)
     {
-        $categories = Category::where('id', '!=', $category->id)
+        $parentCategories = Category::where('id', '!=', $category->id)
             ->whereNull('parent_id')
             ->get();
 
-        return view('admin.categories.edit', compact('category', 'categories'));
+        return view('admin.categories.edit', compact('category', 'parentCategories'));
     }
 
     public function update(Request $request, Category $category)

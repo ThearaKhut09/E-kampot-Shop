@@ -26,6 +26,15 @@
                 </div>
 
                 <div>
+                    <label for="slug" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Slug</label>
+                    <input type="text" name="slug" id="slug" value="{{ old('slug') }}" class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Leave empty to auto-generate from name</p>
+                    @error('slug')<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>@enderror
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
                     <label for="parent_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Parent Category</label>
                     <select name="parent_id" id="parent_id" class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                         <option value="">Select Parent Category (Optional)</option>
@@ -55,34 +64,16 @@
 
             <!-- Status and Sort Order -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Status</label>
-                    <select name="status" id="status" class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                        <option value="active" {{ old('status') === 'active' ? 'selected' : '' }}>Active</option>
-                        <option value="inactive" {{ old('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
-                    </select>
-                    @error('status')<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>@enderror
+                <div class="flex items-center">
+                    <input type="checkbox" name="is_active" id="is_active" value="1" {{ old('is_active') ? 'checked' : '' }} class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                    <label for="is_active" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">Active</label>
+                    @error('is_active')<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>@enderror
                 </div>
 
                 <div>
                     <label for="sort_order" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sort Order</label>
                     <input type="number" name="sort_order" id="sort_order" min="0" value="{{ old('sort_order', 0) }}" class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                     @error('sort_order')<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>@enderror
-                </div>
-            </div>
-
-            <!-- SEO -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label for="meta_title" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Meta Title</label>
-                    <input type="text" name="meta_title" id="meta_title" value="{{ old('meta_title') }}" class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                    @error('meta_title')<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>@enderror
-                </div>
-
-                <div>
-                    <label for="meta_description" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Meta Description</label>
-                    <textarea name="meta_description" id="meta_description" rows="3" class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">{{ old('meta_description') }}</textarea>
-                    @error('meta_description')<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>@enderror
                 </div>
             </div>
 
@@ -98,4 +89,31 @@
         </form>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const nameInput = document.getElementById('name');
+    const slugInput = document.getElementById('slug');
+
+    nameInput.addEventListener('input', function() {
+        if (!slugInput.value || slugInput.hasAttribute('data-auto-generated')) {
+            const slug = this.value
+                .toLowerCase()
+                .replace(/[^a-z0-9 -]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+                .trim();
+
+            slugInput.value = slug;
+            slugInput.setAttribute('data-auto-generated', 'true');
+        }
+    });
+
+    slugInput.addEventListener('input', function() {
+        if (this.value) {
+            this.removeAttribute('data-auto-generated');
+        }
+    });
+});
+</script>
 @endsection
