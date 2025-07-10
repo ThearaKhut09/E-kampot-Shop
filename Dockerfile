@@ -28,39 +28,38 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www
 
-# Copy existing application directory contents
-COPY . /var/www
+# Copy composer files first for better caching
+COPY composer.json composer.lock ./
+
+# Install Composer dependencies as root first
+RUN composer install --no-dev --optimize-autoloader --no-scripts
+
+# Copy package.json and package-lock.json for npm
+COPY package*.json ./
+
+# Install npm dependencies
+RUN npm ci
+
+# Copy the rest of the application
+COPY . .
 
 # Create storage and bootstrap cache directories
-RUN mkdir -p /var/www/storage/logs \
-    && mkdir -p /var/www/storage/framework/cache \
-    && mkdir -p /var/www/storage/framework/sessions \
-    && mkdir -p /var/www/storage/framework/views \
-    && mkdir -p /var/www/bootstrap/cache
+RUN mkdir -p storage/logs \
+    && mkdir -p storage/framework/cache \
+    && mkdir -p storage/framework/sessions \
+    && mkdir -p storage/framework/views \
+    && mkdir -p bootstrap/cache
 
-# Copy existing application directory permissions
-COPY --chown=www-data:www-data . /var/www
+# Create SQLite database file
+RUN touch database/database.sqlite
 
-# Change current user to www-data
-USER www-data
-
-# Install dependencies
-RUN composer install --no-dev --optimize-autoloader
-
-# Install node dependencies and build assets
-RUN npm ci && npm run build
-
-# Change back to root for final setup
-USER root
+# Build frontend assets
+RUN npm run build
 
 # Set proper permissions
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/storage \
-    && chmod -R 755 /var/www/bootstrap/cache
-
-# Create SQLite database file
-RUN touch /var/www/database/database.sqlite \
-    && chown www-data:www-data /var/www/database/database.sqlite \
+    && chmod -R 755 /var/www/bootstrap/cache \
     && chmod 664 /var/www/database/database.sqlite
 
 # Copy nginx configuration
