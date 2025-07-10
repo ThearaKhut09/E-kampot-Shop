@@ -161,10 +161,7 @@
                             @else
                                 <div class="flex items-center space-x-4">
                                     <a href="{{ route('login') }}" class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 px-3 py-2 text-sm font-medium transition-colors">
-                                        Customer Login
-                                    </a>
-                                    <a href="{{ route('admin.login') }}" class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 px-3 py-2 text-sm font-medium transition-colors">
-                                        Admin Login
+                                        Login
                                     </a>
                                     <a href="{{ route('register') }}" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
                                         Register
@@ -232,10 +229,7 @@
                                 <div class="pt-4 pb-3 border-t border-gray-200 dark:border-gray-600">
                                     <div class="space-y-1">
                                         <a href="{{ route('login') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
-                                            Customer Login
-                                        </a>
-                                        <a href="{{ route('admin.login') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
-                                            Admin Login
+                                            Login
                                         </a>
                                         <a href="{{ route('register') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
                                             Register

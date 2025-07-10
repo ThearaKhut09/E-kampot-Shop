@@ -134,7 +134,7 @@
             </div>
 
             <!-- Demo Credentials -->
-            <div class="px-8 py-6 bg-purple-50 dark:bg-purple-900/20 border-t border-purple-200 dark:border-purple-800">
+            {{-- <div class="px-8 py-6 bg-purple-50 dark:bg-purple-900/20 border-t border-purple-200 dark:border-purple-800">
                 <div class="text-center">
                     <h3 class="text-sm font-semibold text-purple-800 dark:text-purple-200 mb-3">Demo Admin Credentials</h3>
                     <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-purple-200 dark:border-purple-700">
@@ -149,7 +149,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Footer -->
         <div class="mt-8 text-center">
