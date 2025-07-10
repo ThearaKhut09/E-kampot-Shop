@@ -18,10 +18,18 @@ use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\AdminAnalyticsController;
 use App\Http\Controllers\Admin\AdminBulkController;
 use App\Http\Controllers\Admin\AdminSystemController;
+use App\Http\Controllers\Admin\Auth\AdminAuthController;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
+// Admin Authentication Routes
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('login', [AdminAuthController::class, 'showLoginForm'])->name('login');
+    Route::post('login', [AdminAuthController::class, 'login']);
+    Route::post('logout', [AdminAuthController::class, 'logout'])->name('logout');
+});
 
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -47,7 +55,7 @@ Route::get('/products/{slug}', [ProductController::class, 'show'])->name('produc
 Route::get('/category/{slug}', [ProductController::class, 'category'])->name('category.show');
 
 // Cart Routes (Customer only)
-Route::middleware(['auth', 'role:customer'])->group(function () {
+Route::middleware(['customer.auth'])->group(function () {
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
     Route::patch('/cart/{cartItem}', [CartController::class, 'update'])->name('cart.update');
@@ -64,17 +72,17 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
 // User Dashboard and Orders (Authenticated Users Only)
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth:web', 'verified'])->name('dashboard');
 
-// Profile Routes (All authenticated users)
-Route::middleware('auth')->group(function () {
+// Profile Routes (Customer users only)
+Route::middleware('customer.auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 // Customer-specific routes
-Route::middleware(['auth', 'role:customer'])->group(function () {
+Route::middleware(['customer.auth'])->group(function () {
     // User Orders (Customer only)
     Route::get('/orders', [UserOrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [UserOrderController::class, 'show'])->name('orders.show');
@@ -87,7 +95,7 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
 });
 
 // Admin Routes (Admin Only)
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['admin.auth'])->prefix('admin')->name('admin.')->group(function () {
     // Dashboard
     Route::get('/', [AdminController::class, 'index'])->name('dashboard');
 

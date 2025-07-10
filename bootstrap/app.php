@@ -14,6 +14,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => \App\Http\Middleware\RoleMiddleware::class,
             'ajax.auth' => \App\Http\Middleware\HandleAjaxAuth::class,
+            'admin.auth' => \App\Http\Middleware\AdminAuth::class,
+            'customer.auth' => \App\Http\Middleware\CustomerAuth::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

@@ -19,6 +19,52 @@
         </div>
     </section>
 
+    <!-- Demo Credentials Section -->
+    @if(!Auth::guard('web')->check() && !Auth::guard('admin')->check())
+        <section class="py-8 bg-blue-50 dark:bg-blue-900/20 border-b border-blue-200 dark:border-blue-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-2xl font-bold text-blue-900 dark:text-blue-100 mb-4">Demo Credentials</h2>
+                    <p class="text-blue-700 dark:text-blue-300 mb-6">Use these credentials to test the application</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                        <!-- Customer Login -->
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 border-l-4 border-green-500">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">Customer Account</h3>
+                            <div class="space-y-2 mb-4">
+                                <p class="text-sm text-gray-600 dark:text-gray-300">
+                                    <strong>Email:</strong> customer@example.com
+                                </p>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">
+                                    <strong>Password:</strong> password
+                                </p>
+                            </div>
+                            <a href="{{ route('login') }}" class="inline-block bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                                Customer Login
+                            </a>
+                        </div>
+
+                        <!-- Admin Login -->
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 border-l-4 border-purple-500">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">Admin Account</h3>
+                            <div class="space-y-2 mb-4">
+                                <p class="text-sm text-gray-600 dark:text-gray-300">
+                                    <strong>Email:</strong> admin@example.com
+                                </p>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">
+                                    <strong>Password:</strong> password
+                                </p>
+                            </div>
+                            <a href="{{ route('admin.login') }}" class="inline-block bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                                Admin Login
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    @endif
+
     <!-- Featured Categories -->
     <section class="py-16 bg-white dark:bg-gray-900 transition-colors duration-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -107,7 +107,7 @@
                             </button>
 
                             <!-- Cart (Only for customers and guests) -->
-                            @if(!auth()->check() || !auth()->user()->hasRole('admin'))
+                            @if(!Auth::guard('admin')->check())
                                 <a href="{{ route('cart.index') }}" class="relative p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
                                     <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13v8a2 2 0 002 2h9.5M9 19.5h.01M20 19.5h.01"></path>
@@ -119,38 +119,52 @@
                             @endif
 
                             <!-- Authentication -->
-                            @auth
+                            @if(Auth::guard('web')->check() || Auth::guard('admin')->check())
                                 <div class="relative" x-data="{ open: false }">
                                     <button @click="open = !open" class="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
-                                        {{ Auth::user()->name }}
+                                        @if(Auth::guard('web')->check())
+                                            {{ Auth::guard('web')->user()->name }}
+                                        @else
+                                            {{ Auth::guard('admin')->user()->name }}
+                                        @endif
                                         <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                         </svg>
                                     </button>
                                     <div x-show="open" @click.away="open = false" x-transition class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50">
-                                        <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                            Dashboard
-                                        </a>
-                                        @if(Auth::user()->isAdmin())
-                                            <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                                Admin Panel
+                                        @if(Auth::guard('web')->check())
+                                            <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                                Dashboard
                                             </a>
+                                            <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                                Profile
+                                            </a>
+                                            <form method="POST" action="{{ route('logout') }}">
+                                                @csrf
+                                                <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                                    Logout
+                                                </button>
+                                            </form>
+                                        @else
+                                            <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                                Admin Dashboard
+                                            </a>
+                                            <form method="POST" action="{{ route('admin.logout') }}">
+                                                @csrf
+                                                <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                                    Logout
+                                                </button>
+                                            </form>
                                         @endif
-                                        <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                            Profile
-                                        </a>
-                                        <form method="POST" action="{{ route('logout') }}">
-                                            @csrf
-                                            <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                                Logout
-                                            </button>
-                                        </form>
                                     </div>
                                 </div>
                             @else
                                 <div class="flex items-center space-x-4">
                                     <a href="{{ route('login') }}" class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 px-3 py-2 text-sm font-medium transition-colors">
-                                        Login
+                                        Customer Login
+                                    </a>
+                                    <a href="{{ route('admin.login') }}" class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 px-3 py-2 text-sm font-medium transition-colors">
+                                        Admin Login
                                     </a>
                                     <a href="{{ route('register') }}" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
                                         Register
@@ -214,11 +228,14 @@
                             </div>
 
                             <!-- Mobile Auth Links -->
-                            @guest
+                            @if(!Auth::guard('web')->check() && !Auth::guard('admin')->check())
                                 <div class="pt-4 pb-3 border-t border-gray-200 dark:border-gray-600">
                                     <div class="space-y-1">
                                         <a href="{{ route('login') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
-                                            Login
+                                            Customer Login
+                                        </a>
+                                        <a href="{{ route('admin.login') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
+                                            Admin Login
                                         </a>
                                         <a href="{{ route('register') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
                                             Register
@@ -228,29 +245,42 @@
                             @else
                                 <div class="pt-4 pb-3 border-t border-gray-200 dark:border-gray-600">
                                     <div class="flex items-center px-4">
-                                        <div class="text-base font-medium text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
+                                        <div class="text-base font-medium text-gray-800 dark:text-gray-200">
+                                            @if(Auth::guard('web')->check())
+                                                {{ Auth::guard('web')->user()->name }}
+                                            @else
+                                                {{ Auth::guard('admin')->user()->name }}
+                                            @endif
+                                        </div>
                                     </div>
                                     <div class="mt-3 space-y-1">
-                                        <a href="{{ route('dashboard') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
-                                            Dashboard
-                                        </a>
-                                        @if(Auth::user()->isAdmin())
-                                            <a href="{{ route('admin.dashboard') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
-                                                Admin Panel
+                                        @if(Auth::guard('web')->check())
+                                            <a href="{{ route('dashboard') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
+                                                Dashboard
                                             </a>
+                                            <a href="{{ route('profile.edit') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
+                                                Profile
+                                            </a>
+                                            <form method="POST" action="{{ route('logout') }}">
+                                                @csrf
+                                                <button type="submit" class="block w-full text-left pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
+                                                    Logout
+                                                </button>
+                                            </form>
+                                        @else
+                                            <a href="{{ route('admin.dashboard') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
+                                                Admin Dashboard
+                                            </a>
+                                            <form method="POST" action="{{ route('admin.logout') }}">
+                                                @csrf
+                                                <button type="submit" class="block w-full text-left pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
+                                                    Logout
+                                                </button>
+                                            </form>
                                         @endif
-                                        <a href="{{ route('profile.edit') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
-                                            Profile
-                                        </a>
-                                        <form method="POST" action="{{ route('logout') }}">
-                                            @csrf
-                                            <button type="submit" class="block w-full text-left pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
-                                                Logout
-                                            </button>
-                                        </form>
                                     </div>
                                 </div>
-                            @endguest
+                            @endif
                         </div>
                     </div>
                 </div>
