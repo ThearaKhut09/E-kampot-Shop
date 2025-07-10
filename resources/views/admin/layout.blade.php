@@ -185,12 +185,6 @@
                             </svg>
                         </button>
 
-                        <!-- View Site -->
-                        <a href="{{ route('home') }}" target="_blank"
-                            class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200">
-                            View Site
-                        </a>
-
                         <!-- User Menu -->
                         <div class="relative" x-data="{ open: false }">
                             <button @click="open = !open"
