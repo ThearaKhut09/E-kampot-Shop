@@ -2,7 +2,7 @@ services:
   - type: web
     name: e-kampot-shop
     env: docker
-    dockerfilePath: ./Dockerfile.simple
+    dockerfilePath: ./Dockerfile.minimal
     dockerContext: .
     plan: free
     region: oregon
