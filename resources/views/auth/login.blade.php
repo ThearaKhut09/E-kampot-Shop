@@ -128,6 +128,23 @@
                         </a>
                     </p>
                 </div>
+
+                <!-- Demo Credentials -->
+                <div class="px-8 py-4 bg-green-50 dark:bg-green-900/20 border-t border-green-200 dark:border-green-800">
+                    <div class="text-center">
+                        <h3 class="text-sm font-semibold text-green-800 dark:text-green-200 mb-3">Demo Customer Credentials</h3>
+                        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-green-200 dark:border-green-700">
+                            <div class="space-y-2 text-sm">
+                                <p class="text-gray-700 dark:text-gray-300">
+                                    <strong class="text-green-700 dark:text-green-300">Email:</strong> customer@example.com
+                                </p>
+                                <p class="text-gray-700 dark:text-gray-300">
+                                    <strong class="text-green-700 dark:text-green-300">Password:</strong> password
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Footer -->
