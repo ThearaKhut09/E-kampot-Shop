@@ -24,29 +24,45 @@ class AdminReviewController extends Controller
     public function update(Request $request, Review $review)
     {
         $request->validate([
-            'status' => 'required|in:pending,approved,rejected',
+            'is_approved' => 'required|boolean',
         ]);
 
-        $review->update(['status' => $request->status]);
+        $review->update(['is_approved' => $request->is_approved]);
+
+        // Update product average rating
+        $review->product->updateAverageRating();
 
         return redirect()->route('admin.reviews.index')->with('success', 'Review status updated successfully.');
     }
 
     public function destroy(Review $review)
     {
+        $product = $review->product;
         $review->delete();
+
+        // Update product average rating
+        $product->updateAverageRating();
+
         return redirect()->route('admin.reviews.index')->with('success', 'Review deleted successfully.');
     }
 
     public function approve(Review $review)
     {
-        $review->update(['status' => 'approved']);
+        $review->update(['is_approved' => true]);
+
+        // Update product average rating
+        $review->product->updateAverageRating();
+
         return redirect()->back()->with('success', 'Review approved successfully.');
     }
 
     public function reject(Review $review)
     {
-        $review->update(['status' => 'rejected']);
+        $review->update(['is_approved' => false]);
+
+        // Update product average rating
+        $review->product->updateAverageRating();
+
         return redirect()->back()->with('success', 'Review rejected successfully.');
     }
 }

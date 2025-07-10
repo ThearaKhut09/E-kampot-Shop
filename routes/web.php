@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\UserOrderController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminCategoryController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\AdminAnalyticsController;
 use App\Http\Controllers\Admin\AdminBulkController;
 use App\Http\Controllers\Admin\AdminSystemController;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -77,6 +79,11 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
     Route::get('/orders', [UserOrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [UserOrderController::class, 'show'])->name('orders.show');
     Route::patch('/orders/{order}/cancel', [UserOrderController::class, 'cancel'])->name('orders.cancel');
+
+    // Review Routes (Customer only)
+    Route::post('/products/{product}/reviews', [App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
+    Route::patch('/reviews/{review}', [App\Http\Controllers\ReviewController::class, 'update'])->name('reviews.update');
+    Route::delete('/reviews/{review}', [App\Http\Controllers\ReviewController::class, 'destroy'])->name('reviews.destroy');
 });
 
 // Admin Routes (Admin Only)
@@ -141,5 +148,20 @@ Route::post('/debug/ajax', function(Request $request) {
         'headers' => $request->headers->all()
     ]);
 })->name('debug.ajax');
+
+// Debug route to test review submission
+Route::post('/debug/review/{product}', function(Request $request, Product $product) {
+    return response()->json([
+        'success' => true,
+        'message' => 'Review debug test successful',
+        'product_id' => $product->id,
+        'product_name' => $product->name,
+        'user_authenticated' => Auth::check(),
+        'user_id' => Auth::id(),
+        'request_data' => $request->all(),
+        'request_ajax' => $request->ajax(),
+        'request_expects_json' => $request->expectsJson(),
+    ]);
+})->name('debug.review');
 
 require __DIR__.'/auth.php';

@@ -103,7 +103,9 @@ class ProductController extends Controller
 
     public function show($slug)
     {
-        $product = Product::with(['categories', 'reviews.user'])
+        $product = Product::with(['categories', 'reviews' => function($query) {
+                $query->approved()->with('user');
+            }])
             ->where('slug', $slug)
             ->active()
             ->firstOrFail();

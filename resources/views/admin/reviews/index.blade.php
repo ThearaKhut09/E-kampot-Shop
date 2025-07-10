@@ -72,10 +72,9 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                    @if($review->status === 'approved') bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200
-                                    @elseif($review->status === 'rejected') bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200
-                                    @else bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 @endif">
-                                    {{ ucfirst($review->status) }}
+                                    @if($review->is_approved) bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200
+                                    @else bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200 @endif">
+                                    {{ $review->is_approved ? 'Approved' : 'Pending' }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
@@ -83,7 +82,7 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <div class="flex space-x-2">
-                                    @if($review->status === 'pending')
+                                    @if(!$review->is_approved)
                                         <form method="POST" action="{{ route('admin.reviews.approve', $review) }}" class="inline">
                                             @csrf
                                             @method('PATCH')
@@ -91,11 +90,12 @@
                                                 Approve
                                             </button>
                                         </form>
+                                    @else
                                         <form method="POST" action="{{ route('admin.reviews.reject', $review) }}" class="inline">
                                             @csrf
                                             @method('PATCH')
-                                            <button type="submit" class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300">
-                                                Reject
+                                            <button type="submit" class="text-yellow-600 dark:text-yellow-400 hover:text-yellow-900 dark:hover:text-yellow-300">
+                                                Unapprove
                                             </button>
                                         </form>
                                     @endif

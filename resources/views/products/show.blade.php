@@ -183,9 +183,67 @@
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-8">
             <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Customer Reviews</h2>
 
-            @if($product->reviews->count() > 0)
+            <!-- Review Form (Customer only) -->
+            @auth
+                @if(auth()->user()->hasRole('customer'))
+                    @php
+                        $userReview = $product->reviews()->where('user_id', auth()->id())->first();
+                    @endphp
+
+                    @if(!$userReview)
+                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 mb-8">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Write a Review</h3>
+                            <form id="review-form">
+                                @csrf
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                    <div>
+                                        <label for="rating" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Rating</label>
+                                        <div class="flex items-center space-x-1">
+                                            @for($i = 1; $i <= 5; $i++)
+                                                <button type="button" class="rating-star text-gray-300 hover:text-yellow-400 focus:outline-none" data-rating="{{ $i }}">
+                                                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                                    </svg>
+                                                </button>
+                                            @endfor
+                                        </div>
+                                        <input type="hidden" name="rating" id="rating-input" value="">
+                                    </div>
+                                    <div>
+                                        <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Title (Optional)</label>
+                                        <input type="text" name="title" id="title" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent" placeholder="Review title">
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="comment" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Comment</label>
+                                    <textarea name="comment" id="comment" rows="4" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent" placeholder="Share your thoughts about this product..."></textarea>
+                                </div>
+                                <button type="submit" class="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg transition-colors duration-200">
+                                    Submit Review
+                                </button>
+                            </form>
+                        </div>
+                    @else
+                        <div class="bg-blue-50 dark:bg-blue-900 rounded-lg p-4 mb-8">
+                            <p class="text-blue-700 dark:text-blue-300">
+                                You have already reviewed this product.
+                                @if(!$userReview->is_approved)
+                                    <span class="text-yellow-600 dark:text-yellow-400">Your review is pending approval.</span>
+                                @endif
+                            </p>
+                        </div>
+                    @endif
+                @endif
+            @endauth
+
+            <!-- Display Reviews -->
+            @php
+                $approvedReviews = $product->reviews()->approved()->with('user')->orderBy('created_at', 'desc')->get();
+            @endphp
+
+            @if($approvedReviews->count() > 0)
                 <div class="space-y-6">
-                    @foreach($product->reviews as $review)
+                    @foreach($approvedReviews as $review)
                         <div class="border-b border-gray-200 dark:border-gray-700 pb-6 last:border-b-0">
                             <div class="flex items-start space-x-4">
                                 <div class="flex-shrink-0">
@@ -215,6 +273,9 @@
                                             {{ $review->created_at->format('M j, Y') }}
                                         </span>
                                     </div>
+                                    @if($review->title)
+                                        <h5 class="text-sm font-medium text-gray-900 dark:text-white mb-1">{{ $review->title }}</h5>
+                                    @endif
                                     <p class="text-gray-600 dark:text-gray-400">{{ $review->comment }}</p>
                                 </div>
                             </div>
@@ -304,6 +365,144 @@
             }, 1500);
         @endauth
     }
+
+    // Review form functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const reviewForm = document.getElementById('review-form');
+        const ratingStars = document.querySelectorAll('.rating-star');
+        const ratingInput = document.getElementById('rating-input');
+        let selectedRating = 0;
+
+        // Handle star rating
+        ratingStars.forEach(star => {
+            star.addEventListener('click', function() {
+                selectedRating = parseInt(this.dataset.rating);
+                ratingInput.value = selectedRating;
+                updateStarDisplay();
+            });
+
+            star.addEventListener('mouseenter', function() {
+                const hoverRating = parseInt(this.dataset.rating);
+                highlightStars(hoverRating);
+            });
+        });
+
+        // Handle star hover out
+        document.querySelector('.rating-star').parentElement.addEventListener('mouseleave', function() {
+            updateStarDisplay();
+        });
+
+        function updateStarDisplay() {
+            ratingStars.forEach((star, index) => {
+                if (index < selectedRating) {
+                    star.classList.remove('text-gray-300');
+                    star.classList.add('text-yellow-400');
+                } else {
+                    star.classList.remove('text-yellow-400');
+                    star.classList.add('text-gray-300');
+                }
+            });
+        }
+
+        function highlightStars(rating) {
+            ratingStars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.remove('text-gray-300');
+                    star.classList.add('text-yellow-400');
+                } else {
+                    star.classList.remove('text-yellow-400');
+                    star.classList.add('text-gray-300');
+                }
+            });
+        }
+
+        // Handle form submission
+        if (reviewForm) {
+            reviewForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                console.log('Form submitted');
+                console.log('Selected rating:', selectedRating);
+                console.log('Form action URL:', '{{ route("reviews.store", $product) }}');
+
+                if (selectedRating === 0) {
+                    showToast('Please select a rating', 'error');
+                    return;
+                }
+
+                const formData = new FormData(this);
+                const submitButton = this.querySelector('button[type="submit"]');
+                const originalText = submitButton.textContent;
+
+                // Log form data
+                console.log('Form data:');
+                for (let [key, value] of formData.entries()) {
+                    console.log(key, value);
+                }
+
+                submitButton.disabled = true;
+                submitButton.textContent = 'Submitting...';
+
+                // Check if CSRF token exists
+                const csrfToken = document.querySelector('meta[name="csrf-token"]');
+                console.log('CSRF token element:', csrfToken);
+                console.log('CSRF token value:', csrfToken ? csrfToken.getAttribute('content') : 'NOT FOUND');
+
+                fetch('{{ route("reviews.store", $product) }}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: formData
+                })
+                .then(response => {
+                    console.log('Response status:', response.status);
+                    console.log('Response headers:', response.headers);
+                    console.log('Response ok:', response.ok);
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    return response.text().then(text => {
+                        console.log('Raw response text:', text);
+                        try {
+                            return JSON.parse(text);
+                        } catch (e) {
+                            console.error('JSON parse error:', e);
+                            throw new Error('Invalid JSON response');
+                        }
+                    });
+                })
+                .then(data => {
+                    console.log('Parsed response data:', data);
+                    if (data.success) {
+                        showToast(data.message, 'success');
+                        // Hide the form and show a success message
+                        reviewForm.parentElement.innerHTML = `
+                            <div class="bg-green-50 dark:bg-green-900 rounded-lg p-4 mb-8">
+                                <p class="text-green-700 dark:text-green-300">
+                                    Thank you for your review! It will be visible after admin approval.
+                                </p>
+                            </div>
+                        `;
+                    } else {
+                        showToast(data.message || 'An error occurred', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                    showToast('Error submitting review: ' + error.message, 'error');
+                })
+                .finally(() => {
+                    submitButton.disabled = false;
+                    submitButton.textContent = originalText;
+                });
+            });
+        }
+    });
 </script>
 @endpush
 </x-app-layout>

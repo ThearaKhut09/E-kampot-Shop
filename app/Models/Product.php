@@ -178,7 +178,15 @@ class Product extends Model
     {
         $reviews = $this->reviews()->where('is_approved', true);
         $this->review_count = $reviews->count();
-        $this->average_rating = $reviews->avg('rating') ?? 0;
+        $this->average_rating = $reviews->count() > 0 ? round($reviews->avg('rating'), 2) : 0;
         $this->save();
+    }
+
+    /**
+     * Get approved reviews for this product.
+     */
+    public function approvedReviews(): HasMany
+    {
+        return $this->hasMany(Review::class)->where('is_approved', true);
     }
 }
