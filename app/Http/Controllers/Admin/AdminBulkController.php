@@ -386,13 +386,12 @@ class AdminBulkController extends Controller
         $callback = function() use ($products) {
             $file = fopen('php://output', 'w');
 
-            fputcsv($file, ['ID', 'Name', 'SKU', 'Price', 'Sale Price', 'Stock', 'Status', 'Featured', 'Categories']);
+            fputcsv($file, ['ID', 'Name', 'Price', 'Sale Price', 'Stock', 'Status', 'Featured', 'Categories']);
 
             foreach ($products as $product) {
                 fputcsv($file, [
                     $product->id,
                     $product->name,
-                    $product->sku,
                     $product->price,
                     $product->sale_price,
                     $product->stock_quantity,

@@ -154,7 +154,7 @@ class CheckoutController extends Controller
                     'order_id' => $order->id,
                     'product_id' => $item->product->id,
                     'product_name' => $item->product->name,
-                    'product_sku' => $item->product->sku,
+                    'product_sku' => 'PROD-' . $item->product->id, // Generate SKU from product ID
                     'quantity' => $item->quantity,
                     'price' => $item->product->current_price,
                     'total' => $item->quantity * $item->product->current_price,
@@ -471,7 +471,7 @@ class CheckoutController extends Controller
                     'order_id' => $order->id,
                     'product_id' => $item->product->id,
                     'product_name' => $item->product->name,
-                    'product_sku' => $item->product->sku,
+                    'product_sku' => 'PROD-' . $item->product->id, // Generate SKU from product ID
                     'quantity' => $item->quantity,
                     'price' => $item->product->current_price,
                     'total' => $item->quantity * $item->product->current_price,

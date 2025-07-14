@@ -41,10 +41,6 @@
                             <dd class="text-sm text-gray-900 dark:text-white">{{ $product->name }}</dd>
                         </div>
                         <div>
-                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">SKU</dt>
-                            <dd class="text-sm text-gray-900 dark:text-white">{{ $product->sku }}</dd>
-                        </div>
-                        <div>
                             <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Price</dt>
                             <dd class="text-sm text-gray-900 dark:text-white">${{ number_format($product->price, 2) }}</dd>
                         </div>

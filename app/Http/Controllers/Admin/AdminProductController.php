@@ -44,7 +44,6 @@ class AdminProductController extends Controller
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
             'stock_quantity' => 'required|integer|min:0',
-            'sku' => 'required|string|max:100|unique:products',
             'categories' => 'required|array|min:1',
             'categories.*' => 'exists:categories,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -56,8 +55,6 @@ class AdminProductController extends Controller
             'dimensions' => 'nullable|string|max:100',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500',
-        ], [
-            'sku.unique' => 'This SKU is already in use. Please enter a unique SKU.',
         ]);
 
         $product = new Product();
@@ -66,7 +63,6 @@ class AdminProductController extends Controller
         $product->description = $request->description;
         $product->price = $request->price;
         $product->stock_quantity = $request->stock_quantity;
-        $product->sku = $request->sku;
         $product->status = $request->status;
         $product->featured = $request->boolean('featured');
         $product->weight = $request->weight;
@@ -127,7 +123,6 @@ class AdminProductController extends Controller
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
             'stock_quantity' => 'required|integer|min:0',
-            'sku' => 'required|string|max:100|unique:products,sku,' . $product->id,
             'categories' => 'required|array|min:1',
             'categories.*' => 'exists:categories,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -139,8 +134,6 @@ class AdminProductController extends Controller
             'dimensions' => 'nullable|string|max:100',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500',
-        ], [
-            'sku.unique' => 'This SKU is already in use. Please enter a unique SKU.',
         ]);
 
         $product->name = $request->name;
@@ -148,7 +141,6 @@ class AdminProductController extends Controller
         $product->description = $request->description;
         $product->price = $request->price;
         $product->stock_quantity = $request->stock_quantity;
-        $product->sku = $request->sku;
         $product->status = $request->status;
         $product->featured = $request->boolean('featured');
         $product->weight = $request->weight;

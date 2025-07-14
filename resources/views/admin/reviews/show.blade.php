@@ -31,9 +31,6 @@
                                     {{ $review->product->name }}
                                 </p>
                                 <p class="text-sm text-gray-500 dark:text-gray-400">
-                                    SKU: {{ $review->product->sku }}
-                                </p>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">
                                     Price: ${{ number_format($review->product->price, 2) }}
                                 </p>
                             </div>
