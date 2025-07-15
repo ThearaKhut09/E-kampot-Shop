@@ -183,11 +183,6 @@
                                             {{ Auth::guard('admin')->user()->name }}
                                         @endif
                                     </span>
-                                    <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 9l-7 7-7-7"></path>
-                                    </svg>
                                 </button>
                                 <div x-show="open" @click.away="open = false" x-transition
                                     class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50">
