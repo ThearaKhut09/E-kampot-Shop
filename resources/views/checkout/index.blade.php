@@ -342,43 +342,7 @@
                                 </div>
                             </label>
 
-                            <!-- Bank Transfer -->
-                            <label class="flex items-center p-4 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
-                                <input type="radio"
-                                       name="payment_method"
-                                       value="bank_transfer"
-                                       {{ old('payment_method') == 'bank_transfer' ? 'checked' : '' }}
-                                       onchange="showPaymentDetails('bank_transfer')"
-                                       class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300">
-                                <div class="ml-3">
-                                    <div class="text-sm font-medium text-gray-900 dark:text-gray-100">Bank Transfer</div>
-                                    <div class="text-sm text-gray-500 dark:text-gray-400">Direct bank transfer</div>
-                                </div>
-                                <div class="ml-auto">
-                                    <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"></path>
-                                    </svg>
-                                </div>
-                            </label>
 
-                            <!-- Cash on Delivery -->
-                            <label class="flex items-center p-4 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
-                                <input type="radio"
-                                       name="payment_method"
-                                       value="cash_on_delivery"
-                                       {{ old('payment_method') == 'cash_on_delivery' ? 'checked' : '' }}
-                                       onchange="showPaymentDetails('cash_on_delivery')"
-                                       class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300">
-                                <div class="ml-3">
-                                    <div class="text-sm font-medium text-gray-900 dark:text-gray-100">Cash on Delivery</div>
-                                    <div class="text-sm text-gray-500 dark:text-gray-400">Pay when your order is delivered</div>
-                                </div>
-                                <div class="ml-auto">
-                                    <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                                    </svg>
-                                </div>
-                            </label>
                         </div>
 
                         @error('payment_method')
@@ -457,31 +421,7 @@
                             </div>
                         </div>
 
-                        <!-- Bank Transfer Details -->
-                        <div id="bank_transfer_details" class="mt-6 hidden">
-                            <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-                                <h3 class="text-lg font-medium text-blue-900 dark:text-blue-200 mb-2">Bank Transfer Instructions</h3>
-                                <p class="text-sm text-blue-800 dark:text-blue-300 mb-2">
-                                    Please transfer the total amount to the following bank account:
-                                </p>
-                                <div class="text-sm text-blue-800 dark:text-blue-300">
-                                    <p><strong>Bank:</strong> E-Kampot Bank</p>
-                                    <p><strong>Account Name:</strong> E-Kampot Shop Ltd.</p>
-                                    <p><strong>Account Number:</strong> 1234567890</p>
-                                    <p><strong>SWIFT Code:</strong> EKMPKH22</p>
-                                </div>
-                            </div>
-                        </div>
 
-                        <!-- Cash on Delivery Details -->
-                        <div id="cash_on_delivery_details" class="mt-6 hidden">
-                            <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
-                                <h3 class="text-lg font-medium text-green-900 dark:text-green-200 mb-2">Cash on Delivery</h3>
-                                <p class="text-sm text-green-800 dark:text-green-300">
-                                    You will pay for your order when it is delivered to your doorstep. Please have the exact amount ready.
-                                </p>
-                            </div>
-                        </div>
                     </div>
 
                     <!-- Order Notes -->
@@ -657,16 +597,10 @@
         function showPaymentDetails(method) {
             // Hide all payment details
             document.getElementById('credit_card_details').classList.add('hidden');
-            document.getElementById('bank_transfer_details').classList.add('hidden');
-            document.getElementById('cash_on_delivery_details').classList.add('hidden');
 
             // Show selected payment method details
             if (method === 'credit_card') {
                 document.getElementById('credit_card_details').classList.remove('hidden');
-            } else if (method === 'bank_transfer') {
-                document.getElementById('bank_transfer_details').classList.remove('hidden');
-            } else if (method === 'cash_on_delivery') {
-                document.getElementById('cash_on_delivery_details').classList.remove('hidden');
             }
         }
 
