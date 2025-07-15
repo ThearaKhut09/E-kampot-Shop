@@ -29,8 +29,13 @@
                         <!-- Logo -->
                         <div class="flex-shrink-0">
                             <a href="{{ route('home') }}"
-                                class="text-2xl font-bold text-primary-600 dark:text-primary-400">
-                                E-Kampot Shop
+                                class="flex items-center text-2xl font-bold text-primary-600 dark:text-primary-400">
+                                <!-- Logo Icon - Always visible -->
+                                <div class="w-8 h-8 bg-primary-600 dark:bg-primary-400 rounded-lg flex items-center justify-center mr-2 flex-shrink-0">
+                                    <span class="text-white dark:text-gray-900 font-bold text-lg">E</span>
+                                </div>
+                                <!-- Shop Name - Hidden on small screens -->
+                                <span class="hidden sm:block">E-Kampot Shop</span>
                             </a>
                         </div>
 
@@ -164,11 +169,20 @@
                             <div class="relative" x-data="{ open: false }">
                                 <button @click="open = !open"
                                     class="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
-                                    @if (Auth::guard('web')->check())
-                                        {{ Auth::guard('web')->user()->name }}
-                                    @else
-                                        {{ Auth::guard('admin')->user()->name }}
-                                    @endif
+                                    <!-- User Icon - Always visible -->
+                                    <div class="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mr-2 sm:mr-1">
+                                        <svg class="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                        </svg>
+                                    </div>
+                                    <!-- User Name - Hidden on small screens -->
+                                    <span class="hidden sm:block">
+                                        @if (Auth::guard('web')->check())
+                                            {{ Auth::guard('web')->user()->name }}
+                                        @else
+                                            {{ Auth::guard('admin')->user()->name }}
+                                        @endif
+                                    </span>
                                     <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -209,14 +223,21 @@
                                 </div>
                             </div>
                         @else
-                            <div class="flex items-center space-x-4">
+                            <div class="flex items-center space-x-2">
                                 <a href="{{ route('login') }}"
-                                    class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 px-3 py-2 text-sm font-medium transition-colors">
+                                    class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 px-3 py-2 text-sm font-medium transition-colors hidden sm:block">
                                     Login
                                 </a>
                                 <a href="{{ route('register') }}"
-                                    class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                                    class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors hidden sm:block">
                                     Register
+                                </a>
+                                <!-- Mobile Login Icon -->
+                                <a href="{{ route('login') }}"
+                                    class="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors sm:hidden">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                                    </svg>
                                 </a>
                             </div>
                         @endauth
@@ -306,6 +327,11 @@
                     @else
                         <div class="pt-4 pb-3 border-t border-gray-200 dark:border-gray-600">
                             <div class="flex items-center px-4">
+                                <div class="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mr-3">
+                                    <svg class="w-6 h-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                    </svg>
+                                </div>
                                 <div class="text-base font-medium text-gray-800 dark:text-gray-200">
                                     @if (Auth::guard('web')->check())
                                         {{ Auth::guard('web')->user()->name }}
