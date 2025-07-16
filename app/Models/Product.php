@@ -146,8 +146,28 @@ class Product extends Model
      */
     public function getPrimaryImageAttribute(): ?string
     {
-        $images = $this->images ?? [];
-        return $images[0] ?? null;
+        // First try the main image field
+        if ($this->image) {
+            return $this->image;
+        }
+
+        // If no main image, try to get first from gallery
+        if ($this->gallery) {
+            $gallery = is_string($this->gallery) ? json_decode($this->gallery, true) : $this->gallery;
+            if (is_array($gallery) && count($gallery) > 0) {
+                return $gallery[0];
+            }
+        }
+
+        // Finally try the old images field for backward compatibility
+        if ($this->images) {
+            $images = is_string($this->images) ? json_decode($this->images, true) : $this->images;
+            if (is_array($images) && count($images) > 0) {
+                return $images[0];
+            }
+        }
+
+        return null;
     }
 
     /**

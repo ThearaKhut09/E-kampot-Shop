@@ -84,9 +84,15 @@
                 @foreach($featuredProducts as $product)
                     <div class="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-200">
                         <div class="aspect-square overflow-hidden">
-                            <img src="{{ $product->primary_image ?? 'https://via.placeholder.com/400x400/e5e7eb/6b7280?text=No+Image' }}"
-                                 alt="{{ $product->name }}"
-                                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-200">
+                            @if($product->primary_image)
+                                <img src="{{ asset('storage/' . $product->primary_image) }}"
+                                     alt="{{ $product->name }}"
+                                     class="w-full h-full object-cover hover:scale-105 transition-transform duration-200">
+                            @else
+                                <img src="https://via.placeholder.com/400x400/e5e7eb/6b7280?text=No+Image"
+                                     alt="{{ $product->name }}"
+                                     class="w-full h-full object-cover hover:scale-105 transition-transform duration-200">
+                            @endif
                         </div>
                         <div class="p-4">
                             <div class="flex flex-wrap gap-1 mb-2">
@@ -160,9 +166,15 @@
                     <div class="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-200">
                         <div class="aspect-square overflow-hidden relative">
                             <span class="absolute top-2 left-2 bg-green-500 text-white px-2 py-1 text-xs rounded z-10">New</span>
-                            <img src="{{ $product->primary_image ?? 'https://via.placeholder.com/400x400/e5e7eb/6b7280?text=No+Image' }}"
-                                 alt="{{ $product->name }}"
-                                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-200">
+                            @if($product->primary_image)
+                                <img src="{{ asset('storage/' . $product->primary_image) }}"
+                                     alt="{{ $product->name }}"
+                                     class="w-full h-full object-cover hover:scale-105 transition-transform duration-200">
+                            @else
+                                <img src="https://via.placeholder.com/400x400/e5e7eb/6b7280?text=No+Image"
+                                     alt="{{ $product->name }}"
+                                     class="w-full h-full object-cover hover:scale-105 transition-transform duration-200">
+                            @endif
                         </div>
                         <div class="p-4">
                             <div class="flex flex-wrap gap-1 mb-2">
