@@ -219,23 +219,25 @@
                             </div>
                         @else
                             <div class="flex items-center space-x-2">
+                                <!-- Desktop Login & Register Buttons -->
                                 <a href="{{ route('login') }}"
-                                    class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 px-3 py-2 text-sm font-medium transition-colors hidden sm:block">
+                                    class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 px-3 py-2 text-sm font-medium transition-colors hidden lg:block">
                                     Login
                                 </a>
                                 <a href="{{ route('register') }}"
-                                    class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors hidden sm:block">
+                                    class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors hidden lg:block">
                                     Register
                                 </a>
-                                <!-- Mobile Login Icon -->
+                                <!-- Mobile/Tablet Login Icon -->
                                 <a href="{{ route('login') }}"
-                                    class="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors sm:hidden">
+                                    class="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors lg:hidden"
+                                    title="Login">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
                                     </svg>
                                 </a>
                             </div>
-                        @endauth
+                        @endif
                 </div>
             </div>
 
