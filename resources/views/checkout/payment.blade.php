@@ -73,7 +73,7 @@
                     <div class="payment-method-card border-2 border-gray-200 dark:border-gray-700 rounded-xl p-6 cursor-pointer hover:border-blue-500 dark:hover:border-blue-400 transition-colors"
                          data-method="visa" onclick="selectPaymentMethod('visa')">
                         <div class="flex items-center space-x-4">
-                            <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center shadow-lg border border-gray-200">
+                            <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg border border-gray-200">
                                 <!-- Custom Visa Icon -->
                                 <svg class="w-10 h-7" viewBox="0 -11 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <rect x="0.5" y="0.5" width="69" height="47" rx="5.5" fill="white" stroke="#D9D9D9"/>
