@@ -236,9 +236,9 @@
                     <h3 class="text-lg font-medium text-gray-900 dark:text-white">Quick Actions</h3>
                 </div>
                 <div class="p-6 space-y-3">
-                    <a href="{{ route('products.show', $product->slug) }}" target="_blank" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium text-center block">
+                    {{-- <a href="{{ route('products.show', $product->slug) }}" target="_blank" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium text-center block">
                         View on Store
-                    </a>
+                    </a> --}}
                     <a href="{{ route('admin.products.edit', $product) }}" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium text-center block">
                         Edit Product
                     </a>
