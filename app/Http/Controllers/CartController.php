@@ -151,9 +151,16 @@ class CartController extends Controller
 
     public function count()
     {
-        return response()->json([
-            'count' => $this->getCartCount()
-        ]);
+        try {
+            return response()->json([
+                'count' => $this->getCartCount()
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Cart count error: ' . $e->getMessage());
+            return response()->json([
+                'count' => 0
+            ]);
+        }
     }
 
     private function getCartItems()

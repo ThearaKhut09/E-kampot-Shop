@@ -59,8 +59,11 @@ class AdminAuthController extends Controller
     {
         Auth::guard('admin')->logout();
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        // Only invalidate session if no other guards are active
+        if (!Auth::guard('web')->check()) {
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
 
         return redirect()->route('admin.login');
     }

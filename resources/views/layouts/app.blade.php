@@ -147,7 +147,7 @@
                         </button>
 
                         <!-- Cart (Only for customers and guests) -->
-                        @if (!Auth::guard('admin')->check())
+                        @if (Auth::guard('web')->check())
                             <a href="{{ route('cart.index') }}"
                                 class="relative p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
                                 <svg width="24px" height="24px" viewBox="0 0 24 24"
@@ -451,26 +451,59 @@
 
     <!-- JavaScript -->
     <script>
+        // Global cart management
+        window.cartManager = {
+            isAdmin: {{ Auth::guard('admin')->check() ? 'true' : 'false' }},
+            isWebUser: {{ Auth::guard('web')->check() ? 'true' : 'false' }},
+
+            updateCartCount: function() {
+                const cartCountElement = document.getElementById('cart-count');
+
+                // Only update cart count if web user is logged in and cart icon exists
+                if (this.isWebUser && cartCountElement) {
+                    fetch('{{ route('cart.count') }}', {
+                        method: 'GET',
+                        credentials: 'same-origin',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        cartCountElement.textContent = data.count || 0;
+                    })
+                    .catch(error => {
+                        console.log('Cart count fetch error:', error);
+                        cartCountElement.textContent = '0';
+                    });
+                }
+            },
+
+            init: function() {
+                this.updateCartCount();
+
+                // Update cart count periodically if web user is logged in
+                if (this.isWebUser) {
+                    setInterval(() => {
+                        this.updateCartCount();
+                    }, 30000); // Update every 30 seconds
+                }
+            }
+        };
+
         // Update cart count on page load
         document.addEventListener('DOMContentLoaded', function() {
-            updateCartCount();
+            window.cartManager.init();
         });
 
         function updateCartCount() {
-            const cartCountElement = document.getElementById('cart-count');
-            // Update cart count for guests and customers (not for admin users)
-            @if (!Auth::guard('admin')->check())
-                if (cartCountElement) {
-                    fetch('{{ route('cart.count') }}')
-                        .then(response => response.json())
-                        .then(data => {
-                            cartCountElement.textContent = data.count;
-                        })
-                        .catch(error => {
-                            console.log('Cart count fetch error:', error);
-                        });
-                }
-            @endif
+            window.cartManager.updateCartCount();
         }
 
         function showToast(message, type = 'success') {

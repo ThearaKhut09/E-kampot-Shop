@@ -34,6 +34,7 @@ class AuthenticatedSessionController extends Controller
 
         try {
             if ($user && $user->hasRole('admin')) {
+                // If user has admin role, redirect to admin dashboard
                 return redirect()->intended(route('admin.dashboard', absolute: false));
             }
         } catch (\Exception $e) {
@@ -51,9 +52,11 @@ class AuthenticatedSessionController extends Controller
     {
         Auth::guard('web')->logout();
 
-        session()->invalidate();
-
-        session()->regenerateToken();
+        // Only invalidate session if no other guards are active
+        if (!Auth::guard('admin')->check()) {
+            session()->invalidate();
+            session()->regenerateToken();
+        }
 
         return redirect('/');
     }

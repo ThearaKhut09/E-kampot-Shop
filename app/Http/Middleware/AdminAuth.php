@@ -21,8 +21,11 @@ class AdminAuth
         }
 
         // Additional check to ensure user has admin role
-        if (!Auth::guard('admin')->user()->hasRole('admin')) {
+        $user = Auth::guard('admin')->user();
+        if (!$user || !$user->hasRole('admin')) {
             Auth::guard('admin')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
             return redirect()->route('admin.login')->withErrors(['email' => 'Access denied.']);
         }
 

@@ -174,4 +174,22 @@ Route::post('/debug/review/{product}', function(Request $request, Product $produ
     ]);
 })->name('debug.review');
 
+// Debug session route (can be removed after fixing the issue)
+Route::get('/debug/session', function() {
+    return response()->json([
+        'web_guard_check' => Auth::guard('web')->check(),
+        'admin_guard_check' => Auth::guard('admin')->check(),
+        'web_user' => Auth::guard('web')->user(),
+        'admin_user' => Auth::guard('admin')->user(),
+        'session_id' => session()->getId(),
+        'session_data' => session()->all(),
+        'cookies' => request()->cookies->all(),
+        'session_config' => [
+            'driver' => config('session.driver'),
+            'cookie' => config('session.cookie'),
+            'admin_cookie' => config('session.admin_cookie'),
+        ]
+    ]);
+})->name('debug.session');
+
 require __DIR__.'/auth.php';

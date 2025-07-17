@@ -21,8 +21,11 @@ class CustomerAuth
         }
 
         // Additional check to ensure user has customer role
-        if (!Auth::guard('web')->user()->hasRole('customer')) {
+        $user = Auth::guard('web')->user();
+        if (!$user || !$user->hasRole('customer')) {
             Auth::guard('web')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
             return redirect()->route('login')->withErrors(['email' => 'Access denied.']);
         }
 

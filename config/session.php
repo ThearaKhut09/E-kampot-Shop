@@ -134,6 +134,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Admin Session Cookie Name
+    |--------------------------------------------------------------------------
+    |
+    | This defines a separate session cookie name for admin users to prevent
+    | session conflicts when both admin and regular users are logged in.
+    |
+    */
+
+    'admin_cookie' => env(
+        'ADMIN_SESSION_COOKIE',
+        Str::slug(env('APP_NAME', 'laravel'), '_').'_admin_session'
+    ),
+
+    /*
+    |--------------------------------------------------------------------------
     | Session Cookie Path
     |--------------------------------------------------------------------------
     |
