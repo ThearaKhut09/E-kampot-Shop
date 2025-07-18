@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Role;
 
 class AdminUserController extends Controller
@@ -31,15 +32,32 @@ class AdminUserController extends Controller
             'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:500',
             'role' => 'required|exists:roles,name',
+            'is_active' => 'boolean',
+            'email_verified' => 'boolean',
         ]);
 
-        $user = User::create([
+        $userData = [
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'phone' => $request->phone,
             'address' => $request->address,
+            'is_active' => $request->has('is_active'),
+        ];
+
+        // Handle email verification
+        if ($request->has('email_verified')) {
+            $userData['email_verified_at'] = now();
+        }
+
+        // Debug logging - remove this after testing
+        Log::info('Admin user create debug', [
+            'email_verified_checkbox' => $request->has('email_verified'),
+            'email_verified_value' => $request->input('email_verified'),
+            'email_verified_at_setting' => $userData['email_verified_at'] ?? null,
         ]);
+
+        $user = User::create($userData);
 
         $user->assignRole($request->role);
 
@@ -71,28 +89,40 @@ class AdminUserController extends Controller
             'email_verified' => 'boolean',
         ]);
 
-        $updateData = [
+        // Update basic fields
+        $user->update([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
             'address' => $request->address,
             'is_active' => $request->has('is_active'),
-        ];
+        ]);
 
         // Handle password update
         if ($request->filled('password')) {
-            $updateData['password'] = Hash::make($request->password);
+            $user->password = Hash::make($request->password);
+            $user->save();
         }
 
-        // Handle email verification
-        if ($request->has('email_verified') && !$user->email_verified_at) {
-            $updateData['email_verified_at'] = now();
-        } elseif (!$request->has('email_verified') && $user->email_verified_at) {
-            $updateData['email_verified_at'] = null;
+        // Handle email verification - direct assignment to avoid any interference
+        if ($request->has('email_verified')) {
+            // Checkbox is checked - set email as verified
+            $user->email_verified_at = now();
+        } else {
+            // Checkbox is unchecked - set email as unverified
+            $user->email_verified_at = null;
         }
+        $user->save();
 
-        $user->update($updateData);
         $user->syncRoles([$request->role]);
+
+        // Final verification check
+        $user->refresh();
+        Log::info('Admin user update result', [
+            'user_id' => $user->id,
+            'email_verified_at_after_update' => $user->email_verified_at,
+            'is_verified' => $user->hasVerifiedEmail(),
+        ]);
 
         return redirect()->route('admin.users.index')->with('success', 'User updated successfully.');
     }
