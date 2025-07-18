@@ -18,7 +18,8 @@ class AdminSystemController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth', 'verified', 'role:admin']);
+        // Middleware is already applied in the route group
+        // No need for additional middleware in constructor
     }
 
     /**
