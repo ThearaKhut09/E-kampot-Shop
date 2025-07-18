@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Session;
 use Symfony\Component\HttpFoundation\Response;
 
 class AdminSessionManager
@@ -16,13 +17,15 @@ class AdminSessionManager
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // For admin routes, use separate session configuration
+        // For admin routes, configure session to use admin-specific settings
         if ($request->is('admin') || $request->is('admin/*')) {
-            // Set separate session configuration for admin
-            Config::set([
-                'session.cookie' => config('session.admin_cookie'),
-                'session.table' => 'admin_sessions', // Use separate table if needed
-            ]);
+            // Use admin-specific session cookie
+            Config::set('session.cookie', config('session.admin_cookie'));
+
+            // Ensure session is started with admin configuration
+            if (!Session::isStarted()) {
+                Session::start();
+            }
         }
 
         return $next($request);

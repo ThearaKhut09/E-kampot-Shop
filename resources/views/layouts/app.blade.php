@@ -146,8 +146,31 @@
                             </svg>
                         </button>
 
+                        <!-- Authentication State Check -->
+                        @php
+                            $isWebUser = Auth::guard('web')->check();
+                            $isAdminUser = Auth::guard('admin')->check();
+
+                            // On main site (non-admin routes), only show web user authentication
+                            // Admin authentication should only be relevant on admin routes
+                            $currentRoute = request()->route();
+                            $isAdminRoute = $currentRoute && (str_starts_with($currentRoute->getPrefix(), 'admin') || request()->is('admin') || request()->is('admin/*'));
+
+                            if ($isAdminRoute) {
+                                // On admin routes, prioritize admin authentication
+                                $isAuthenticated = $isAdminUser;
+                                $showWebUser = false;
+                                $showAdminUser = $isAdminUser;
+                            } else {
+                                // On main site, only show web user authentication
+                                $isAuthenticated = $isWebUser;
+                                $showWebUser = $isWebUser;
+                                $showAdminUser = false;
+                            }
+                        @endphp
+
                         <!-- Cart (Only for customers and guests) -->
-                        @if (Auth::guard('web')->check())
+                        @if ($showWebUser || !$isAuthenticated)
                             <a href="{{ route('cart.index') }}"
                                 class="relative p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
                                 <svg width="24px" height="24px" viewBox="0 0 24 24"
@@ -166,7 +189,8 @@
                         @endif
 
                         <!-- Authentication -->
-                        @if (Auth::guard('web')->check() || Auth::guard('admin')->check())
+
+                        @if ($isAuthenticated)
                             <div class="relative" x-data="{ open: false }">
                                 <button @click="open = !open"
                                     class="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
@@ -182,16 +206,16 @@
                                     </div>
                                     <!-- User Name - Hidden on small screens -->
                                     <span class="hidden sm:block">
-                                        @if (Auth::guard('web')->check())
+                                        @if ($showWebUser)
                                             {{ Auth::guard('web')->user()->name }}
-                                        @else
+                                        @elseif ($showAdminUser)
                                             {{ Auth::guard('admin')->user()->name }}
                                         @endif
                                     </span>
                                 </button>
                                 <div x-show="open" @click.away="open = false" x-transition
                                     class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50">
-                                    @if (Auth::guard('web')->check())
+                                    @if ($showWebUser)
                                         <a href="{{ route('dashboard') }}"
                                             class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                                             Dashboard
@@ -207,7 +231,7 @@
                                                 Logout
                                             </button>
                                         </form>
-                                    @else
+                                    @elseif ($showAdminUser)
                                         <a href="{{ route('admin.dashboard') }}"
                                             class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                                             Admin Dashboard
@@ -315,7 +339,7 @@
                         </div>
 
                         <!-- Mobile Auth Links -->
-                        @if (!Auth::guard('web')->check() && !Auth::guard('admin')->check())
+                        @if (!$isAuthenticated)
                             <div class="pt-4 pb-3 border-t border-gray-200 dark:border-gray-600">
                                 <div class="space-y-1">
                                     <a href="{{ route('login') }}"
@@ -341,15 +365,15 @@
                                         </svg>
                                     </div>
                                     <div class="text-base font-medium text-gray-800 dark:text-gray-200">
-                                        @if (Auth::guard('web')->check())
+                                        @if ($showWebUser)
                                             {{ Auth::guard('web')->user()->name }}
-                                        @else
+                                        @elseif ($showAdminUser)
                                             {{ Auth::guard('admin')->user()->name }}
                                         @endif
                                     </div>
                                 </div>
                                 <div class="mt-3 space-y-1">
-                                    @if (Auth::guard('web')->check())
+                                    @if ($showWebUser)
                                         <a href="{{ route('dashboard') }}"
                                             class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
                                             Dashboard
@@ -365,7 +389,7 @@
                                                 Logout
                                             </button>
                                         </form>
-                                    @else
+                                    @elseif ($showAdminUser)
                                         <a href="{{ route('admin.dashboard') }}"
                                             class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
                                             Admin Dashboard
