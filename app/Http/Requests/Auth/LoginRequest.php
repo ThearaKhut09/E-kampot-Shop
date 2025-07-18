@@ -9,6 +9,15 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
+/**
+ * @method array only(array|mixed $keys)
+ * @method bool boolean(string $key = null, bool $default = false)
+ * @method string string(string $key, string $default = '')
+ * @method string|null ip()
+ * @method mixed get(string $key, mixed $default = null)
+ * @method mixed input(string $key, mixed $default = null)
+ * @method array all(array|mixed $keys = null)
+ */
 class LoginRequest extends FormRequest
 {
     /**
@@ -41,7 +50,14 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        // Get credentials from the request using array access
+        $credentials = [
+            'email' => $this['email'] ?? '',
+            'password' => $this['password'] ?? '',
+        ];
+        $remember = (bool) ($this['remember'] ?? false);
+
+        if (! Auth::attempt($credentials, $remember)) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
@@ -80,6 +96,8 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+        $email = $this['email'] ?? '';
+        $ip = request()->ip() ?? '';
+        return Str::transliterate(Str::lower($email).'|'.$ip);
     }
 }
