@@ -38,17 +38,17 @@ Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 Route::post('/contact', [HomeController::class, 'contactStore'])->name('contact.store');
 
 // Product Routes
-Route::get('/products-test', function() {
-    try {
-        $categories = \App\Models\Category::active()->parents()->orderBy('sort_order')->get();
-        return view('products.test', [
-            'products' => collect([]), // Empty collection for testing
-            'categories' => $categories
-        ]);
-    } catch (\Exception $e) {
-        return response('Error: ' . $e->getMessage(), 500);
-    }
-})->name('products.test');
+// Route::get('/products-test', function() {
+//     try {
+//         $categories = \App\Models\Category::active()->parents()->orderBy('sort_order')->get();
+//         return view('products.test', [
+//             'products' => collect([]), // Empty collection for testing
+//             'categories' => $categories
+//         ]);
+//     } catch (\Exception $e) {
+//         return response('Error: ' . $e->getMessage(), 500);
+//     }
+// })->name('products.test');
 
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/{slug}', [ProductController::class, 'show'])->name('products.show');
