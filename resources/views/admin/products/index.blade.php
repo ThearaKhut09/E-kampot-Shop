@@ -57,15 +57,22 @@
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="text-sm text-gray-900 dark:text-white
-                                    @if($product->stock_quantity < 10) text-red-600 dark:text-red-400 @endif">
+                                @php
+                                    $stockClasses = $product->stock_quantity < 10
+                                        ? 'text-sm text-red-600 dark:text-red-400'
+                                        : 'text-sm text-gray-900 dark:text-white';
+                                @endphp
+                                <span class="{{ $stockClasses }}">
                                     {{ $product->stock_quantity }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                    @if($product->status === 'active') bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200
-                                    @else bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200 @endif">
+                                @php
+                                    $statusClasses = $product->status === 'active'
+                                        ? 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                                        : 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
+                                @endphp
+                                <span class="{{ $statusClasses }}">
                                     {{ ucfirst($product->status) }}
                                 </span>
                                 @if($product->featured)
