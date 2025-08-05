@@ -123,7 +123,7 @@ class Product extends Model
      */
     public function scopeFeatured($query)
     {
-        return $query->where('is_featured', true);
+        return $query->where('featured', true);
     }
 
     /**
