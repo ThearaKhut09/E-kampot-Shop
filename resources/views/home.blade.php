@@ -112,7 +112,7 @@
                                     Name: {{ $product->name }}
                                 </p>
                             @endif
-                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">{{ $product->short_description }}</p>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">{{ $product->description }}</p>
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center space-x-2">
                                     <span class="text-lg font-bold text-gray-900 dark:text-white">
@@ -199,7 +199,7 @@
                                     Name: {{ $product->name }}
                                 </p>
                             @endif
-                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">{{ $product->short_description }}</p>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">{{ $product->description }}</p>
                             <div class="flex items-center justify-between">
                                 <span class="text-lg font-bold text-gray-900 dark:text-white">
                                     ${{ number_format($product->current_price, 2) }}

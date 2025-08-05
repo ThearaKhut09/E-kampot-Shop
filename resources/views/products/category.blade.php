@@ -165,7 +165,7 @@
                             @endif
 
                             <p class="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">
-                                {{ $product->short_description }}
+                                {{ $product->description }}
                             </p>
 
                             <!-- Rating -->
