@@ -1,4 +1,4 @@
-<x-app-layout :title="$product->name . ' - E-Kampot Shop'">
+<x-app-layout :title="($product->title ?: $product->name) . ' - E-Kampot Shop'">
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Breadcrumb -->
@@ -24,7 +24,7 @@
                         <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
                         </svg>
-                        <span class="ml-1 text-gray-500 dark:text-gray-400 md:ml-2">{{ $product->name }}</span>
+                        <span class="ml-1 text-gray-500 dark:text-gray-400 md:ml-2">{{ $product->title ?: $product->name }}</span>
                     </div>
                 </li>
             </ol>
@@ -36,7 +36,7 @@
                 <div class="aspect-w-1 aspect-h-1 bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden">
                     @if($product->image)
                         <img src="{{ asset('storage/' . $product->image) }}"
-                             alt="{{ $product->name }}"
+                             alt="{{ $product->title ?: $product->name }}"
                              class="w-full h-96 object-cover">
                     @else
                         <div class="w-full h-96 flex items-center justify-center bg-gray-100 dark:bg-gray-700">
@@ -52,7 +52,10 @@
             <div class="space-y-6">
                 <!-- Product Title -->
                 <div>
-                    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">{{ $product->name }}</h1>
+                    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">{{ $product->title ?: $product->name }}</h1>
+                    @if($product->title && $product->title !== $product->name)
+                        <p class="text-lg text-gray-600 dark:text-gray-400 mb-2">Name: {{ $product->name }}</p>
+                    @endif
                     <p class="text-lg text-gray-600 dark:text-gray-400">{{ $product->short_description }}</p>
                 </div>
 
@@ -297,7 +300,7 @@
                             <div class="aspect-w-1 aspect-h-1 bg-gray-200 dark:bg-gray-700">
                                 @if($relatedProduct->image)
                                     <img src="{{ asset('storage/' . $relatedProduct->image) }}"
-                                         alt="{{ $relatedProduct->name }}"
+                                         alt="{{ $relatedProduct->title ?: $relatedProduct->name }}"
                                          class="w-full h-48 object-cover">
                                 @else
                                     <div class="w-full h-48 flex items-center justify-center bg-gray-100 dark:bg-gray-700">
@@ -310,9 +313,12 @@
                             <div class="p-4">
                                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">
                                     <a href="{{ route('products.show', $relatedProduct->slug) }}" class="hover:text-primary-600 dark:hover:text-primary-400">
-                                        {{ $relatedProduct->name }}
+                                        {{ $relatedProduct->title ?: $relatedProduct->name }}
                                     </a>
                                 </h3>
+                                @if($relatedProduct->title && $relatedProduct->title !== $relatedProduct->name)
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">{{ $relatedProduct->name }}</p>
+                                @endif
                                 <div class="text-xl font-bold text-primary-600 dark:text-primary-400">
                                     ${{ number_format($relatedProduct->price, 2) }}
                                 </div>

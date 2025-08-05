@@ -226,14 +226,14 @@
                                     <div class="flex items-center space-x-4">
                                         <div class="flex-shrink-0">
                                             @if($product->image)
-                                                <img class="h-8 w-8 rounded object-cover" src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}">
+                                                <img class="h-8 w-8 rounded object-cover" src="{{ Storage::url($product->image) }}" alt="{{ $product->title ?: $product->name }}">
                                             @else
                                                 <div class="h-8 w-8 bg-gray-300 dark:bg-gray-600 rounded"></div>
                                             @endif
                                         </div>
                                         <div class="flex-1 min-w-0">
                                             <p class="text-sm font-medium text-gray-900 dark:text-white truncate">
-                                                {{ $product->name }}
+                                                {{ $product->title ?: $product->name }}
                                             </p>
                                             <p class="text-sm text-gray-500 dark:text-gray-400">
                                                 ${{ number_format($product->price, 2) }}

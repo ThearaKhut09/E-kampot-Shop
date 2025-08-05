@@ -40,7 +40,14 @@
                                         @endif
                                     </div>
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium text-gray-900 dark:text-white">{{ $product->name }}</div>
+                                        <div class="text-sm font-medium text-gray-900 dark:text-white">
+                                            {{ $product->title ?: $product->name }}
+                                        </div>
+                                        @if($product->title && $product->title !== $product->name)
+                                            <div class="text-xs text-gray-500 dark:text-gray-400">
+                                                Name: {{ $product->name }}
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                             </td>

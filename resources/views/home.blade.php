@@ -86,11 +86,11 @@
                         <div class="aspect-square overflow-hidden">
                             @if($product->primary_image)
                                 <img src="{{ asset('storage/' . $product->primary_image) }}"
-                                     alt="{{ $product->name }}"
+                                     alt="{{ $product->title ?: $product->name }}"
                                      class="w-full h-full object-cover hover:scale-105 transition-transform duration-200">
                             @else
                                 <img src="https://via.placeholder.com/400x400/e5e7eb/6b7280?text=No+Image"
-                                     alt="{{ $product->name }}"
+                                     alt="{{ $product->title ?: $product->name }}"
                                      class="w-full h-full object-cover hover:scale-105 transition-transform duration-200">
                             @endif
                         </div>
@@ -104,9 +104,14 @@
                             </div>
                             <h3 class="font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">
                                 <a href="{{ route('products.show', $product->slug) }}" class="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-                                    {{ $product->name }}
+                                    {{ $product->title ?: $product->name }}
                                 </a>
                             </h3>
+                            @if($product->title && $product->title !== $product->name)
+                                <p class="text-gray-500 dark:text-gray-400 text-xs mb-2">
+                                    Name: {{ $product->name }}
+                                </p>
+                            @endif
                             <p class="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">{{ $product->short_description }}</p>
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center space-x-2">
@@ -168,11 +173,11 @@
                             <span class="absolute top-2 left-2 bg-green-500 text-white px-2 py-1 text-xs rounded z-10">New</span>
                             @if($product->primary_image)
                                 <img src="{{ asset('storage/' . $product->primary_image) }}"
-                                     alt="{{ $product->name }}"
+                                     alt="{{ $product->title ?: $product->name }}"
                                      class="w-full h-full object-cover hover:scale-105 transition-transform duration-200">
                             @else
                                 <img src="https://via.placeholder.com/400x400/e5e7eb/6b7280?text=No+Image"
-                                     alt="{{ $product->name }}"
+                                     alt="{{ $product->title ?: $product->name }}"
                                      class="w-full h-full object-cover hover:scale-105 transition-transform duration-200">
                             @endif
                         </div>
@@ -186,9 +191,14 @@
                             </div>
                             <h3 class="font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">
                                 <a href="{{ route('products.show', $product->slug) }}" class="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-                                    {{ $product->name }}
+                                    {{ $product->title ?: $product->name }}
                                 </a>
                             </h3>
+                            @if($product->title && $product->title !== $product->name)
+                                <p class="text-gray-500 dark:text-gray-400 text-xs mb-2">
+                                    Name: {{ $product->name }}
+                                </p>
+                            @endif
                             <p class="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">{{ $product->short_description }}</p>
                             <div class="flex items-center justify-between">
                                 <span class="text-lg font-bold text-gray-900 dark:text-white">

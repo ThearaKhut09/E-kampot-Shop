@@ -88,7 +88,7 @@
                         <div class="aspect-w-1 aspect-h-1 bg-gray-200 dark:bg-gray-700">
                             @if($product->image)
                                 <img src="{{ asset('storage/' . $product->image) }}"
-                                     alt="{{ $product->name }}"
+                                     alt="{{ $product->title ?: $product->name }}"
                                      class="w-full h-48 object-cover">
                             @else
                                 <div class="w-full h-48 flex items-center justify-center bg-gray-100 dark:bg-gray-700">
@@ -104,12 +104,18 @@
                             <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">
                                 @if($product->slug)
                                     <a href="{{ route('products.show', $product->slug) }}" class="hover:text-primary-600 dark:hover:text-primary-400">
-                                        {{ $product->name }}
+                                        {{ $product->title ?: $product->name }}
                                     </a>
                                 @else
-                                    {{ $product->name }}
+                                    {{ $product->title ?: $product->name }}
                                 @endif
                             </h3>
+
+                            @if($product->title && $product->title !== $product->name)
+                                <p class="text-gray-500 dark:text-gray-400 text-xs mb-2">
+                                    Name: {{ $product->name }}
+                                </p>
+                            @endif
 
                             @if($product->short_description)
                                 <p class="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">

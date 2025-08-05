@@ -41,6 +41,7 @@ class AdminProductController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
+            'title' => 'nullable|string|max:255',
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
             'stock_quantity' => 'required|integer|min:0',
@@ -59,6 +60,7 @@ class AdminProductController extends Controller
 
         $product = new Product();
         $product->name = $request->name;
+        $product->title = $request->title;
         // Remove manual slug generation - let the model handle it
         $product->description = $request->description;
         $product->price = $request->price;
@@ -120,6 +122,7 @@ class AdminProductController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
+            'title' => 'nullable|string|max:255',
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
             'stock_quantity' => 'required|integer|min:0',
@@ -137,6 +140,7 @@ class AdminProductController extends Controller
         ]);
 
         $product->name = $request->name;
+        $product->title = $request->title;
         // Remove manual slug generation - let the model handle it
         $product->description = $request->description;
         $product->price = $request->price;
