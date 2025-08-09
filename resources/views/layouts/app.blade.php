@@ -9,8 +9,9 @@
     <title>{{ $title ?? config('app.name', 'Laravel') }}</title>
 
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -22,18 +23,18 @@
 <body class="font-sans antialiased bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
     <div class="min-h-screen">
         <!-- Navigation -->
-        <nav class="bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-50 transition-colors duration-200">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between h-16">
+        <nav class="glass shadow-lg sticky top-0 z-50 transition-colors duration-200">
+            <div class="container-app">
+                <div class="flex justify-between h-16 gap-3">
                     <div class="flex items-center">
                         <!-- Logo -->
                         <div class="flex-shrink-0">
                             <a href="{{ route('home') }}"
-                                class="flex items-center text-2xl font-bold text-primary-600 dark:text-primary-400">
+                                class="flex items-center text-2xl font-bold text-primary-700 dark:text-primary-300">
                                 <!-- Logo Icon - Always visible -->
                                 <div
-                                    class="w-8 h-8 bg-primary-600 dark:bg-primary-400 rounded-lg flex items-center justify-center mr-2 flex-shrink-0">
-                                    <span class="text-white dark:text-gray-900 font-bold text-lg">E</span>
+                                    class="w-9 h-9 bg-primary-600 dark:bg-primary-500 rounded-lg flex items-center justify-center mr-2 flex-shrink-0">
+                                    <span class="text-white dark:text-gray-900 font-bold text-base">E</span>
                                 </div>
                                 <!-- Shop Name - Hidden on mobile, shown on desktop (sm and up) -->
                                 <span class="hidden sm:inline">E Kampot Shop</span>
@@ -43,16 +44,16 @@
                         <!-- Navigation Links -->
                         <div class="hidden sm:ml-8 sm:flex sm:space-x-1">
                             <a href="{{ route('home') }}"
-                                class="text-gray-900 dark:text-gray-100 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-700 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 {{ request()->routeIs('home') ? 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20' : '' }}">
+                                class="text-gray-900 dark:text-gray-100 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 {{ request()->routeIs('home') ? 'text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/20' : '' }}">
                                 Home
                             </a>
                             <a href="{{ route('products.index') }}"
-                                class="text-gray-900 dark:text-gray-100 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-700 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 {{ request()->routeIs('products.*') ? 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20' : '' }}">
+                                class="text-gray-900 dark:text-gray-100 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 {{ request()->routeIs('products.*') ? 'text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/20' : '' }}">
                                 Products
                             </a>
                             <div class="relative" x-data="{ open: false }">
                                 <button @click="open = !open"
-                                    class="text-gray-900 dark:text-gray-100 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-700 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center {{ request()->routeIs('category.*') ? 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20' : '' }}">
+                                    class="text-gray-900 dark:text-gray-100 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center {{ request()->routeIs('category.*') ? 'text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/20' : '' }}">
                                     Categories
                                     <svg class="ml-1 h-4 w-4 transition-transform duration-200"
                                         :class="{ 'rotate-180': open }" fill="none" stroke="currentColor"
@@ -68,7 +69,7 @@
                                     x-transition:leave="transition ease-in duration-150"
                                     x-transition:leave-start="opacity-100 scale-100"
                                     x-transition:leave-end="opacity-0 scale-95"
-                                    class="absolute left-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50">
+                                    class="absolute left-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-soft border border-gray-200 dark:border-gray-700 z-50">
                                     @php
                                         $categories = \App\Models\Category::active()
                                             ->parents()
@@ -78,18 +79,18 @@
                                     @endphp
                                     @foreach ($categories as $category)
                                         <a href="{{ route('category.show', $category->slug) }}"
-                                            class="block px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-600 dark:hover:text-primary-400 transition-colors first:rounded-t-lg last:rounded-b-lg">
+                                            class="block px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-600 dark:hover:text-primary-400 transition-colors first:rounded-t-xl last:rounded-b-xl">
                                             {{ $category->name }}
                                         </a>
                                     @endforeach
                                 </div>
                             </div>
                             <a href="{{ route('about') }}"
-                                class="text-gray-900 dark:text-gray-100 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-700 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 {{ request()->routeIs('about') ? 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20' : '' }}">
+                                class="text-gray-900 dark:text-gray-100 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 {{ request()->routeIs('about') ? 'text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/20' : '' }}">
                                 About
                             </a>
                             <a href="{{ route('contact') }}"
-                                class="text-gray-900 dark:text-gray-100 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-700 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 {{ request()->routeIs('contact') ? 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20' : '' }}">
+                                class="text-gray-900 dark:text-gray-100 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 {{ request()->routeIs('contact') ? 'text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/20' : '' }}">
                                 Contact
                             </a>
                         </div>
@@ -118,7 +119,7 @@
                             <form action="{{ route('products.index') }}" method="GET" class="relative">
                                 <input type="text" name="search" placeholder="Search products..."
                                     value="{{ request('search') }}"
-                                    class="w-64 px-4 py-2 pl-10 pr-4 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors">
+                                    class="input input-nav w-90 pl-10 pr-4 text-sm">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
@@ -172,7 +173,7 @@
                         <!-- Cart (Only for customers and guests) -->
                         @if ($showWebUser || !$isAuthenticated)
                             <a href="{{ route('cart.index') }}"
-                                class="relative p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
+                                class="relative p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
                                 <svg width="24px" height="24px" viewBox="0 0 24 24"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="16.5" cy="18.5" r="1.5" />
@@ -182,7 +183,7 @@
                                 </svg>
 
                                 <span
-                                    class="absolute -top-1 -right-1 bg-primary-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                                    class="absolute -top-1 -right-1 bg-primary-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                                     <span id="cart-count">0</span>
                                 </span>
                             </a>
@@ -214,10 +215,10 @@
                                     </span>
                                 </button>
                                 <div x-show="open" @click.away="open = false" x-transition
-                                    class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50">
+                                    class="absolute right-0 mt-2 w-52 bg-white dark:bg-gray-800 rounded-xl shadow-soft border border-gray-100 dark:border-gray-800 z-50">
                                     @if ($showWebUser)
                                         <a href="{{ route('dashboard') }}"
-                                            class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                            class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-t-xl">
                                             Dashboard
                                         </a>
                                         <a href="{{ route('profile.edit') }}"
@@ -227,19 +228,19 @@
                                         <form method="POST" action="{{ route('logout') }}">
                                             @csrf
                                             <button type="submit"
-                                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-b-xl">
                                                 Logout
                                             </button>
                                         </form>
                                     @elseif ($showAdminUser)
                                         <a href="{{ route('admin.dashboard') }}"
-                                            class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                            class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-t-xl">
                                             Admin Dashboard
                                         </a>
                                         <form method="POST" action="{{ route('admin.logout') }}">
                                             @csrf
                                             <button type="submit"
-                                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-b-xl">
                                                 Logout
                                             </button>
                                         </form>
@@ -250,11 +251,11 @@
                             <div class="flex items-center space-x-2">
                                 <!-- Desktop Login & Register Buttons -->
                                 <a href="{{ route('login') }}"
-                                    class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 px-3 py-2 text-sm font-medium transition-colors hidden lg:block">
+                                    class="btn-ghost hidden lg:inline-flex">
                                     Login
                                 </a>
                                 <a href="{{ route('register') }}"
-                                    class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors hidden lg:block">
+                                    class="btn-primary hidden lg:inline-flex">
                                     Register
                                 </a>
                                 <!-- Mobile/Tablet Login Icon -->
@@ -327,7 +328,7 @@
                             <form action="{{ route('products.index') }}" method="GET" class="relative">
                                 <input type="text" name="search" placeholder="Search products..."
                                     value="{{ request('search') }}"
-                                    class="w-full px-4 py-2 pl-10 pr-4 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors">
+                                    class="input input-nav pl-10 pr-4 text-sm">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
@@ -412,8 +413,8 @@
 
         <!-- Page Heading -->
         @isset($header)
-            <header class="bg-white dark:bg-gray-800 shadow transition-colors duration-200">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <header class="bg-white/70 dark:bg-gray-800/60 backdrop-blur shadow-sm transition-colors duration-200">
+                <div class="container-app py-6">
                     {{ $header }}
                 </div>
             </header>
@@ -425,12 +426,12 @@
         </main>
 
         <!-- Footer -->
-        <footer class="bg-gray-900 dark:bg-gray-950 text-white mt-16">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer class="bg-gray-950 text-white mt-16">
+        <div class="container-app py-14">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                     <div>
                         <h3 class="text-lg font-semibold mb-4">E-Kampot Shop</h3>
-                        <p class="text-gray-400 text-sm">Your one-stop shop for everything you need. Quality products,
+            <p class="text-gray-400 text-sm">Your one-stop shop for everything you need. Quality products,
                             great prices, excellent service.</p>
                     </div>
                     <div>
@@ -462,7 +463,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+        <div class="border-t border-white/10 mt-8 pt-8 text-center">
                     <p class="text-gray-400 text-sm">&copy; {{ date('Y') }} E-Kampot Shop. All rights reserved.
                     </p>
                 </div>

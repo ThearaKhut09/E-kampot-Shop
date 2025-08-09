@@ -2,18 +2,21 @@
     <x-slot name="title">E-Kampot Shop - Your One-Stop Shopping Destination</x-slot>
 
     <!-- Hero Section -->
-    <section class="bg-gradient-to-r from-primary-600 to-primary-800 text-white py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h1 class="text-4xl md:text-6xl font-bold mb-6">Welcome to E-Kampot Shop</h1>
-                <p class="text-xl md:text-2xl mb-8 opacity-90">Discover amazing products at unbeatable prices</p>
-                <div class="space-x-4">
-                    <a href="{{ route('products.index') }}" class="bg-white text-primary-600 hover:bg-gray-100 px-8 py-4 rounded-lg font-semibold text-lg transition-colors inline-block">
-                        Shop Now
-                    </a>
-                    <a href="{{ route('about') }}" class="border-2 border-white text-white hover:bg-white hover:text-primary-600 px-8 py-4 rounded-lg font-semibold text-lg transition-colors inline-block">
-                        Learn More
-                    </a>
+    <section class="relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-primary-600 via-primary-700 to-primary-900"></div>
+        <div class="relative text-white py-20">
+            <div class="container-app">
+                <div class="text-center">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6 tracking-tight">Welcome to E-Kampot Shop</h1>
+                    <p class="text-lg md:text-2xl mb-10 text-white/90">Discover amazing products at unbeatable prices</p>
+                    <div class="flex items-center justify-center gap-4 flex-wrap">
+                        <a href="{{ route('products.index') }}" class="btn-primary px-6 py-3 text-base">
+                            Shop Now
+                        </a>
+                        <a href="{{ route('about') }}" class="btn-secondary px-6 py-3 text-base border-0 bg-white/10 text-white hover:bg-white/20">
+                            Learn More
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -21,7 +24,7 @@
 
     <!-- Featured Categories -->
     <section class="py-16 bg-white dark:bg-gray-900 transition-colors duration-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="container-app">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Shop by Category</h2>
                 <p class="text-lg text-gray-600 dark:text-gray-400">Browse our wide range of product categories</p>
@@ -30,7 +33,7 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
                 @foreach($categories as $category)
                     <a href="{{ route('category.show', $category->slug) }}" class="group text-center">
-                        <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-8 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/20 transition-colors duration-200">
+                        <div class="card p-8 hover:shadow-lg transition-shadow duration-200">
                             <div class="text-4xl mb-4">
                                 @switch($category->name)
                                     @case('Phones')
@@ -74,7 +77,7 @@
 
     <!-- Featured Products -->
     <section class="py-16 bg-gray-50 dark:bg-gray-800 transition-colors duration-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="container-app">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Featured Products</h2>
                 <p class="text-lg text-gray-600 dark:text-gray-400">Hand-picked products just for you</p>
@@ -82,22 +85,22 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 @foreach($featuredProducts as $product)
-                    <div class="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-200">
-                        <div class="aspect-square overflow-hidden">
+                    <div class="card hover:shadow-lg transition-shadow duration-200">
+                        <div class="aspect-square card-media">
                             @if($product->primary_image)
                                 <img src="{{ asset('storage/' . $product->primary_image) }}"
                                      alt="{{ $product->title ?: $product->name }}"
-                                     class="w-full h-full object-cover hover:scale-105 transition-transform duration-200">
+                                     class="">
                             @else
                                 <img src="https://via.placeholder.com/400x400/e5e7eb/6b7280?text=No+Image"
                                      alt="{{ $product->title ?: $product->name }}"
-                                     class="w-full h-full object-cover hover:scale-105 transition-transform duration-200">
+                                     class="">
                             @endif
                         </div>
-                        <div class="p-4">
+                        <div class="card-body">
                             <div class="flex flex-wrap gap-1 mb-2">
                                 @foreach($product->categories->take(2) as $category)
-                                    <span class="px-2 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 text-xs rounded">
+                                    <span class="badge-primary">
                                         {{ $category->name }}
                                     </span>
                                 @endforeach
@@ -120,7 +123,7 @@
                                     </span>
                                 </div>
                                 <button onclick="addToCart({{ $product->id }})"
-                                        class="bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                                        class="btn-primary px-3 py-2 text-sm">
                                     Add to Cart
                                 </button>
                             </div>
@@ -150,7 +153,7 @@
             </div>
 
             <div class="text-center mt-12">
-                <a href="{{ route('products.index') }}" class="bg-primary-600 hover:bg-primary-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+                <a href="{{ route('products.index') }}" class="btn-primary px-8 py-3">
                     View All Products
                 </a>
             </div>
@@ -160,7 +163,7 @@
     <!-- New Arrivals -->
     @if($newProducts->count() > 0)
     <section class="py-16 bg-white dark:bg-gray-900 transition-colors duration-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="container-app">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">New Arrivals</h2>
                 <p class="text-lg text-gray-600 dark:text-gray-400">Fresh products just added to our collection</p>
@@ -168,23 +171,23 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 @foreach($newProducts as $product)
-                    <div class="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-200">
-                        <div class="aspect-square overflow-hidden relative">
+                    <div class="card hover:shadow-lg transition-shadow duration-200">
+                        <div class="aspect-square card-media relative">
                             <span class="absolute top-2 left-2 bg-green-500 text-white px-2 py-1 text-xs rounded z-10">New</span>
                             @if($product->primary_image)
                                 <img src="{{ asset('storage/' . $product->primary_image) }}"
                                      alt="{{ $product->title ?: $product->name }}"
-                                     class="w-full h-full object-cover hover:scale-105 transition-transform duration-200">
+                                     class="">
                             @else
                                 <img src="https://via.placeholder.com/400x400/e5e7eb/6b7280?text=No+Image"
                                      alt="{{ $product->title ?: $product->name }}"
-                                     class="w-full h-full object-cover hover:scale-105 transition-transform duration-200">
+                                     class="">
                             @endif
                         </div>
-                        <div class="p-4">
+                        <div class="card-body">
                             <div class="flex flex-wrap gap-1 mb-2">
                                 @foreach($product->categories->take(2) as $category)
-                                    <span class="px-2 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 text-xs rounded">
+                                    <span class="badge-primary">
                                         {{ $category->name }}
                                     </span>
                                 @endforeach
@@ -205,7 +208,7 @@
                                     ${{ number_format($product->current_price, 2) }}
                                 </span>
                                 <button onclick="addToCart({{ $product->id }})"
-                                        class="bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                                        class="btn-primary px-3 py-2 text-sm">
                                     Add to Cart
                                 </button>
                             </div>

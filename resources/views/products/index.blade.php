@@ -1,6 +1,6 @@
 <x-app-layout title="Products - E-Kampot Shop">
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="container-app">
         <!-- Page Header -->
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Products</h1>
@@ -8,16 +8,14 @@
         </div>
 
         <!-- Search and Filters -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-8">
+        <div class="card p-6 mb-8">
             <form method="GET" action="{{ route('products.index') }}" class="space-y-4">
                 <!-- Search Bar -->
                 <div class="flex flex-col sm:flex-row gap-4">
                     <div class="flex-1">
-                        <input type="text" name="search" value="{{ request('search') }}"
-                               placeholder="Search products..."
-                               class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Search products..." class="input">
                     </div>
-                    <button type="submit" class="px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium transition-colors duration-200">
+                    <button type="submit" class="btn-primary px-6 py-2">
                         Search
                     </button>
                 </div>
@@ -27,7 +25,7 @@
                     <!-- Category Filter -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
-                        <select name="category" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                        <select name="category" class="input">
                             <option value="">All Categories</option>
                             @if($categories)
                                 @foreach($categories as $category)
@@ -42,22 +40,18 @@
                     <!-- Price Range -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Min Price</label>
-                        <input type="number" name="min_price" value="{{ request('min_price') }}"
-                               placeholder="$0" min="0" step="0.01"
-                               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                        <input type="number" name="min_price" value="{{ request('min_price') }}" placeholder="$0" min="0" step="0.01" class="input">
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Max Price</label>
-                        <input type="number" name="max_price" value="{{ request('max_price') }}"
-                               placeholder="$999" min="0" step="0.01"
-                               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                        <input type="number" name="max_price" value="{{ request('max_price') }}" placeholder="$999" min="0" step="0.01" class="input">
                     </div>
 
                     <!-- Sort Options -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Sort By</label>
-                        <select name="sort" onchange="this.form.submit()" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                        <select name="sort" onchange="this.form.submit()" class="input">
                             <option value="latest" {{ request('sort') === 'latest' ? 'selected' : '' }}>Latest</option>
                             <option value="price_low" {{ request('sort') === 'price_low' ? 'selected' : '' }}>Price: Low to High</option>
                             <option value="price_high" {{ request('sort') === 'price_high' ? 'selected' : '' }}>Price: High to Low</option>
@@ -70,8 +64,7 @@
                 <!-- Clear Filters Button -->
                 @if(request()->hasAny(['search', 'category', 'min_price', 'max_price', 'min_rating']))
                     <div class="flex justify-end">
-                        <a href="{{ route('products.index') }}"
-                           class="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
+                        <a href="{{ route('products.index') }}" class="btn-ghost">
                             Clear Filters
                         </a>
                     </div>
@@ -83,9 +76,9 @@
         @if($products && $products->count() > 0)
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
                 @foreach($products as $product)
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg transition-shadow duration-200">
+                    <div class="card overflow-hidden hover:shadow-lg transition-shadow duration-200">
                         <!-- Product Image -->
-                        <div class="aspect-w-1 aspect-h-1 bg-gray-200 dark:bg-gray-700">
+                        <div class="aspect-w-1 aspect-h-1 card-media bg-gray-200 dark:bg-gray-700">
                             @if($product->image)
                                 <img src="{{ asset('storage/' . $product->image) }}"
                                      alt="{{ $product->title ?: $product->name }}"
@@ -100,7 +93,7 @@
                         </div>
 
                         <!-- Product Info -->
-                        <div class="p-4">
+                        <div class="card-body">
                             <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">
                                 @if($product->slug)
                                     <a href="{{ route('products.show', $product->slug) }}" class="hover:text-primary-600 dark:hover:text-primary-400">
@@ -165,16 +158,14 @@
                             @auth
                                 @if(auth()->user()->hasRole('customer'))
                                     @if((isset($product->stock_quantity) && $product->stock_quantity > 0) || (isset($product->in_stock) && $product->in_stock))
-                                        <button onclick="addToCart({{ $product->id }})"
-                                                class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2">
+                                        <button onclick="addToCart({{ $product->id }})" class="w-full btn-primary flex items-center justify-center space-x-2">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 2.5M7 13l2.5 2.5m6-6.5h.01M17 13v.01"></path>
                                             </svg>
                                             <span>Add to Cart</span>
                                         </button>
                                     @else
-                                        <button disabled
-                                                class="w-full bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 font-medium py-2 px-4 rounded-lg cursor-not-allowed">
+                                        <button disabled class="w-full btn-ghost cursor-not-allowed">
                                             Out of Stock
                                         </button>
                                     @endif
@@ -184,7 +175,7 @@
                                     </div>
                                 @endif
                             @else
-                                <a href="{{ route('login') }}" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2">
+                                <a href="{{ route('login') }}" class="w-full btn-primary flex items-center justify-center space-x-2">
                                     <span>Login to Purchase</span>
                                 </a>
                             @endauth
