@@ -6,11 +6,11 @@
 <div class="space-y-6">
     <!-- Statistics Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+        <div class="card overflow-hidden">
             <div class="p-5">
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
-                        <div class="w-8 h-8 bg-blue-500 rounded-md flex items-center justify-center">
+                        <div class="w-8 h-8 bg-primary-600 rounded-md flex items-center justify-center">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                             </svg>
@@ -24,14 +24,14 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-gray-50 dark:bg-gray-700 px-5 py-3">
+            <div class="bg-gray-50 dark:bg-gray-800/60 border-t border-gray-100 dark:border-gray-800 px-5 py-3">
                 <div class="text-sm">
-                    <a href="{{ route('admin.products.index') }}" class="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500">View all</a>
+                    <a href="{{ route('admin.products.index') }}" class="font-medium text-primary-600 dark:text-primary-400 hover:text-primary-500">View all</a>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+        <div class="card overflow-hidden">
             <div class="p-5">
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
@@ -49,14 +49,14 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-gray-50 dark:bg-gray-700 px-5 py-3">
+            <div class="bg-gray-50 dark:bg-gray-800/60 border-t border-gray-100 dark:border-gray-800 px-5 py-3">
                 <div class="text-sm">
                     <a href="{{ route('admin.orders.index') }}" class="font-medium text-green-600 dark:text-green-400 hover:text-green-500">View all</a>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+        <div class="card overflow-hidden">
             <div class="p-5">
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
@@ -81,7 +81,7 @@
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+    <div class="card overflow-hidden">
             <div class="p-5">
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
@@ -104,7 +104,7 @@
 
     <!-- Additional Statistics -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+        <div class="card overflow-hidden">
             <div class="p-5">
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
@@ -124,7 +124,7 @@
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+    <div class="card overflow-hidden">
             <div class="p-5">
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
@@ -144,7 +144,7 @@
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+    <div class="card overflow-hidden">
             <div class="p-5">
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
@@ -168,7 +168,7 @@
     <!-- Recent Orders and Top Products -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Recent Orders -->
-        <div class="bg-white dark:bg-gray-800 shadow rounded-lg">
+        <div class="card">
             <div class="px-4 py-5 sm:p-6">
                 <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">Recent Orders</h3>
                 <div class="mt-5">
@@ -205,7 +205,7 @@
                             </ul>
                         </div>
                         <div class="mt-6">
-                            <a href="{{ route('admin.orders.index') }}" class="w-full flex justify-center items-center px-4 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                            <a href="{{ route('admin.orders.index') }}" class="w-full btn-secondary">
                                 View all orders
                             </a>
                         </div>
@@ -217,7 +217,7 @@
         </div>
 
         <!-- Top Products -->
-        <div class="bg-white dark:bg-gray-800 shadow rounded-lg">
+    <div class="card">
             <div class="px-4 py-5 sm:p-6">
                 <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">Top Selling Products</h3>
                 <div class="mt-5">
@@ -251,7 +251,7 @@
                             </ul>
                         </div>
                         <div class="mt-6">
-                            <a href="{{ route('admin.products.index') }}" class="w-full flex justify-center items-center px-4 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                            <a href="{{ route('admin.products.index') }}" class="w-full btn-secondary">
                                 View all products
                             </a>
                         </div>
