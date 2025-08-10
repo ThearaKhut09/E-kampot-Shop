@@ -8,7 +8,7 @@
     <div class="flex justify-between items-center">
         <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Analytics & Reports</h2>
         <div class="flex space-x-2">
-            <select id="dateRange" class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-sm">
+            <select id="dateRange" class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md px-6 py-2 text-sm">
                 <option value="7">Last 7 days</option>
                 <option value="30" selected>Last 30 days</option>
                 <option value="90">Last 90 days</option>
