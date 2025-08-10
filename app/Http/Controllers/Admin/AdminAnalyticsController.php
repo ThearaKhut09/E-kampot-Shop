@@ -63,7 +63,7 @@ class AdminAnalyticsController extends Controller
             ->pluck('count', 'status')
             ->toArray();
 
-        return view('admin.analytics', compact('analytics'));
+        return view('admin.analytics', compact('analytics', 'days'));
     }
 
     public function export(Request $request)

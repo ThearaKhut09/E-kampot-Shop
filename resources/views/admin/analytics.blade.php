@@ -9,10 +9,10 @@
         <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Analytics & Reports</h2>
         <div class="flex space-x-2">
             <select id="dateRange" class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md px-6 py-2 text-sm">
-                <option value="7">Last 7 days</option>
-                <option value="30" selected>Last 30 days</option>
-                <option value="90">Last 90 days</option>
-                <option value="365">Last year</option>
+                <option value="7" {{ $days == 7 ? 'selected' : '' }}>Last 7 days</option>
+                <option value="30" {{ $days == 30 ? 'selected' : '' }}>Last 30 days</option>
+                <option value="90" {{ $days == 90 ? 'selected' : '' }}>Last 90 days</option>
+                <option value="365" {{ $days == 365 ? 'selected' : '' }}>Last year</option>
             </select>
             <button onclick="exportReport()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium">
                 Export CSV
