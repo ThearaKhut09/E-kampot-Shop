@@ -127,7 +127,7 @@
                             <div class="space-y-4">
                                 <div class="flex items-center space-x-4">
                                     <label for="quantity" class="text-sm font-medium text-gray-900 dark:text-white">Quantity:</label>
-                                    <select id="quantity" class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                    <select id="quantity" class="px-6 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                                         @for($i = 1; $i <= min(10, $product->stock_quantity); $i++)
                                             <option value="{{ $i }}">{{ $i }}</option>
                                         @endfor
