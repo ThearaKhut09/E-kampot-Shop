@@ -36,7 +36,7 @@
                                 <!-- Logo Icon - Always visible -->
                                 <img src="{{ asset('images/logo-shop.png') }}" alt="E-Kampot Shop" class="h-14 w-auto">
                                 <!-- Shop Name - Hidden on mobile, shown on desktop (sm and up) -->
-                                <span class="hidden sm:inline">E Kampot Shop</span>
+                                <span class="hidden sm:inline -ml-4">E Kampot Shop</span>
                             </a>
                         </div>
 
