@@ -29,13 +29,11 @@
                     </p>
                 </div>
             </div>
-            <div class="bg-gray-200 dark:bg-gray-700 rounded-lg h-96 flex items-center justify-center">
-                <div class="text-center text-gray-500 dark:text-gray-400">
-                    <svg class="w-24 h-24 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                    </svg>
-                    <p class="text-lg font-medium">Our Store Image</p>
-                </div>
+            <div class="bg-gray-200 dark:bg-gray-700 rounded-lg h-96 flex items-center justify-center overflow-hidden">
+                <img src="{{ asset('images/about-us.png') }}"
+                     alt="E-Kampot Shop Store"
+                     class="w-full h-full object-cover rounded-lg"
+                     onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect width=%22400%22 height=%22300%22 fill=%22%23e5e7eb%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2224%22 fill=%22%236b7280%22%3EE-Kampot Shop%3C/text%3E%3C/svg%3E';">
             </div>
         </div>
 

@@ -28,16 +28,13 @@
         <nav class="glass shadow-lg sticky top-0 z-50 transition-colors duration-200">
             <div class="container-app">
                 <div class="flex justify-between h-16 gap-3">
-                    <div class="flex items-center">
+                    <div class="flex items-center -ml-6">
                         <!-- Logo -->
                         <div class="flex-shrink-0">
                             <a href="{{ route('home') }}"
                                 class="flex items-center text-2xl font-bold text-primary-700 dark:text-primary-300">
                                 <!-- Logo Icon - Always visible -->
-                                <div
-                                    class="w-9 h-9 bg-primary-600 dark:bg-primary-500 rounded-lg flex items-center justify-center mr-2 flex-shrink-0">
-                                    <span class="text-white dark:text-gray-900 font-bold text-base">E</span>
-                                </div>
+                                <img src="{{ asset('images/logo-shop.png') }}" alt="E-Kampot Shop" class="h-14 w-auto">
                                 <!-- Shop Name - Hidden on mobile, shown on desktop (sm and up) -->
                                 <span class="hidden sm:inline">E Kampot Shop</span>
                             </a>

@@ -123,7 +123,7 @@
                 </div>
                 <div class="bg-[#fff2f2] dark:bg-[#1D0002] relative lg:-ml-px -mb-px lg:mb-0 rounded-t-lg lg:rounded-t-none lg:rounded-r-lg aspect-[335/376] lg:aspect-auto w-full lg:w-[438px] shrink-0 overflow-hidden">
                     {{-- Brand Logo --}}
-                    <img src="/images/brand-logo.svg" alt="E‑Kampot Shop" class="w-full max-w-none transition-all translate-y-0 opacity-100 duration-750 starting:opacity-0 starting:translate-y-6" />
+                    <img src="{{ asset('images/logo-shop.png') }}" alt="E‑Kampot Shop" class="w-full max-w-none transition-all translate-y-0 opacity-100 duration-750 starting:opacity-0 starting:translate-y-6" />
 
                     {{-- Light Mode 12 SVG --}}
                     <svg class="w-[448px] max-w-none relative -mt-[4.9rem] -ml-8 lg:ml-0 lg:-mt-[6.6rem] dark:hidden" viewBox="0 0 440 376" fill="none" xmlns="http://www.w3.org/2000/svg">
