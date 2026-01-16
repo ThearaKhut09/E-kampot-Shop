@@ -41,7 +41,7 @@
                         </div>
 
                         <!-- Navigation Links -->
-                        <div class="hidden sm:ml-8 sm:flex sm:space-x-1">
+                        <div class="hidden lg:ml-8 lg:flex lg:space-x-1">
                             <a href="{{ route('home') }}"
                                 class="text-gray-900 dark:text-gray-100 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 {{ request()->routeIs('home') ? 'text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/20' : '' }}">
                                 Home
@@ -97,7 +97,7 @@
 
                     <div class="flex items-center space-x-4">
                         <!-- Mobile menu button -->
-                        <div class="sm:hidden">
+                        <div class="lg:hidden">
                             <button @click="mobileMenuOpen = !mobileMenuOpen" type="button"
                                 class="p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500">
                                 <span class="sr-only">Open main menu</span>
@@ -114,7 +114,7 @@
                             </button>
                         </div>
                         <!-- Search -->
-                        <div class="hidden md:block">
+                        <div class="hidden lg:block">
                             <form action="{{ route('products.index') }}" method="GET" class="relative">
                                 <input type="text" name="search" placeholder="Search products..."
                                     value="{{ request('search') }}"
@@ -205,7 +205,7 @@
                                         </svg>
                                     </div>
                                     <!-- User Name - Hidden on small screens -->
-                                    <span class="hidden sm:block">
+                                    <span class="hidden lg:block">
                                         @if ($showWebUser)
                                             {{ Auth::guard('web')->user()->name }}
                                         @elseif ($showAdminUser)
@@ -273,7 +273,7 @@
                 </div>
 
                 <!-- Mobile menu -->
-                <div x-show="mobileMenuOpen" x-transition class="sm:hidden">
+                <div x-show="mobileMenuOpen" x-transition class="lg:hidden">
                     <div class="pt-2 pb-3 space-y-1">
                         <a href="{{ route('home') }}"
                             class="block pl-3 pr-4 py-2 border-l-4 text-base font-medium {{ request()->routeIs('home') ? 'border-primary-500 text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/10' : 'border-transparent text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300' }} transition-colors">
