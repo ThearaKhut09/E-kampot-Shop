@@ -134,9 +134,9 @@
         @if($products->count() > 0)
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
                 @foreach($products as $product)
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg transition-shadow duration-200">
+                    <div class="card hover:shadow-lg transition-shadow duration-200 h-full">
                         <!-- Product Image -->
-                        <div class="aspect-w-1 aspect-h-1 bg-gray-200 dark:bg-gray-700">
+                        <div class="aspect-w-1 aspect-h-1 card-media bg-gray-200 dark:bg-gray-700">
                             @if($product->image)
                                 <img src="{{ asset('storage/' . $product->image) }}"
                                      alt="{{ $product->title ?: $product->name }}"
@@ -151,7 +151,7 @@
                         </div>
 
                         <!-- Product Info -->
-                        <div class="p-4">
+                        <div class="card-body">
                             <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">
                                 <a href="{{ route('products.show', $product->slug) }}" class="hover:text-primary-600 dark:hover:text-primary-400">
                                     {{ $product->title ?: $product->name }}
@@ -191,43 +191,45 @@
                             @endif
 
                             <!-- Price and Stock -->
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="text-2xl font-bold text-primary-600 dark:text-primary-400">
-                                    ${{ number_format($product->price, 2) }}
+                            <div class="mt-auto">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="text-2xl font-bold text-primary-600 dark:text-primary-400">
+                                        ${{ number_format($product->price, 2) }}
+                                    </div>
+                                    <div class="text-sm">
+                                        @if($product->stock_quantity > 0)
+                                            <span class="text-green-600 dark:text-green-400">In Stock ({{ $product->stock_quantity }})</span>
+                                        @else
+                                            <span class="text-red-600 dark:text-red-400">Out of Stock</span>
+                                        @endif
+                                    </div>
                                 </div>
-                                <div class="text-sm">
-                                    @if($product->stock_quantity > 0)
-                                        <span class="text-green-600 dark:text-green-400">In Stock ({{ $product->stock_quantity }})</span>
-                                    @else
-                                        <span class="text-red-600 dark:text-red-400">Out of Stock</span>
-                                    @endif
-                                </div>
-                            </div>
 
-                            <!-- Add to Cart Button (Customer Only) -->
-                            @auth
-                                @if(auth()->user()->hasRole('customer'))
-                                    @if($product->stock_quantity > 0)
-                                        <button onclick="addToCart({{ $product->id }})"
-                                                class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
-                                            Add to Cart
-                                        </button>
+                                <!-- Add to Cart Button (Customer Only) -->
+                                @auth
+                                    @if(auth()->user()->hasRole('customer'))
+                                        @if($product->stock_quantity > 0)
+                                            <button onclick="addToCart({{ $product->id }})"
+                                                    class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+                                                Add to Cart
+                                            </button>
+                                        @else
+                                            <button disabled
+                                                    class="w-full bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 font-medium py-2 px-4 rounded-lg cursor-not-allowed">
+                                                Out of Stock
+                                            </button>
+                                        @endif
                                     @else
-                                        <button disabled
-                                                class="w-full bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 font-medium py-2 px-4 rounded-lg cursor-not-allowed">
-                                            Out of Stock
-                                        </button>
+                                        <div class="w-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 font-medium py-2 px-4 rounded-lg text-center border border-dashed border-gray-300 dark:border-gray-600">
+                                            Admin View Only
+                                        </div>
                                     @endif
                                 @else
-                                    <div class="w-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 font-medium py-2 px-4 rounded-lg text-center border border-dashed border-gray-300 dark:border-gray-600">
-                                        Admin View Only
-                                    </div>
-                                @endif
-                            @else
-                                <a href="{{ route('login') }}" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 block text-center">
-                                    Login to Purchase
-                                </a>
-                            @endauth
+                                    <a href="{{ route('login') }}" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 block text-center">
+                                        Login to Purchase
+                                    </a>
+                                @endauth
+                            </div>
                         </div>
                     </div>
                 @endforeach

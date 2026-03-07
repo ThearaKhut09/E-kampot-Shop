@@ -296,8 +296,8 @@
                 <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Related Products</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     @foreach($relatedProducts as $relatedProduct)
-                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg transition-shadow duration-200">
-                            <div class="aspect-w-1 aspect-h-1 bg-gray-200 dark:bg-gray-700">
+                        <div class="card hover:shadow-lg transition-shadow duration-200 h-full">
+                            <div class="aspect-w-1 aspect-h-1 card-media bg-gray-200 dark:bg-gray-700">
                                 @if($relatedProduct->image)
                                     <img src="{{ asset('storage/' . $relatedProduct->image) }}"
                                          alt="{{ $relatedProduct->title ?: $relatedProduct->name }}"
@@ -310,7 +310,7 @@
                                     </div>
                                 @endif
                             </div>
-                            <div class="p-4">
+                            <div class="card-body">
                                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">
                                     <a href="{{ route('products.show', $relatedProduct->slug) }}" class="hover:text-primary-600 dark:hover:text-primary-400">
                                         {{ $relatedProduct->title ?: $relatedProduct->name }}
@@ -319,7 +319,7 @@
                                 @if($relatedProduct->title && $relatedProduct->title !== $relatedProduct->name)
                                     <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">{{ $relatedProduct->name }}</p>
                                 @endif
-                                <div class="text-xl font-bold text-primary-600 dark:text-primary-400">
+                                <div class="text-xl font-bold text-primary-600 dark:text-primary-400 mt-auto">
                                     ${{ number_format($relatedProduct->price, 2) }}
                                 </div>
                             </div>

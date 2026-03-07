@@ -76,7 +76,7 @@
         @if($products && $products->count() > 0)
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
                 @foreach($products as $product)
-                    <div class="card overflow-hidden hover:shadow-lg transition-shadow duration-200">
+                    <div class="card hover:shadow-lg transition-shadow duration-200 h-full">
                         <!-- Product Image -->
                         <div class="aspect-w-1 aspect-h-1 card-media bg-gray-200 dark:bg-gray-700">
                             @if($product->image)
@@ -139,46 +139,48 @@
                             @endif
 
                             <!-- Price and Stock -->
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="text-2xl font-bold text-primary-600 dark:text-primary-400">
-                                    ${{ number_format($product->price, 2) }}
+                            <div class="mt-auto">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="text-2xl font-bold text-primary-600 dark:text-primary-400">
+                                        ${{ number_format($product->price, 2) }}
+                                    </div>
+                                    <div class="text-sm">
+                                        @if(isset($product->stock_quantity) && $product->stock_quantity > 0)
+                                            <span class="text-green-600 dark:text-green-400">In Stock ({{ $product->stock_quantity }})</span>
+                                        @elseif(isset($product->in_stock) && $product->in_stock)
+                                            <span class="text-green-600 dark:text-green-400">In Stock</span>
+                                        @else
+                                            <span class="text-red-600 dark:text-red-400">Out of Stock</span>
+                                        @endif
+                                    </div>
                                 </div>
-                                <div class="text-sm">
-                                    @if(isset($product->stock_quantity) && $product->stock_quantity > 0)
-                                        <span class="text-green-600 dark:text-green-400">In Stock ({{ $product->stock_quantity }})</span>
-                                    @elseif(isset($product->in_stock) && $product->in_stock)
-                                        <span class="text-green-600 dark:text-green-400">In Stock</span>
-                                    @else
-                                        <span class="text-red-600 dark:text-red-400">Out of Stock</span>
-                                    @endif
-                                </div>
-                            </div>
 
-                            <!-- Add to Cart Button (Customer Only) -->
-                            @auth
-                                @if(auth()->user()->hasRole('customer'))
-                                    @if((isset($product->stock_quantity) && $product->stock_quantity > 0) || (isset($product->in_stock) && $product->in_stock))
-                                        <button onclick="addToCart({{ $product->id }})" class="w-full btn-primary flex items-center justify-center space-x-2">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 2.5M7 13l2.5 2.5m6-6.5h.01M17 13v.01"></path>
-                                            </svg>
-                                            <span>Add to Cart</span>
-                                        </button>
+                                <!-- Add to Cart Button (Customer Only) -->
+                                @auth
+                                    @if(auth()->user()->hasRole('customer'))
+                                        @if((isset($product->stock_quantity) && $product->stock_quantity > 0) || (isset($product->in_stock) && $product->in_stock))
+                                            <button onclick="addToCart({{ $product->id }})" class="w-full btn-primary flex items-center justify-center space-x-2">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 2.5M7 13l2.5 2.5m6-6.5h.01M17 13v.01"></path>
+                                                </svg>
+                                                <span>Add to Cart</span>
+                                            </button>
+                                        @else
+                                            <button disabled class="w-full btn-ghost cursor-not-allowed">
+                                                Out of Stock
+                                            </button>
+                                        @endif
                                     @else
-                                        <button disabled class="w-full btn-ghost cursor-not-allowed">
-                                            Out of Stock
-                                        </button>
+                                        <div class="w-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 font-medium py-2 px-4 rounded-lg text-center border border-dashed border-gray-300 dark:border-gray-600">
+                                            Admin View Only
+                                        </div>
                                     @endif
                                 @else
-                                    <div class="w-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 font-medium py-2 px-4 rounded-lg text-center border border-dashed border-gray-300 dark:border-gray-600">
-                                        Admin View Only
-                                    </div>
-                                @endif
-                            @else
-                                <a href="{{ route('login') }}" class="w-full btn-primary flex items-center justify-center space-x-2">
-                                    <span>Login to Purchase</span>
-                                </a>
-                            @endauth
+                                    <a href="{{ route('login') }}" class="w-full btn-primary flex items-center justify-center space-x-2">
+                                        <span>Login to Purchase</span>
+                                    </a>
+                                @endauth
+                            </div>
                         </div>
                     </div>
                 @endforeach
