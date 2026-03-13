@@ -1,4 +1,10 @@
 <x-guest-layout>
+    <div class="mb-4">
+        <a href="{{ route('home') }}" class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-primary-600 transition-colors duration-200">
+            <span class="mr-1">←</span> Back
+        </a>
+    </div>
+
     <div class="mb-4 text-sm text-gray-600">
         {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
     </div>

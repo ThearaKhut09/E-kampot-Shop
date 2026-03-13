@@ -1,4 +1,10 @@
 <x-guest-layout>
+    <div class="mb-4">
+        <a href="{{ route('home') }}" class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-primary-600 transition-colors duration-200">
+            <span class="mr-1">←</span> Back
+        </a>
+    </div>
+
     <div class="mb-4 text-sm text-gray-600">
         {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
     </div>

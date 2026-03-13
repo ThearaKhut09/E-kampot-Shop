@@ -41,6 +41,12 @@
                 </a>
             </div>
 
+            <div class="w-full sm:max-w-md mb-4">
+                <a href="{{ route('home') }}" class="inline-flex items-center text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200">
+                    <span class="mr-1">←</span> Back
+                </a>
+            </div>
+
             <!-- Register Card -->
             <div class="w-full sm:max-w-md bg-white dark:bg-gray-800 shadow-xl rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-colors duration-200">
                 <div class="px-8 py-8">
