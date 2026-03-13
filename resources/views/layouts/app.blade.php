@@ -85,12 +85,8 @@
                                 </div>
                             </div>
                             <a href="{{ route('about') }}"
-                                class="text-gray-900 dark:text-gray-100 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 {{ request()->routeIs('about') ? 'text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/20' : '' }}">
+                                class="text-gray-900 dark:text-gray-100 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 {{ request()->routeIs('about') || request()->routeIs('contact') ? 'text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/20' : '' }}">
                                 About
-                            </a>
-                            <a href="{{ route('contact') }}"
-                                class="text-gray-900 dark:text-gray-100 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 {{ request()->routeIs('contact') ? 'text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/20' : '' }}">
-                                Contact
                             </a>
                         </div>
                     </div>
@@ -314,12 +310,8 @@
                         </div>
 
                         <a href="{{ route('about') }}"
-                            class="block pl-3 pr-4 py-2 border-l-4 text-base font-medium {{ request()->routeIs('about') ? 'border-primary-500 text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/10' : 'border-transparent text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300' }} transition-colors">
+                            class="block pl-3 pr-4 py-2 border-l-4 text-base font-medium {{ request()->routeIs('about') || request()->routeIs('contact') ? 'border-primary-500 text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/10' : 'border-transparent text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300' }} transition-colors">
                             About
-                        </a>
-                        <a href="{{ route('contact') }}"
-                            class="block pl-3 pr-4 py-2 border-l-4 text-base font-medium {{ request()->routeIs('contact') ? 'border-primary-500 text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/10' : 'border-transparent text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300' }} transition-colors">
-                            Contact
                         </a>
 
                         <!-- Mobile Search -->

@@ -142,4 +142,8 @@
             </div>
         </div>
     </div>
+
+    <div class="border-t border-gray-200 dark:border-gray-700">
+        @include('partials.contact-content')
+    </div>
 </x-app-layout>
