@@ -128,6 +128,15 @@
                     @if($recentOrders->count() > 0)
                         <div class="space-y-4">
                             @foreach($recentOrders as $order)
+                                @php
+                                    $orderStatusClasses = match ($order->status) {
+                                        'delivered' => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+                                        'shipped' => 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
+                                        'processing' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
+                                        'pending' => 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200',
+                                        default => 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200',
+                                    };
+                                @endphp
                                 <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
                                     <div class="flex items-center justify-between mb-3">
                                         <div>
@@ -139,12 +148,7 @@
                                             </p>
                                         </div>
                                         <div class="flex items-center space-x-3">
-                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                                @if($order->status === 'delivered') bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200
-                                                @elseif($order->status === 'shipped') bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200
-                                                @elseif($order->status === 'processing') bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200
-                                                @elseif($order->status === 'pending') bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200
-                                                @else bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200 @endif">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $orderStatusClasses }}">
                                                 {{ ucfirst($order->status) }}
                                             </span>
                                             <span class="font-semibold text-gray-900 dark:text-gray-100">
