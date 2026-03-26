@@ -248,6 +248,8 @@
         </div>
     </div>
 
+    <x-chatbot-widget />
+
     <!-- Mobile Sidebar Overlay -->
     <div class="fixed inset-0 z-40 bg-gray-600 bg-opacity-75 lg:hidden" id="sidebar-overlay" style="display: none;"
         onclick="toggleSidebar()"></div>

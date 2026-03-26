@@ -41,4 +41,10 @@ return [
     'system_status' => 'System Status',
     'cancel' => 'Cancel',
     'shop_intro' => 'Your one-stop shop for everything you need. Quality products, great prices, excellent service.',
+    'chat_assistant' => 'Shop Assistant',
+    'chatbot_welcome' => 'Hi. Ask me anything about products, price range, stock, or category.',
+    'chatbot_placeholder' => 'Ask about a product...',
+    'chatbot_send' => 'Send',
+    'chatbot_error' => 'Sorry, I could not connect right now. Please try again.',
+    'chatbot_thinking' => 'Thinking...',
 ];

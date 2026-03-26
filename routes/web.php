@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\UserOrderController;
 use App\Http\Controllers\ReviewController;
@@ -34,6 +35,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 // Public Routes
 Route::post('/language/{locale}', [LanguageController::class, 'switch'])->name('language.switch');
+Route::post('/chatbot/message', [ChatbotController::class, 'message'])
+    ->middleware('throttle:20,1')
+    ->name('chatbot.message');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [HomeController::class, 'about'])->name('about');

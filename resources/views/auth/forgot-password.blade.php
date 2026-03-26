@@ -113,5 +113,7 @@
                 </p>
             </div>
         </div>
+
+        <x-chatbot-widget />
     </body>
 </html>
