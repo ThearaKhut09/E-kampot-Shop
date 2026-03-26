@@ -21,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Apply admin session manager to handle separate session cookies
         $middleware->web([
+            \App\Http\Middleware\SetLocale::class,
             \App\Http\Middleware\AdminSessionManager::class,
         ]);
     })

@@ -26,7 +26,7 @@
     <section class="py-16 bg-white dark:bg-gray-900 transition-colors duration-200">
         <div class="container-app">
             <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Shop by Category</h2>
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">{{ __('ui.shop_by_category') }}</h2>
                 <p class="text-lg text-gray-600 dark:text-gray-400">Browse our wide range of product categories</p>
             </div>
 
@@ -79,7 +79,7 @@
     <section class="py-16 bg-gray-50 dark:bg-gray-800 transition-colors duration-200">
         <div class="container-app">
             <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Featured Products</h2>
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">{{ __('ui.featured_products') }}</h2>
                 <p class="text-lg text-gray-600 dark:text-gray-400">Hand-picked products just for you</p>
             </div>
 
@@ -91,7 +91,7 @@
 
             <div class="text-center mt-12">
                 <a href="{{ route('products.index') }}" class="btn-primary px-8 py-3">
-                    View All Products
+                    {{ __('ui.view_all_products') }}
                 </a>
             </div>
         </div>

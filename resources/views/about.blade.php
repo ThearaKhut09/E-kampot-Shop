@@ -1,10 +1,10 @@
 <x-app-layout>
-    <x-slot name="title">About Us - E-Kampot Shop</x-slot>
+    <x-slot name="title">{{ __('ui.about_us') }} - E-Kampot Shop</x-slot>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <!-- Hero Section -->
         <div class="text-center mb-16">
-            <h1 class="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">About E-Kampot Shop</h1>
+            <h1 class="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">{{ __('ui.about') }} E-Kampot Shop</h1>
             <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
                 Your trusted online destination for quality products at unbeatable prices
             </p>
@@ -86,11 +86,11 @@
                 </div>
                 <div class="text-center">
                     <div class="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-2">5,000+</div>
-                    <div class="text-gray-600 dark:text-gray-300">Products</div>
+                    <div class="text-gray-600 dark:text-gray-300">{{ __('ui.products') }}</div>
                 </div>
                 <div class="text-center">
                     <div class="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-2">50+</div>
-                    <div class="text-gray-600 dark:text-gray-300">Categories</div>
+                    <div class="text-gray-600 dark:text-gray-300">{{ __('ui.categories') }}</div>
                 </div>
                 <div class="text-center">
                     <div class="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-2">24/7</div>

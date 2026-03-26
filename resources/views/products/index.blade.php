@@ -1,9 +1,9 @@
-<x-app-layout title="Products - E-Kampot Shop">
+<x-app-layout :title="__('ui.products') . ' - E-Kampot Shop'">
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
     <div class="container-app">
         <!-- Page Header -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Products</h1>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">{{ __('ui.products') }}</h1>
             <p class="mt-2 text-gray-600 dark:text-gray-400">Discover our amazing collection of products</p>
         </div>
 
@@ -24,9 +24,9 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <!-- Category Filter -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('ui.category') }}</label>
                         <select name="category" class="input">
-                            <option value="">All Categories</option>
+                            <option value="">{{ __('ui.all_categories') }}</option>
                             @if($categories)
                                 @foreach($categories as $category)
                                     <option value="{{ $category->slug }}" {{ request('category') === $category->slug ? 'selected' : '' }}>

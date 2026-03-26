@@ -44,16 +44,16 @@
                         <div class="hidden lg:ml-8 lg:flex lg:space-x-1">
                             <a href="{{ route('home') }}"
                                 class="text-gray-900 dark:text-gray-100 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 {{ request()->routeIs('home') ? 'text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/20' : '' }}">
-                                Home
+                                {{ __('ui.home') }}
                             </a>
                             <a href="{{ route('products.index') }}"
                                 class="text-gray-900 dark:text-gray-100 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 {{ request()->routeIs('products.*') ? 'text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/20' : '' }}">
-                                Products
+                                {{ __('ui.products') }}
                             </a>
                             <div class="relative" x-data="{ open: false }">
                                 <button @click="open = !open"
                                     class="text-gray-900 dark:text-gray-100 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center {{ request()->routeIs('category.*') ? 'text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/20' : '' }}">
-                                    Categories
+                                    {{ __('ui.categories') }}
                                     <svg class="ml-1 h-4 w-4 transition-transform duration-200"
                                         :class="{ 'rotate-180': open }" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
@@ -86,7 +86,7 @@
                             </div>
                             <a href="{{ route('about') }}"
                                 class="text-gray-900 dark:text-gray-100 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 {{ request()->routeIs('about') || request()->routeIs('contact') ? 'text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/20' : '' }}">
-                                About
+                                {{ __('ui.about') }}
                             </a>
                         </div>
                     </div>
@@ -96,7 +96,7 @@
                         <div class="lg:hidden">
                             <button @click="mobileMenuOpen = !mobileMenuOpen" type="button"
                                 class="p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500">
-                                <span class="sr-only">Open main menu</span>
+                                <span class="sr-only">{{ __('ui.open_main_menu') }}</span>
                                 <svg x-show="!mobileMenuOpen" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -112,7 +112,7 @@
                         <!-- Search -->
                         <div class="hidden lg:block">
                             <form action="{{ route('products.index') }}" method="GET" class="relative">
-                                <input type="text" name="search" placeholder="Search products..."
+                                <input type="text" name="search" placeholder="{{ __('ui.search_products') }}"
                                     value="{{ request('search') }}"
                                     class="input input-nav w-90 pl-10 pr-4 text-sm">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -124,6 +124,8 @@
                                 </div>
                             </form>
                         </div>
+
+                        <x-language-switcher class="hidden sm:flex" />
 
                         <!-- Dark Mode Toggle -->
                         <button @click="darkMode = !darkMode; localStorage.setItem('darkMode', darkMode)"
@@ -192,7 +194,7 @@
                                     class="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
                                     <!-- User Icon - Always visible -->
                                     <div
-                                        class="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mr-2 sm:mr-1">
+                                        class="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
                                         <svg class="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none"
                                             stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -200,43 +202,35 @@
                                             </path>
                                         </svg>
                                     </div>
-                                    <!-- User Name - Hidden on small screens -->
-                                    <span class="hidden lg:block">
-                                        @if ($showWebUser)
-                                            {{ Auth::guard('web')->user()->name }}
-                                        @elseif ($showAdminUser)
-                                            {{ Auth::guard('admin')->user()->name }}
-                                        @endif
-                                    </span>
                                 </button>
                                 <div x-show="open" @click.away="open = false" x-transition
                                     class="absolute right-0 mt-2 w-52 bg-white dark:bg-gray-800 rounded-xl shadow-soft border border-gray-100 dark:border-gray-800 z-50">
                                     @if ($showWebUser)
                                         <a href="{{ route('dashboard') }}"
                                             class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-t-xl">
-                                            Dashboard
+                                            {{ __('ui.dashboard') }}
                                         </a>
                                         <a href="{{ route('profile.edit') }}"
                                             class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                            Profile
+                                            {{ __('ui.profile') }}
                                         </a>
                                         <form method="POST" action="{{ route('logout') }}">
                                             @csrf
                                             <button type="submit"
                                                 class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-b-xl">
-                                                Logout
+                                                {{ __('ui.logout') }}
                                             </button>
                                         </form>
                                     @elseif ($showAdminUser)
                                         <a href="{{ route('admin.dashboard') }}"
                                             class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-t-xl">
-                                            Admin Dashboard
+                                            {{ __('ui.admin_dashboard') }}
                                         </a>
                                         <form method="POST" action="{{ route('admin.logout') }}">
                                             @csrf
                                             <button type="submit"
                                                 class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-b-xl">
-                                                Logout
+                                                {{ __('ui.logout') }}
                                             </button>
                                         </form>
                                     @endif
@@ -247,11 +241,11 @@
                                 <!-- Desktop Login & Register Buttons -->
                                 <a href="{{ route('login') }}"
                                     class="btn-ghost hidden lg:inline-flex">
-                                    Login
+                                    {{ __('ui.login') }}
                                 </a>
                                 <a href="{{ route('register') }}"
                                     class="btn-primary hidden lg:inline-flex">
-                                    Register
+                                    {{ __('ui.register') }}
                                 </a>
                                 <!-- Mobile/Tablet Login Icon -->
                                 <a href="{{ route('login') }}"
@@ -273,18 +267,18 @@
                     <div class="pt-2 pb-3 space-y-1">
                         <a href="{{ route('home') }}"
                             class="block pl-3 pr-4 py-2 border-l-4 text-base font-medium {{ request()->routeIs('home') ? 'border-primary-500 text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/10' : 'border-transparent text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300' }} transition-colors">
-                            Home
+                            {{ __('ui.home') }}
                         </a>
                         <a href="{{ route('products.index') }}"
                             class="block pl-3 pr-4 py-2 border-l-4 text-base font-medium {{ request()->routeIs('products.*') ? 'border-primary-500 text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/10' : 'border-transparent text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300' }} transition-colors">
-                            Products
+                            {{ __('ui.products') }}
                         </a>
 
                         <!-- Mobile Categories -->
                         <div x-data="{ categoriesOpen: false }">
                             <button @click="categoriesOpen = !categoriesOpen"
                                 class="w-full flex items-center justify-between pl-3 pr-4 py-2 border-l-4 text-base font-medium {{ request()->routeIs('category.*') ? 'border-primary-500 text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/10' : 'border-transparent text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300' }} transition-colors">
-                                <span>Categories</span>
+                                <span>{{ __('ui.categories') }}</span>
                                 <svg :class="{ 'rotate-180': categoriesOpen }"
                                     class="h-5 w-5 transform transition-transform" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
@@ -311,13 +305,13 @@
 
                         <a href="{{ route('about') }}"
                             class="block pl-3 pr-4 py-2 border-l-4 text-base font-medium {{ request()->routeIs('about') || request()->routeIs('contact') ? 'border-primary-500 text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/10' : 'border-transparent text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300' }} transition-colors">
-                            About
+                            {{ __('ui.about') }}
                         </a>
 
                         <!-- Mobile Search -->
                         <div class="px-3 py-2">
                             <form action="{{ route('products.index') }}" method="GET" class="relative">
-                                <input type="text" name="search" placeholder="Search products..."
+                                <input type="text" name="search" placeholder="{{ __('ui.search_products') }}"
                                     value="{{ request('search') }}"
                                     class="input input-nav pl-10 pr-4 text-sm">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -330,17 +324,21 @@
                             </form>
                         </div>
 
+                        <div class="px-3 py-2">
+                            <x-language-switcher mobile />
+                        </div>
+
                         <!-- Mobile Auth Links -->
                         @if (!$isAuthenticated)
                             <div class="pt-4 pb-3 border-t border-gray-200 dark:border-gray-600">
                                 <div class="space-y-1">
                                     <a href="{{ route('login') }}"
                                         class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
-                                        Login
+                                        {{ __('ui.login') }}
                                     </a>
                                     <a href="{{ route('register') }}"
                                         class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
-                                        Register
+                                        {{ __('ui.register') }}
                                     </a>
                                 </div>
                             </div>
@@ -368,29 +366,29 @@
                                     @if ($showWebUser)
                                         <a href="{{ route('dashboard') }}"
                                             class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
-                                            Dashboard
+                                            {{ __('ui.dashboard') }}
                                         </a>
                                         <a href="{{ route('profile.edit') }}"
                                             class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
-                                            Profile
+                                            {{ __('ui.profile') }}
                                         </a>
                                         <form method="POST" action="{{ route('logout') }}">
                                             @csrf
                                             <button type="submit"
                                                 class="block w-full text-left pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
-                                                Logout
+                                                {{ __('ui.logout') }}
                                             </button>
                                         </form>
                                     @elseif ($showAdminUser)
                                         <a href="{{ route('admin.dashboard') }}"
                                             class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
-                                            Admin Dashboard
+                                            {{ __('ui.admin_dashboard') }}
                                         </a>
                                         <form method="POST" action="{{ route('admin.logout') }}">
                                             @csrf
                                             <button type="submit"
                                                 class="block w-full text-left pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
-                                                Logout
+                                                {{ __('ui.logout') }}
                                             </button>
                                         </form>
                                     @endif
@@ -422,22 +420,21 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                     <div>
                         <h3 class="text-lg font-semibold mb-4">E-Kampot Shop</h3>
-            <p class="text-gray-400 text-sm">Your one-stop shop for everything you need. Quality products,
-                            great prices, excellent service.</p>
+            <p class="text-gray-400 text-sm">{{ __('ui.shop_intro') }}</p>
                     </div>
                     <div>
-                        <h4 class="font-semibold mb-4">Quick Links</h4>
+                        <h4 class="font-semibold mb-4">{{ __('ui.quick_links') }}</h4>
                         <div class="space-y-2">
                             <a href="{{ route('products.index') }}"
-                                class="block text-gray-400 hover:text-white text-sm transition-colors">Products</a>
+                                class="block text-gray-400 hover:text-white text-sm transition-colors">{{ __('ui.products') }}</a>
                             <a href="{{ route('about') }}"
-                                class="block text-gray-400 hover:text-white text-sm transition-colors">About Us</a>
+                                class="block text-gray-400 hover:text-white text-sm transition-colors">{{ __('ui.about_us') }}</a>
                             <a href="{{ route('contact') }}"
-                                class="block text-gray-400 hover:text-white text-sm transition-colors">Contact</a>
+                                class="block text-gray-400 hover:text-white text-sm transition-colors">{{ __('ui.contact') }}</a>
                         </div>
                     </div>
                     <div>
-                        <h4 class="font-semibold mb-4">Categories</h4>
+                        <h4 class="font-semibold mb-4">{{ __('ui.categories') }}</h4>
                         <div class="space-y-2">
                             @foreach (\App\Models\Category::active()->parents()->orderBy('sort_order')->take(5)->get() as $category)
                                 <a href="{{ route('category.show', $category->slug) }}"
@@ -446,7 +443,7 @@
                         </div>
                     </div>
                     <div>
-                        <h4 class="font-semibold mb-4">Contact Info</h4>
+                        <h4 class="font-semibold mb-4">{{ __('ui.contact_info') }}</h4>
                         <div class="space-y-2 text-sm text-gray-400">
                             <p>{{ \App\Models\Setting::get('site_address', '123 Main Street, Kampot, Cambodia') }}</p>
                             <p>{{ \App\Models\Setting::get('site_phone', '+1 (555) 123-4567') }}</p>
@@ -455,7 +452,7 @@
                     </div>
                 </div>
         <div class="border-t border-white/10 mt-8 pt-8 text-center">
-                    <p class="text-gray-400 text-sm">&copy; {{ date('Y') }} E-Kampot Shop. All rights reserved.
+                    <p class="text-gray-400 text-sm">&copy; {{ date('Y') }} E-Kampot Shop. {{ __('ui.all_rights_reserved') }}
                     </p>
                 </div>
             </div>
