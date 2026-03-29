@@ -172,7 +172,7 @@
                             <a href="{{ route('cart.index') }}"
                                 class="relative p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
                                 <svg width="24px" height="24px" viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg">
+                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor">
                                     <circle cx="16.5" cy="18.5" r="1.5" />
                                     <circle cx="9.5" cy="18.5" r="1.5" />
                                     <path
