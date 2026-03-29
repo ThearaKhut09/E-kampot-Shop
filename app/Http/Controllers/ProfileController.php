@@ -29,7 +29,19 @@ class ProfileController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
-        $user->fill($request->validated());
+        $validated = $request->validated();
+
+        // Keep full name in sync with first/last when those fields are provided.
+        $firstName = trim((string) ($validated['first_name'] ?? $user->first_name ?? ''));
+        $lastName = trim((string) ($validated['last_name'] ?? $user->last_name ?? ''));
+
+        if ($firstName !== '' || $lastName !== '') {
+            $validated['name'] = trim($firstName.' '.$lastName);
+            $validated['first_name'] = $firstName !== '' ? $firstName : null;
+            $validated['last_name'] = $lastName !== '' ? $lastName : null;
+        }
+
+        $user->fill($validated);
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;

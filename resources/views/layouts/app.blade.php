@@ -189,18 +189,33 @@
                         <!-- Authentication -->
 
                         @if ($isAuthenticated)
+                            @php
+                                $currentUser = $showWebUser ? Auth::guard('web')->user() : ($showAdminUser ? Auth::guard('admin')->user() : null);
+                                $currentUserName = $currentUser?->name ?? __('ui.profile');
+                                $currentUserAvatar = $currentUser?->avatar;
+                            @endphp
                             <div class="relative" x-data="{ open: false }">
                                 <button @click="open = !open"
                                     class="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
                                     <!-- User Icon - Always visible -->
-                                    <div
-                                        class="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
-                                        <svg class="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none"
-                                            stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
-                                            </path>
-                                        </svg>
+                                    <div class="w-8 h-8 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                                        @if ($currentUserAvatar)
+                                            <img src="{{ $currentUserAvatar }}" alt="{{ $currentUserName }}" class="w-full h-full object-cover"
+                                                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                            <svg style="display:none" class="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none"
+                                                stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
+                                                </path>
+                                            </svg>
+                                        @else
+                                            <svg class="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none"
+                                                stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
+                                                </path>
+                                            </svg>
+                                        @endif
                                     </div>
                                 </button>
                                 <div x-show="open" @click.away="open = false" x-transition
@@ -345,21 +360,32 @@
                         @else
                             <div class="pt-4 pb-3 border-t border-gray-200 dark:border-gray-600">
                                 <div class="flex items-center px-4">
-                                    <div
-                                        class="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mr-3">
-                                        <svg class="w-6 h-6 text-gray-600 dark:text-gray-400" fill="none"
-                                            stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
-                                            </path>
-                                        </svg>
+                                    @php
+                                        $mobileCurrentUser = $showWebUser ? Auth::guard('web')->user() : ($showAdminUser ? Auth::guard('admin')->user() : null);
+                                        $mobileUserAvatar = $mobileCurrentUser?->avatar;
+                                        $mobileUserName = $mobileCurrentUser?->name;
+                                    @endphp
+                                    <div class="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden flex items-center justify-center mr-3">
+                                        @if ($mobileUserAvatar)
+                                            <img src="{{ $mobileUserAvatar }}" alt="{{ $mobileUserName }}" class="w-full h-full object-cover"
+                                                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                            <svg style="display:none" class="w-6 h-6 text-gray-600 dark:text-gray-400" fill="none"
+                                                stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
+                                                </path>
+                                            </svg>
+                                        @else
+                                            <svg class="w-6 h-6 text-gray-600 dark:text-gray-400" fill="none"
+                                                stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
+                                                </path>
+                                            </svg>
+                                        @endif
                                     </div>
                                     <div class="text-base font-medium text-gray-800 dark:text-gray-200">
-                                        @if ($showWebUser)
-                                            {{ Auth::guard('web')->user()->name }}
-                                        @elseif ($showAdminUser)
-                                            {{ Auth::guard('admin')->user()->name }}
-                                        @endif
+                                        {{ __('ui.profile') }}
                                     </div>
                                 </div>
                                 <div class="mt-3 space-y-1">

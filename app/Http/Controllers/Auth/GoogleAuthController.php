@@ -49,12 +49,14 @@ class GoogleAuthController extends Controller
             ->first();
 
         if ($user) {
+            $isGoogleLinkedUser = $user->google_id === $googleUser->getId() || $user->google_id === null;
+
             $user->fill([
-                'name' => $user->name ?: $fullName,
-                'first_name' => $user->first_name ?: $firstName,
-                'last_name' => $user->last_name ?: $lastName,
-                'google_id' => $user->google_id ?: $googleUser->getId(),
-                'avatar' => $user->avatar ?: $googleUser->getAvatar(),
+                'name' => ($user->name && !$isGoogleLinkedUser) ? $user->name : $fullName,
+                'first_name' => ($user->first_name && !$isGoogleLinkedUser) ? $user->first_name : $firstName,
+                'last_name' => ($user->last_name && !$isGoogleLinkedUser) ? $user->last_name : $lastName,
+                'google_id' => $googleUser->getId(),
+                'avatar' => $googleUser->getAvatar() ?: $user->avatar,
                 'email_verified_at' => $user->email_verified_at ?: now(),
                 'last_login_at' => now(),
             ]);
