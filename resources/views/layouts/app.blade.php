@@ -229,7 +229,7 @@
                                             class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                                             {{ __('ui.profile') }}
                                         </a>
-                                        <form method="POST" action="{{ route('logout') }}">
+                                        <form method="POST" action="{{ route('logout') }}" onsubmit="return confirmLogoutPrompt(event, this);">
                                             @csrf
                                             <button type="submit"
                                                 class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-b-xl">
@@ -241,7 +241,7 @@
                                             class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-t-xl">
                                             {{ __('ui.admin_dashboard') }}
                                         </a>
-                                        <form method="POST" action="{{ route('admin.logout') }}">
+                                        <form method="POST" action="{{ route('admin.logout') }}" onsubmit="return confirmLogoutPrompt(event, this);">
                                             @csrf
                                             <button type="submit"
                                                 class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-b-xl">
@@ -398,7 +398,7 @@
                                             class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
                                             {{ __('ui.profile') }}
                                         </a>
-                                        <form method="POST" action="{{ route('logout') }}">
+                                        <form method="POST" action="{{ route('logout') }}" onsubmit="return confirmLogoutPrompt(event, this);">
                                             @csrf
                                             <button type="submit"
                                                 class="block w-full text-left pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
@@ -410,7 +410,7 @@
                                             class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
                                             {{ __('ui.admin_dashboard') }}
                                         </a>
-                                        <form method="POST" action="{{ route('admin.logout') }}">
+                                        <form method="POST" action="{{ route('admin.logout') }}" onsubmit="return confirmLogoutPrompt(event, this);">
                                             @csrf
                                             <button type="submit"
                                                 class="block w-full text-left pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
@@ -490,8 +490,60 @@
     <!-- Toast Notifications -->
     <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
 
+    <!-- Logout Confirmation Modal -->
+    <div id="logout-confirm-modal" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-black/50" onclick="closeLogoutConfirm()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div class="w-full max-w-sm rounded-2xl bg-white dark:bg-gray-800 shadow-xl border border-gray-200 dark:border-gray-700">
+                <div class="px-5 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Confirm Logout</h3>
+                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Are you sure you want to log out?</p>
+                </div>
+                <div class="px-5 py-4 flex items-center justify-end gap-2">
+                    <button type="button" onclick="closeLogoutConfirm()"
+                        class="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                        Cancel
+                    </button>
+                    <button type="button" onclick="submitConfirmedLogout()"
+                        class="px-4 py-2 rounded-lg text-sm font-medium text-white bg-red-600 hover:bg-red-700 transition-colors">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- JavaScript -->
     <script>
+        let pendingLogoutForm = null;
+
+        function confirmLogoutPrompt(event, form) {
+            event.preventDefault();
+            pendingLogoutForm = form;
+
+            const modal = document.getElementById('logout-confirm-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+            }
+
+            return false;
+        }
+
+        function closeLogoutConfirm() {
+            const modal = document.getElementById('logout-confirm-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+            }
+            pendingLogoutForm = null;
+        }
+
+        function submitConfirmedLogout() {
+            if (pendingLogoutForm) {
+                pendingLogoutForm.submit();
+            }
+            closeLogoutConfirm();
+        }
+
         // Global cart management
         window.cartManager = {
             isAdmin: {{ Auth::guard('admin')->check() ? 'true' : 'false' }},
