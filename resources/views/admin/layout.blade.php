@@ -203,7 +203,7 @@
 
                             <div x-show="open" @click.away="open = false"
                                 class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-soft border border-gray-100 dark:border-gray-800 py-1 z-50">
-                                <form method="POST" action="{{ route('admin.logout') }}">
+                                <form method="POST" action="{{ route('admin.logout') }}" onsubmit="return confirmAdminLogout(event, this);">
                                     @csrf
                                     <button type="submit"
                                         class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
@@ -315,8 +315,62 @@
         </div>
     </div>
 
+    <!-- Admin Logout Confirmation Modal -->
+    <div id="admin-logout-confirm-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50" onclick="closeAdminLogoutConfirm()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div class="w-full max-w-sm rounded-xl bg-white dark:bg-gray-800 shadow-xl border border-gray-200 dark:border-gray-700">
+                <div class="px-5 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Confirm Logout</h3>
+                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Are you sure you want to log out?</p>
+                </div>
+                <div class="px-5 py-4 flex items-center justify-end gap-2">
+                    <button type="button" onclick="closeAdminLogoutConfirm()"
+                        class="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                        {{ __('ui.cancel') }}
+                    </button>
+                    <button type="button" onclick="submitAdminLogoutConfirmed()"
+                        class="px-4 py-2 rounded-lg text-sm font-medium text-white bg-red-600 hover:bg-red-700 transition-colors">
+                        {{ __('ui.logout') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script>
+        let pendingAdminLogoutForm = null;
+
+        function confirmAdminLogout(event, form) {
+            event.preventDefault();
+            pendingAdminLogoutForm = form;
+
+            const modal = document.getElementById('admin-logout-confirm-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+            }
+
+            return false;
+        }
+
+        function closeAdminLogoutConfirm() {
+            const modal = document.getElementById('admin-logout-confirm-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+            }
+
+            pendingAdminLogoutForm = null;
+        }
+
+        function submitAdminLogoutConfirmed() {
+            if (pendingAdminLogoutForm) {
+                pendingAdminLogoutForm.submit();
+            }
+
+            closeAdminLogoutConfirm();
+        }
+
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
