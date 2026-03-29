@@ -31,38 +31,38 @@
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                @php
+                    $categoryIconMap = [
+                        'Phones' => 'phone-removebg.png',
+                        'Electronics' => 'pc-removebg.png',
+                        'Fashion' => 'fashion-removebg.png',
+                        'Home & Kitchen' => 'home-removebg.png',
+                        'Beauty & Personal Care' => 'beauty-removebg.png',
+                        'Sports & Outdoors' => 'sport-removebg.png',
+                        'Books & Stationery' => 'book-removebg.png',
+                        'Toys & Games' => 'toy-removebg.png',
+                    ];
+                @endphp
+
                 @foreach($categories as $category)
+                    @php
+                        $iconFile = $categoryIconMap[$category->name] ?? null;
+                    @endphp
                     <a href="{{ route('category.show', $category->slug) }}" class="group text-center">
                         <div class="card p-8 hover:shadow-lg transition-shadow duration-200">
-                            <div class="text-4xl mb-4">
-                                @switch($category->name)
-                                    @case('Phones')
-                                        📱
-                                        @break
-                                    @case('Electronics')
-                                        💻
-                                        @break
-                                    @case('Fashion')
-                                        👗
-                                        @break
-                                    @case('Home & Kitchen')
-                                        🏠
-                                        @break
-                                    @case('Beauty & Personal Care')
-                                        💄
-                                        @break
-                                    @case('Sports & Outdoors')
-                                        ⚽
-                                        @break
-                                    @case('Books & Stationery')
-                                        📚
-                                        @break
-                                    @case('Toys & Games')
-                                        🎮
-                                        @break
-                                    @default
-                                        🛍️
-                                @endswitch
+                            <div class="mb-4 flex items-center justify-center">
+                                @if($iconFile)
+                                    <div class="h-16 w-16">
+                                        <img
+                                            src="{{ asset('images/IconCategory/' . $iconFile) }}"
+                                            alt="{{ $category->name }}"
+                                            class="h-full w-full object-contain"
+                                            loading="lazy"
+                                        >
+                                    </div>
+                                @else
+                                    <div class="text-4xl">🛍️</div>
+                                @endif
                             </div>
                             <h3 class="font-semibold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                                 {{ $category->name }}
