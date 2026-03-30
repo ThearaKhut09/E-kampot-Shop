@@ -145,8 +145,11 @@
                     @if(auth()->user()->hasRole('customer'))
                         @if($inStock)
                             <button onclick="addToCart({{ $product->id }})" class="w-full btn-primary flex items-center justify-center space-x-2">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 2.5M7 13l2.5 2.5m6-6.5h.01M17 13v.01"></path>
+                                <svg class="w-4 h-4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                                    <circle cx="16.5" cy="18.5" r="1.5" />
+                                    <circle cx="9.5" cy="18.5" r="1.5" />
+                                    <path
+                                        d="M18 16H8a1 1 0 0 1-.958-.713L4.256 6H3a1 1 0 0 1 0-2h2a1 1 0 0 1 .958.713L6.344 6H21a1 1 0 0 1 .937 1.352l-3 8A1 1 0 0 1 18 16zm-9.256-2h8.563l2.25-6H6.944z" />
                                 </svg>
                                 <span>Add to Cart</span>
                             </button>
