@@ -5,6 +5,7 @@ E-Kampot Shop is a modern, full-featured e-commerce platform built with Laravel 
 ## 🚀 Features
 
 ### Core Features
+
 - **Multi-role system** (Admin/Customer) with Spatie Laravel Permission
 - **Comprehensive product categories** (Phones, Electronics, Fashion, etc.)
 - **Shopping cart and checkout** functionality
@@ -15,12 +16,14 @@ E-Kampot Shop is a modern, full-featured e-commerce platform built with Laravel 
 - **Admin dashboard** with full CRUD operations
 
 ### Technology Stack
+
 - **Backend**: Laravel 12 with SQLite database
 - **Frontend**: Blade templates with Tailwind CSS
 - **Authentication**: Laravel Breeze with role-based access control
 - **Packages**: Spatie Laravel Permission, Laravel Sanctum, Intervention Image
 
 ### Product Categories
+
 - 📱 Phones (Smartphones, Feature phones, Accessories)
 - 💻 Electronics (Laptops, Desktops, Tablets, etc.)
 - 👗 Fashion (Clothing, Shoes, Accessories)
@@ -42,54 +45,75 @@ E-Kampot Shop is a modern, full-featured e-commerce platform built with Laravel 
 ## 🛠️ Installation
 
 1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd e-kampot-shop
-   ```
+
+    ```bash
+    git clone <repository-url>
+    cd e-kampot-shop
+    ```
 
 2. **Install PHP dependencies**
-   ```bash
-   composer install
-   ```
+
+    ```bash
+    composer install
+    ```
 
 3. **Install Node.js dependencies**
-   ```bash
-   npm install
-   ```
+
+    ```bash
+    npm install
+    ```
 
 4. **Environment setup**
-   ```bash
-   cp .env.example .env
-   php artisan key:generate
-   ```
+
+    ```bash
+    cp .env.example .env
+    php artisan key:generate
+    ```
 
 5. **Database setup**
-   ```bash
-   php artisan migrate --seed
-   ```
+
+    ```bash
+    php artisan migrate --seed
+    ```
 
 6. **Build assets**
-   ```bash
-   npm run build
-   ```
+
+    ```bash
+    npm run build
+    ```
 
 7. **Start the development server**
-   ```bash
-   php artisan serve
-   ```
+    ```bash
+    php artisan serve
+    ```
 
 Visit `http://127.0.0.1:8000` to access the application.
+
+## ☁️ Supabase Hosting Setup
+
+To deploy this project with a free Supabase PostgreSQL database, follow:
+
+- [SUPABASE_SETUP.md](SUPABASE_SETUP.md)
+
+Quick local DB toggle:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/switch-db.ps1 sqlite
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/switch-db.ps1 supabase
+```
 
 ## 👤 Default Users
 
 After seeding, you can log in with these accounts:
 
 ### Admin Account
+
 - **Email**: admin@ekampot.com
 - **Password**: password
 - **Role**: Administrator (Full access to admin panel)
 
 ### Customer Account
+
 - **Email**: customer@example.com
 - **Password**: password
 - **Role**: Customer (Shopping access)
@@ -109,6 +133,7 @@ The admin panel is accessible at `/admin` for users with admin role and includes
 ## 🛍️ Customer Features
 
 ### Public Pages
+
 - **Homepage**: Featured products, categories, and promotional content
 - **Product Catalog**: Browse with filtering and search
 - **Product Details**: Detailed view with reviews and related products
@@ -116,6 +141,7 @@ The admin panel is accessible at `/admin` for users with admin role and includes
 - **About & Contact**: Company information and contact form
 
 ### Authenticated Features
+
 - **Shopping Cart**: Add, update, and remove items
 - **User Dashboard**: Order history and account management
 - **Product Reviews**: Write and manage reviews
@@ -125,6 +151,7 @@ The admin panel is accessible at `/admin` for users with admin role and includes
 ## 🌙 Dark Mode
 
 The application supports system-wide dark mode that:
+
 - Automatically detects user's system preference
 - Allows manual toggle via navigation button
 - Persists user preference in localStorage
@@ -133,6 +160,7 @@ The application supports system-wide dark mode that:
 ## 🎯 Key Components
 
 ### Models & Relationships
+
 - **User**: With roles and permissions
 - **Product**: With categories, reviews, and cart items
 - **Category**: Hierarchical with parent-child relationships
@@ -142,6 +170,7 @@ The application supports system-wide dark mode that:
 - **Setting**: Site configuration
 
 ### Security Features
+
 - **CSRF Protection**: On all forms
 - **Role-based Access Control**: Using Spatie Permission
 - **Input Validation**: Comprehensive form validation
@@ -159,6 +188,7 @@ The application supports system-wide dark mode that:
 ## 🧪 Testing
 
 Run the test suite:
+
 ```bash
 php artisan test
 ```

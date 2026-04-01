@@ -15,6 +15,13 @@
     $primaryImage = data_get($product, 'primary_image');
     $fallbackImage = data_get($product, 'image');
     $imagePath = $primaryImage ?: $fallbackImage;
+    $imageUrl = data_get($product, 'image_url');
+
+    if (!$imageUrl && $imagePath) {
+        $imageUrl = filter_var($imagePath, FILTER_VALIDATE_URL)
+            ? $imagePath
+            : asset('storage/' . ltrim($imagePath, '/'));
+    }
 
     $resolvedPrice = null;
     if ($priceField && !is_null(data_get($product, $priceField))) {
@@ -47,8 +54,8 @@
             <a href="{{ $productUrl }}" class="block w-full h-full">
         @endif
 
-        @if($imagePath)
-            <img src="{{ asset('storage/' . $imagePath) }}"
+        @if($imageUrl)
+            <img src="{{ $imageUrl }}"
                  alt="{{ $displayTitle }}"
                  class="w-full h-full object-cover">
         @else

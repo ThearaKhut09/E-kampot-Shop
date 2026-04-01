@@ -16,6 +16,14 @@ class AdminController extends Controller
 {
     public function index()
     {
+        $driver = DB::connection()->getDriverName();
+
+        $monthExpression = match ($driver) {
+            'pgsql' => "to_char(created_at, 'YYYY-MM')",
+            'mysql', 'mariadb' => "DATE_FORMAT(created_at, '%Y-%m')",
+            default => "strftime('%Y-%m', created_at)",
+        };
+
         // Dashboard statistics
         $stats = [
             'total_products' => Product::count(),
@@ -42,12 +50,12 @@ class AdminController extends Controller
 
         // Monthly revenue chart data
         $monthly_revenue = Order::select(
-            DB::raw('strftime("%Y-%m", created_at) as month'),
+            DB::raw("{$monthExpression} as month"),
             DB::raw('SUM(total_amount) as revenue')
         )
         ->where('status', 'completed')
         ->where('created_at', '>=', now()->subMonths(12))
-        ->groupBy('month')
+        ->groupBy(DB::raw($monthExpression))
         ->orderBy('month')
         ->get();
 
