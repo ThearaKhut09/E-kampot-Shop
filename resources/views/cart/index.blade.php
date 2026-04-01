@@ -78,8 +78,8 @@
                             <!-- Quantity Controls -->
                             <div class="flex items-center space-x-3">
                                 <button type="button"
-                                        onclick="updateQuantity({{ $item->id }}, {{ $item->quantity - 1 }})"
-                                        class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600 flex items-center justify-center transition-colors"
+                                        onclick="changeQuantity({{ $item->id }}, -1)"
+                                        class="quantity-btn decrease-btn w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600 flex items-center justify-center transition-colors"
                                         {{ $item->quantity <= 1 ? 'disabled' : '' }}>
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
@@ -91,8 +91,8 @@
                                 </span>
 
                                 <button type="button"
-                                        onclick="updateQuantity({{ $item->id }}, {{ $item->quantity + 1 }})"
-                                        class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600 flex items-center justify-center transition-colors">
+                                        onclick="changeQuantity({{ $item->id }}, 1)"
+                                        class="quantity-btn increase-btn w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600 flex items-center justify-center transition-colors">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                     </svg>
@@ -254,6 +254,29 @@
 <script>
 let currentCartIdToRemove = null;
 
+function setQuantityButtonsState(cartItem, isDisabled) {
+    cartItem.querySelectorAll('.quantity-btn').forEach((btn) => {
+        btn.disabled = isDisabled;
+    });
+}
+
+function syncDecreaseButtonState(cartItem, quantity) {
+    const decreaseBtn = cartItem.querySelector('.decrease-btn');
+    if (!decreaseBtn) return;
+    decreaseBtn.disabled = quantity <= 1;
+}
+
+function changeQuantity(cartId, delta) {
+    const cartItem = document.querySelector(`[data-cart-id="${cartId}"]`);
+    if (!cartItem) return;
+
+    const quantityEl = cartItem.querySelector('.quantity-display');
+    const currentQuantity = parseInt(quantityEl?.textContent || '1', 10);
+    const newQuantity = currentQuantity + delta;
+
+    updateQuantity(cartId, newQuantity);
+}
+
 function showLoading() {
     document.getElementById('loading-overlay').classList.remove('hidden');
     document.getElementById('loading-overlay').classList.add('flex');
@@ -289,6 +312,16 @@ function closeRemoveItemModal() {
 function updateQuantity(cartId, newQuantity) {
     if (newQuantity < 1) return;
 
+    const cartItem = document.querySelector(`[data-cart-id="${cartId}"]`);
+    if (!cartItem) return;
+
+    if (cartItem.dataset.updating === '1') {
+        return;
+    }
+
+    cartItem.dataset.updating = '1';
+    setQuantityButtonsState(cartItem, true);
+
     showLoading();
 
     fetch(`/cart/${cartId}`, {
@@ -303,11 +336,10 @@ function updateQuantity(cartId, newQuantity) {
     })
     .then(response => response.json())
     .then(data => {
-        hideLoading();
         if (data.success) {
             // Update quantity display
-            const cartItem = document.querySelector(`[data-cart-id="${cartId}"]`);
             cartItem.querySelector('.quantity-display').textContent = newQuantity;
+            syncDecreaseButtonState(cartItem, newQuantity);
 
             // Update item total
             cartItem.querySelector('.item-total').textContent = '$' + parseFloat(data.total).toFixed(2);
@@ -322,9 +354,15 @@ function updateQuantity(cartId, newQuantity) {
         }
     })
     .catch(error => {
-        hideLoading();
         console.error('Error:', error);
         showToast('Error updating quantity', 'error');
+    })
+    .finally(() => {
+        hideLoading();
+        cartItem.dataset.updating = '0';
+        setQuantityButtonsState(cartItem, false);
+        const currentQuantity = parseInt(cartItem.querySelector('.quantity-display')?.textContent || '1', 10);
+        syncDecreaseButtonState(cartItem, currentQuantity);
     });
 }
 
