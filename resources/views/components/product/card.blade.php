@@ -33,10 +33,18 @@
     $inStock = !is_null($stockQuantity) ? (int) $stockQuantity > 0 : (bool) $inStockFlag;
 @endphp
 
-<div class="card hover:shadow-lg transition-shadow duration-200 h-full">
+<div class="card hover:shadow-lg transition-shadow duration-200 h-full {{ $productUrl ? 'cursor-pointer' : '' }}"
+    @if($productUrl)
+        onclick="if (!event.target.closest('a, button, input, select, textarea, label, form')) { window.location.href='{{ $productUrl }}'; }"
+    @endif
+>
     <div class="aspect-square card-media relative bg-gray-200 dark:bg-gray-700">
         @if($showNewBadge)
-            <span class="absolute top-2 left-2 bg-green-500 text-white px-2 py-1 text-xs rounded z-10">{{ $newBadgeText }}</span>
+            <span class="absolute top-2 left-2 bg-green-500 text-white px-2 py-1 text-xs rounded z-10 pointer-events-none">{{ $newBadgeText }}</span>
+        @endif
+
+        @if($productUrl)
+            <a href="{{ $productUrl }}" class="block w-full h-full">
         @endif
 
         @if($imagePath)
@@ -49,6 +57,10 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                 </svg>
             </div>
+        @endif
+
+        @if($productUrl)
+            </a>
         @endif
     </div>
 

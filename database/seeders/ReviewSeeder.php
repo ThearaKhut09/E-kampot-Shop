@@ -6,7 +6,6 @@ use App\Models\Review;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class ReviewSeeder extends Seeder
 {
@@ -31,61 +30,51 @@ class ReviewSeeder extends Seeder
                 'rating' => 5,
                 'title' => 'Excellent product!',
                 'comment' => 'This product exceeded my expectations. Great quality and fast delivery.',
-                'is_approved' => true,
             ],
             [
                 'rating' => 4,
                 'title' => 'Good value for money',
                 'comment' => 'Good product overall. Some minor issues but nothing major.',
-                'is_approved' => true,
             ],
             [
                 'rating' => 5,
                 'title' => 'Highly recommend',
                 'comment' => 'Amazing product! Will definitely buy again.',
-                'is_approved' => true,
             ],
             [
                 'rating' => 3,
                 'title' => 'Average product',
                 'comment' => 'It is okay, not great but not bad either.',
-                'is_approved' => true,
             ],
             [
                 'rating' => 4,
                 'title' => 'Pretty good',
                 'comment' => 'Nice product, good quality. Would recommend to others.',
-                'is_approved' => true,
             ],
             [
                 'rating' => 5,
                 'title' => 'Perfect!',
                 'comment' => 'Exactly what I was looking for. Perfect condition and fast shipping.',
-                'is_approved' => true,
             ],
             [
                 'rating' => 2,
                 'title' => 'Could be better',
                 'comment' => 'Not satisfied with the quality. Had some issues.',
-                'is_approved' => false, // This one is pending approval
             ],
             [
                 'rating' => 4,
                 'title' => 'Good purchase',
                 'comment' => 'Happy with my purchase. Good quality and reasonable price.',
-                'is_approved' => true,
             ],
             [
                 'rating' => 5,
                 'title' => 'Love it!',
                 'comment' => 'Absolutely love this product! Will order more.',
-                'is_approved' => true,
             ],
             [
                 'rating' => 3,
                 'title' => 'Decent',
                 'comment' => 'Decent product for the price. Nothing special but does the job.',
-                'is_approved' => true,
             ],
         ];
 
@@ -114,7 +103,6 @@ class ReviewSeeder extends Seeder
                     'rating' => $reviewData['rating'],
                     'title' => $reviewData['title'],
                     'comment' => $reviewData['comment'],
-                    'is_approved' => $reviewData['is_approved'],
                     'created_at' => now()->subDays(rand(1, 30)),
                     'updated_at' => now()->subDays(rand(1, 30)),
                 ]);

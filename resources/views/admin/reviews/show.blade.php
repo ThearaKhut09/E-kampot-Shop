@@ -89,42 +89,14 @@
                     </div>
                 @endif
 
-                <!-- Status and Date -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Status</label>
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                            @if($review->is_approved) bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200
-                            @else bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200 @endif">
-                            {{ $review->is_approved ? 'Approved' : 'Pending' }}
-                        </span>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Date</label>
-                        <p class="text-gray-900 dark:text-white">{{ $review->created_at->format('M j, Y g:i A') }}</p>
-                    </div>
+                <!-- Date -->
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Date</label>
+                    <p class="text-gray-900 dark:text-white">{{ $review->created_at->format('M j, Y g:i A') }}</p>
                 </div>
 
                 <!-- Actions -->
                 <div class="flex space-x-4">
-                    @if(!$review->is_approved)
-                        <form method="POST" action="{{ route('admin.reviews.approve', $review) }}" class="inline">
-                            @csrf
-                            @method('PATCH')
-                            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md">
-                                Approve Review
-                            </button>
-                        </form>
-                    @else
-                        <form method="POST" action="{{ route('admin.reviews.reject', $review) }}" class="inline">
-                            @csrf
-                            @method('PATCH')
-                            <button type="submit" class="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-md">
-                                Unapprove Review
-                            </button>
-                        </form>
-                    @endif
-
                     <form method="POST" action="{{ route('admin.reviews.destroy', $review) }}" class="inline" id="delete-form-review-{{ $review->id }}">
                         @csrf
                         @method('DELETE')

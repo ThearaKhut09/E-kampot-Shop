@@ -36,39 +36,43 @@
             <!-- Cart Items -->
             <div class="divide-y divide-gray-200 dark:divide-gray-700">
                 @foreach($cartItems as $item)
+                    @php
+                        $productUrl = route('products.show', $item->product->slug);
+                    @endphp
                     <div class="p-6 cart-item" data-cart-id="{{ $item->id }}">
                         <div class="flex items-center space-x-4">
                             <!-- Product Image -->
                             <div class="flex-shrink-0">
-                                @if($item->product->image_url)
-                                    <img src="{{ $item->product->image_url }}"
-                                         alt="{{ $item->product->name }}"
-                                         class="w-20 h-20 object-cover rounded-lg border border-gray-200 dark:border-gray-600">
-                                @else
-                                    <div class="w-20 h-20 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-                                        <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                        </svg>
-                                    </div>
-                                @endif
+                                <a href="{{ $productUrl }}" class="block group" aria-label="View {{ $item->product->name }}">
+                                    @if($item->product->image_url)
+                                        <img src="{{ $item->product->image_url }}"
+                                             alt="{{ $item->product->name }}"
+                                             class="w-20 h-20 object-cover rounded-lg border border-gray-200 dark:border-gray-600 transition-opacity group-hover:opacity-90">
+                                    @else
+                                        <div class="w-20 h-20 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center transition-opacity group-hover:opacity-90">
+                                            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                            </svg>
+                                        </div>
+                                    @endif
+                                </a>
                             </div>
 
                             <!-- Product Details -->
                             <div class="flex-1 min-w-0">
-                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1">
-                                    <a href="{{ route('products.show', $item->product->slug) }}"
-                                       class="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                                <a href="{{ $productUrl }}" class="block group">
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                                         {{ $item->product->name }}
-                                    </a>
-                                </h3>
-                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                                    {{ Str::limit($item->product->description, 100) }}
-                                </p>
-                                <div class="flex items-center space-x-4">
-                                    <span class="text-lg font-bold text-primary-600 dark:text-primary-400">
-                                        ${{ number_format($item->product->current_price, 2) }}
-                                    </span>
-                                </div>
+                                    </h3>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                                        {{ Str::limit($item->product->description, 100) }}
+                                    </p>
+                                    <div class="flex items-center space-x-4">
+                                        <span class="text-lg font-bold text-primary-600 dark:text-primary-400">
+                                            ${{ number_format($item->product->current_price, 2) }}
+                                        </span>
+                                    </div>
+                                </a>
                             </div>
 
                             <!-- Quantity Controls -->

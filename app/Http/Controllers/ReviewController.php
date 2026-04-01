@@ -44,7 +44,6 @@ class ReviewController extends Controller
                 'rating' => $request->rating,
                 'title' => $request->title,
                 'comment' => $request->comment,
-                'is_approved' => false, // Reviews need admin approval
             ]);
 
             // Update product average rating
@@ -53,12 +52,12 @@ class ReviewController extends Controller
             if ($request->ajax() || $request->expectsJson()) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'Review submitted successfully! It will be visible after admin approval.',
+                    'message' => 'Review submitted successfully!',
                     'review' => $review->load('user')
                 ]);
             }
 
-            return redirect()->back()->with('success', 'Review submitted successfully! It will be visible after admin approval.');
+            return redirect()->back()->with('success', 'Review submitted successfully.');
 
         } catch (\Illuminate\Validation\ValidationException $e) {
             if ($request->ajax() || $request->expectsJson()) {
@@ -105,7 +104,6 @@ class ReviewController extends Controller
             'rating' => $request->rating,
             'title' => $request->title,
             'comment' => $request->comment,
-            'is_approved' => false, // Re-approval needed after edit
         ]);
 
         // Update product average rating
@@ -114,12 +112,12 @@ class ReviewController extends Controller
         if ($request->ajax()) {
             return response()->json([
                 'success' => true,
-                'message' => 'Review updated successfully! It will be visible after admin approval.',
+                'message' => 'Review updated successfully.',
                 'review' => $review->load('user')
             ]);
         }
 
-        return redirect()->back()->with('success', 'Review updated successfully! It will be visible after admin approval.');
+        return redirect()->back()->with('success', 'Review updated successfully.');
     }
 
     /**

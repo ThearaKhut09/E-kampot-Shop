@@ -16,12 +16,10 @@ class Review extends Model
         'rating',
         'title',
         'comment',
-        'is_approved',
     ];
 
     protected $casts = [
         'rating' => 'integer',
-        'is_approved' => 'boolean',
     ];
 
     /**
@@ -38,21 +36,5 @@ class Review extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
-    }
-
-    /**
-     * Scope to get only approved reviews.
-     */
-    public function scopeApproved($query)
-    {
-        return $query->where('is_approved', true);
-    }
-
-    /**
-     * Scope to get only pending reviews.
-     */
-    public function scopePending($query)
-    {
-        return $query->where('is_approved', false);
     }
 }

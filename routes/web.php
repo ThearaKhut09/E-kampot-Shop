@@ -124,9 +124,7 @@ Route::middleware(['admin.auth'])->prefix('admin')->name('admin.')->group(functi
     Route::post('users/{user}/verify-email', [AdminUserController::class, 'verifyEmail'])->name('users.verify-email');
 
     // Review Management
-    Route::resource('reviews', AdminReviewController::class)->except(['create', 'store', 'edit']);
-    Route::patch('reviews/{review}/approve', [AdminReviewController::class, 'approve'])->name('reviews.approve');
-    Route::patch('reviews/{review}/reject', [AdminReviewController::class, 'reject'])->name('reviews.reject');
+    Route::resource('reviews', AdminReviewController::class)->only(['index', 'show', 'destroy']);
 
     // Bulk Actions
     Route::get('bulk', [AdminBulkController::class, 'index'])->name('bulk.index');

@@ -230,9 +230,6 @@
                         <div class="bg-blue-50 dark:bg-blue-900 rounded-lg p-4 mb-8">
                             <p class="text-blue-700 dark:text-blue-300">
                                 You have already reviewed this product.
-                                @if(!$userReview->is_approved)
-                                    <span class="text-yellow-600 dark:text-yellow-400">Your review is pending approval.</span>
-                                @endif
                             </p>
                         </div>
                     @endif
@@ -241,12 +238,12 @@
 
             <!-- Display Reviews -->
             @php
-                $approvedReviews = $product->reviews()->approved()->with('user')->orderBy('created_at', 'desc')->get();
+                $reviews = $product->reviews()->with('user')->orderBy('created_at', 'desc')->get();
             @endphp
 
-            @if($approvedReviews->count() > 0)
+            @if($reviews->count() > 0)
                 <div class="space-y-6">
-                    @foreach($approvedReviews as $review)
+                    @foreach($reviews as $review)
                         <div class="border-b border-gray-200 dark:border-gray-700 pb-6 last:border-b-0">
                             <div class="flex items-start space-x-4">
                                 <div class="flex-shrink-0">
@@ -459,14 +456,7 @@
                     console.log('Parsed response data:', data);
                     if (data.success) {
                         showToast(data.message, 'success');
-                        // Hide the form and show a success message
-                        reviewForm.parentElement.innerHTML = `
-                            <div class="bg-green-50 dark:bg-green-900 rounded-lg p-4 mb-8">
-                                <p class="text-green-700 dark:text-green-300">
-                                    Thank you for your review! It will be visible after admin approval.
-                                </p>
-                            </div>
-                        `;
+                        window.location.reload();
                     } else {
                         showToast(data.message || 'An error occurred', 'error');
                     }
