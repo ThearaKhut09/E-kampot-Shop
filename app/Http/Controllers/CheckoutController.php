@@ -58,13 +58,12 @@ class CheckoutController extends Controller
         }
 
         $request->validate([
-            'payment_method' => 'required|in:visa,paypal',
+            'payment_method' => 'required|in:bakong',
             'total' => 'required|numeric|min:0',
-            // Visa fields
-            'card_number' => 'required_if:payment_method,visa|string',
-            'card_expiry' => 'required_if:payment_method,visa|string',
-            'card_cvv' => 'required_if:payment_method,visa|string',
-            'card_name' => 'required_if:payment_method,visa|string|max:255',
+            // Bakong KH fields
+            'bakong_phone' => 'required_if:payment_method,bakong|string|max:25',
+            'bakong_account_name' => 'nullable|string|max:255',
+            'bakong_reference' => 'nullable|string|max:50',
         ]);
 
         $cartItems = $this->getCartItems();
@@ -195,11 +194,9 @@ class CheckoutController extends Controller
                 'payment_method' => $request->payment_method,
             ];
 
-            // Add payment-specific details
-            if ($request->payment_method === 'visa') {
-                $response['card_type'] = $paymentResult['card_type'] ?? 'Card';
-                $response['last_four'] = $paymentResult['last_four'] ?? '****';
-            }
+            // Add payment-specific details (Bakong-only flow)
+            $response['wallet'] = $paymentResult['wallet'] ?? 'Bakong KHQR';
+            $response['payer_phone'] = $paymentResult['payer_phone'] ?? null;
 
             return response()->json($response);
 
@@ -222,35 +219,66 @@ class CheckoutController extends Controller
         // Simulate processing delay
         sleep(1);
 
-        if ($request->payment_method === 'visa') {
-            $cardNumber = str_replace(' ', '', $request->card_number);
+        if ($request->payment_method === 'bakong') {
+            $phone = (string) $request->bakong_phone;
 
-            // Basic validation
-            if (strlen($cardNumber) < 13 || strlen($cardNumber) > 19) {
-                return ['success' => false, 'message' => 'Invalid card number'];
+            if (!$this->isValidCambodianPhone($phone)) {
+                return [
+                    'success' => false,
+                    'message' => 'Please enter a valid Cambodian Bakong phone number.',
+                ];
             }
 
-            // Simulate payment failure for cards ending in 0000
-            if (substr($cardNumber, -4) === '0000') {
-                return ['success' => false, 'message' => 'Payment declined. Please try a different card.'];
+            // Demo-only failure trigger for testing payment errors.
+            if (strtoupper(trim((string) $request->bakong_reference)) === 'FAIL') {
+                return [
+                    'success' => false,
+                    'message' => 'Bakong payment declined (demo). Please try again.',
+                ];
             }
 
             return [
                 'success' => true,
-                'transaction_id' => 'VISA_' . strtoupper(uniqid()),
-                'message' => 'Visa payment processed successfully!',
-                'last_four' => substr($cardNumber, -4),
-                'card_type' => $this->detectCardType($cardNumber)
-            ];
-        } elseif ($request->payment_method === 'paypal') {
-            return [
-                'success' => true,
-                'transaction_id' => 'PP_' . strtoupper(uniqid()),
-                'message' => 'PayPal payment processed successfully!'
+                'transaction_id' => 'BAKONG_' . strtoupper(uniqid()),
+                'message' => 'Bakong KHQR payment processed successfully!',
+                'wallet' => 'Bakong KHQR',
+                'payer_phone' => $this->maskPhone($phone),
             ];
         }
 
         return ['success' => false, 'message' => 'Invalid payment method'];
+    }
+
+    /**
+     * Validate Cambodian mobile number format for Bakong demo flow.
+     */
+    private function isValidCambodianPhone(string $phone): bool
+    {
+        $normalized = preg_replace('/\D+/', '', $phone);
+
+        if (str_starts_with($normalized, '855')) {
+            $normalized = substr($normalized, 3);
+        }
+
+        if (str_starts_with($normalized, '0')) {
+            $normalized = substr($normalized, 1);
+        }
+
+        return preg_match('/^(?:1[0-9]|[6-9][0-9])\d{6,7}$/', $normalized) === 1;
+    }
+
+    /**
+     * Mask phone number for confirmation payload.
+     */
+    private function maskPhone(string $phone): string
+    {
+        $digits = preg_replace('/\D+/', '', $phone);
+
+        if (strlen($digits) <= 4) {
+            return $phone;
+        }
+
+        return str_repeat('*', strlen($digits) - 4) . substr($digits, -4);
     }
 
     /**
@@ -334,26 +362,6 @@ class CheckoutController extends Controller
         } while (Order::where('order_number', $orderNumber)->exists());
 
         return $orderNumber;
-    }
-
-    /**
-     * Detect card type from card number.
-     */
-    private function detectCardType($cardNumber)
-    {
-        $cardNumber = preg_replace('/\D/', '', $cardNumber);
-
-        if (preg_match('/^4/', $cardNumber)) {
-            return 'Visa';
-        } elseif (preg_match('/^5[1-5]/', $cardNumber)) {
-            return 'Mastercard';
-        } elseif (preg_match('/^3[47]/', $cardNumber)) {
-            return 'American Express';
-        } elseif (preg_match('/^6(?:011|5)/', $cardNumber)) {
-            return 'Discover';
-        } else {
-            return 'Unknown';
-        }
     }
 
     /**
