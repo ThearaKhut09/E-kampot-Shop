@@ -58,12 +58,8 @@ class CheckoutController extends Controller
         }
 
         $request->validate([
-            'payment_method' => 'required|in:bakong',
+            'payment_method' => 'required|in:manual',
             'total' => 'required|numeric|min:0',
-            // Bakong KH fields
-            'bakong_phone' => 'required_if:payment_method,bakong|string|max:25',
-            'bakong_account_name' => 'nullable|string|max:255',
-            'bakong_reference' => 'nullable|string|max:50',
         ]);
 
         $cartItems = $this->getCartItems();
@@ -194,10 +190,6 @@ class CheckoutController extends Controller
                 'payment_method' => $request->payment_method,
             ];
 
-            // Add payment-specific details (Bakong-only flow)
-            $response['wallet'] = $paymentResult['wallet'] ?? 'Bakong KHQR';
-            $response['payer_phone'] = $paymentResult['payer_phone'] ?? null;
-
             return response()->json($response);
 
         } catch (\Exception $e) {
@@ -219,66 +211,15 @@ class CheckoutController extends Controller
         // Simulate processing delay
         sleep(1);
 
-        if ($request->payment_method === 'bakong') {
-            $phone = (string) $request->bakong_phone;
-
-            if (!$this->isValidCambodianPhone($phone)) {
-                return [
-                    'success' => false,
-                    'message' => 'Please enter a valid Cambodian Bakong phone number.',
-                ];
-            }
-
-            // Demo-only failure trigger for testing payment errors.
-            if (strtoupper(trim((string) $request->bakong_reference)) === 'FAIL') {
-                return [
-                    'success' => false,
-                    'message' => 'Bakong payment declined (demo). Please try again.',
-                ];
-            }
-
+        if ($request->payment_method === 'manual') {
             return [
                 'success' => true,
-                'transaction_id' => 'BAKONG_' . strtoupper(uniqid()),
-                'message' => 'Bakong KHQR payment processed successfully!',
-                'wallet' => 'Bakong KHQR',
-                'payer_phone' => $this->maskPhone($phone),
+                'transaction_id' => 'PAY_' . strtoupper(uniqid()),
+                'message' => 'Payment processed successfully!',
             ];
         }
 
         return ['success' => false, 'message' => 'Invalid payment method'];
-    }
-
-    /**
-     * Validate Cambodian mobile number format for Bakong demo flow.
-     */
-    private function isValidCambodianPhone(string $phone): bool
-    {
-        $normalized = preg_replace('/\D+/', '', $phone);
-
-        if (str_starts_with($normalized, '855')) {
-            $normalized = substr($normalized, 3);
-        }
-
-        if (str_starts_with($normalized, '0')) {
-            $normalized = substr($normalized, 1);
-        }
-
-        return preg_match('/^(?:1[0-9]|[6-9][0-9])\d{6,7}$/', $normalized) === 1;
-    }
-
-    /**
-     * Mask phone number for confirmation payload.
-     */
-    private function maskPhone(string $phone): string
-    {
-        $digits = preg_replace('/\D+/', '', $phone);
-
-        if (strlen($digits) <= 4) {
-            return $phone;
-        }
-
-        return str_repeat('*', strlen($digits) - 4) . substr($digits, -4);
     }
 
     /**

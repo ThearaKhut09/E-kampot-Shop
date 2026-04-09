@@ -5,10 +5,10 @@
         <!-- Header -->
         <div class="text-center mb-8">
             <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-                Bakong KHQR Payment
+                Secure Checkout Payment
             </h1>
             <p class="text-gray-600 dark:text-gray-400">
-                Complete your order with Bakong only
+                Complete your order using our manual confirmation flow
             </p>
         </div>
 
@@ -69,50 +69,33 @@
 
                 <div class="payment-method-card border-2 border-emerald-500 dark:border-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl p-6 mb-8">
                     <div class="flex items-center space-x-4">
-                        <img src="{{ asset('images/bakong.png') }}" alt="Bakong Logo" class="w-12 h-12 rounded-lg shadow-sm bg-white p-1">
+                        <div class="w-12 h-12 rounded-lg shadow-sm bg-white dark:bg-gray-700 border border-emerald-200 dark:border-emerald-700 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V6m0 10v2m-7-6h14"></path>
+                            </svg>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-gray-900 dark:text-gray-100">Bakong KHQR</h3>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">Only Bakong payment is available</p>
+                            <h3 class="font-semibold text-gray-900 dark:text-gray-100">Manual Payment</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Demo payment method for order confirmation</p>
                         </div>
                     </div>
                 </div>
 
                 <div id="payment-forms">
-                    <div id="bakong-form" class="payment-form">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Bakong KHQR (Demo)</h3>
+                    <div id="manual-form" class="payment-form">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Manual Payment (Demo)</h3>
                         <div class="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-700 rounded-lg p-6">
                             <p class="text-sm text-emerald-900 dark:text-emerald-200 mb-4">
-                                This is a fake Bakong payment for testing. No real transaction will be charged.
+                                This is a demo payment flow for testing. No real transaction will be charged.
                             </p>
 
-                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                                <div class="bg-white dark:bg-gray-800 rounded-lg border border-emerald-200 dark:border-emerald-700 p-4">
-                                    <div class="aspect-square w-full max-w-[220px] mx-auto rounded-lg border-2 border-gray-200 dark:border-gray-600 flex items-center justify-center bg-white dark:bg-gray-800">
-                                        <img src="{{ asset('images/khqr.jpg') }}" alt="KHQR" class="w-full h-full object-cover rounded-md">
-                                    </div>
-                                    <p class="text-xs text-gray-600 dark:text-gray-400 mt-3 text-center">
-                                        Merchant: E-Kampot Shop Demo<br>
-                                        Amount: ${{ number_format($total, 2) }}
-                                    </p>
-                                </div>
-
-                                <div class="space-y-4">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Bakong Phone Number</label>
-                                        <input type="text" id="bakong-phone" name="bakong_phone" placeholder="+855 12 345 678"
-                                               class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Account Name (Optional)</label>
-                                        <input type="text" id="bakong-account-name" name="bakong_account_name" placeholder="Your Bakong account name"
-                                               class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Reference (Optional)</label>
-                                        <input type="text" id="bakong-reference" name="bakong_reference" placeholder="Type FAIL to simulate payment decline"
-                                               class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-                                    </div>
-                                </div>
+                            <div class="bg-white dark:bg-gray-800 rounded-lg border border-emerald-200 dark:border-emerald-700 p-4">
+                                <p class="text-sm text-gray-700 dark:text-gray-300">
+                                    After clicking <strong>Complete Payment</strong>, your order will be created and marked as paid in demo mode.
+                                </p>
+                                <p class="text-xs text-gray-600 dark:text-gray-400 mt-3">
+                                    Amount to charge: ${{ number_format($total, 2) }}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -148,23 +131,12 @@
 
     @push('scripts')
     <script>
-        const selectedPaymentMethod = 'bakong';
-
-        // Bakong phone formatting
-        document.getElementById('bakong-phone')?.addEventListener('input', function(e) {
-            e.target.value = e.target.value.replace(/[^0-9+\s]/g, '');
-        });
+        const selectedPaymentMethod = 'manual';
 
         function processPayment() {
             const button = document.getElementById('process-payment-btn');
             const btnText = document.getElementById('payment-btn-text');
             const btnLoading = document.getElementById('payment-btn-loading');
-
-            const bakongPhone = document.getElementById('bakong-phone')?.value?.trim();
-            if (!bakongPhone) {
-                showToast('Please enter your Bakong phone number', 'error');
-                return;
-            }
 
             // Show loading state
             button.disabled = true;
@@ -175,10 +147,7 @@
             // Prepare payment data
             let paymentData = {
                 payment_method: selectedPaymentMethod,
-                total: {{ $total }},
-                bakong_phone: bakongPhone,
-                bakong_account_name: document.getElementById('bakong-account-name')?.value?.trim() || '',
-                bakong_reference: document.getElementById('bakong-reference')?.value?.trim() || ''
+                total: {{ $total }}
             };
 
             // Process payment
@@ -230,7 +199,7 @@
                         </svg>
                     </div>
 
-                    <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">🎉 Order Successful!</h2>
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">Order Successful!</h2>
                     <p class="text-gray-600 dark:text-gray-400 mb-6">Order placed successfully!</p>
 
                     <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 mb-6 text-left">
@@ -245,19 +214,13 @@
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-gray-600 dark:text-gray-400 font-medium">Payment Method:</span>
-                                <span class="font-medium text-gray-900 dark:text-gray-100">Bakong KHQR</span>
+                                <span class="font-medium text-gray-900 dark:text-gray-100">${(data.payment_method || 'manual').replace('_', ' ')}</span>
                             </div>
-                            ${data.payer_phone ? `
-                            <div class="flex justify-between items-center">
-                                <span class="text-gray-600 dark:text-gray-400 font-medium">Bakong Phone:</span>
-                                <span class="font-medium text-gray-900 dark:text-gray-100">${data.payer_phone}</span>
-                            </div>
-                            ` : ''}
                         </div>
                     </div>
 
                     <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">
-                        ✨ Data sent to admin order management
+                        Data sent to admin order management
                     </p>
 
                     <button onclick="window.location.href='{{ route('products.index') }}'"
