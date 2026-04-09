@@ -13,11 +13,13 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\User;
 use App\Mail\OrderConfirmation;
+use App\Services\BakongService;
 
 class CheckoutController extends Controller
 {
     /**
-     * Show the checkout form.
+     * Show the checkout / payment page.
+     * Generates a KHQR code and displays it for the customer to scan.
      */
     public function index()
     {
@@ -44,7 +46,8 @@ class CheckoutController extends Controller
     }
 
     /**
-     * Process payment for the new checkout flow.
+     * Process payment — creates a pending order and generates KHQR QR code.
+     * Returns QR data for the frontend to display and poll.
      */
     public function processPayment(Request $request)
     {
@@ -58,7 +61,7 @@ class CheckoutController extends Controller
         }
 
         $request->validate([
-            'payment_method' => 'required|in:manual',
+            'payment_method' => 'required|in:bakong_khqr',
             'total' => 'required|numeric|min:0',
         ]);
 
@@ -114,33 +117,41 @@ class CheckoutController extends Controller
                 'country' => 'Cambodia',
             ];
 
-            // Process fake payment
-            $paymentResult = $this->processFakePayment($request, $total);
+            $orderNumber = $this->generateOrderNumber();
 
-            if (!$paymentResult['success']) {
+            // Generate KHQR code
+            $bakongService = new BakongService();
+            $qrResult = $bakongService->generateQRCode($total, $orderNumber);
+
+            if (!$qrResult['success']) {
                 DB::rollBack();
                 return response()->json([
                     'success' => false,
-                    'message' => $paymentResult['message']
+                    'message' => $qrResult['message'] ?? 'Failed to generate payment QR code.'
                 ]);
             }
 
-            // Create order
+            $expirationMinutes = config('bakong.qr_expiration_minutes', 15);
+
+            // Create order with pending payment status
             $order = Order::create([
-                'order_number' => $this->generateOrderNumber(),
+                'order_number' => $orderNumber,
                 'user_id' => Auth::id(),
                 'status' => 'pending',
                 'subtotal' => $subtotal,
                 'tax_amount' => $taxAmount,
                 'shipping_amount' => $shippingAmount,
                 'total_amount' => $total,
-                'currency' => 'USD',
+                'currency' => config('bakong.currency', 'USD'),
                 'billing_address' => $billingAddress,
                 'shipping_address' => $billingAddress,
-                'payment_method' => $request->payment_method,
-                'payment_status' => 'paid',
-                'payment_id' => $paymentResult['transaction_id'],
-                'notes' => 'Payment processed via ' . ucfirst($request->payment_method),
+                'payment_method' => 'bakong_khqr',
+                'payment_status' => 'pending',
+                'payment_id' => null,
+                'qr_string' => $qrResult['qr'],
+                'md5_hash' => $qrResult['md5'],
+                'payment_expires_at' => now()->addMinutes($expirationMinutes),
+                'notes' => 'Bakong KHQR payment — awaiting confirmation',
             ]);
 
             // Create order items
@@ -149,7 +160,7 @@ class CheckoutController extends Controller
                     'order_id' => $order->id,
                     'product_id' => $item->product->id,
                     'product_name' => $item->product->name,
-                    'product_sku' => 'PROD-' . $item->product->id, // Generate SKU from product ID
+                    'product_sku' => 'PROD-' . $item->product->id,
                     'quantity' => $item->quantity,
                     'price' => $item->product->current_price,
                     'total' => $item->quantity * $item->product->current_price,
@@ -167,6 +178,92 @@ class CheckoutController extends Controller
 
             DB::commit();
 
+            // Return QR data for frontend
+            return response()->json([
+                'success' => true,
+                'message' => 'QR code generated. Please scan to pay.',
+                'order_id' => $order->id,
+                'order_number' => $order->order_number,
+                'qr_string' => $qrResult['qr'],
+                'md5' => $qrResult['md5'],
+                'total' => number_format($total, 2),
+                'currency' => config('bakong.currency', 'USD'),
+                'expires_at' => $order->payment_expires_at->toIso8601String(),
+                'expiration_minutes' => $expirationMinutes,
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Payment processing error: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while processing your payment. Please try again.'
+            ]);
+        }
+    }
+
+    /**
+     * Check payment status via Bakong API (polled by frontend every 3s).
+     */
+    public function checkPaymentStatus(Request $request)
+    {
+        if (!Auth::check()) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized'], 401);
+        }
+
+        $request->validate([
+            'md5' => 'required|string',
+            'order_id' => 'required|integer',
+        ]);
+
+        $order = Order::where('id', $request->order_id)
+            ->where('user_id', Auth::id())
+            ->where('md5_hash', $request->md5)
+            ->first();
+
+        if (!$order) {
+            return response()->json([
+                'success' => false,
+                'paid' => false,
+                'message' => 'Order not found.',
+            ]);
+        }
+
+        // Already paid
+        if ($order->payment_status === 'paid') {
+            return response()->json([
+                'success' => true,
+                'paid' => true,
+                'message' => 'Payment already confirmed.',
+                'order_number' => $order->order_number,
+            ]);
+        }
+
+        // Check if QR has expired
+        if ($order->payment_expires_at && now()->greaterThan($order->payment_expires_at)) {
+            return response()->json([
+                'success' => true,
+                'paid' => false,
+                'expired' => true,
+                'message' => 'Payment QR code has expired.',
+            ]);
+        }
+
+        // Poll Bakong API
+        $bakongService = new BakongService();
+        $result = $bakongService->checkPaymentStatus($request->md5);
+
+        if ($result['paid']) {
+            // Update order to paid
+            $order->update([
+                'payment_status' => 'paid',
+                'payment_id' => $result['data']['hash'] ?? ('BAKONG_' . strtoupper(uniqid())),
+                'notes' => 'Payment confirmed via Bakong KHQR',
+            ]);
+
             // Send order confirmation email (in background)
             try {
                 $this->sendOrderConfirmationEmail($order);
@@ -181,45 +278,21 @@ class CheckoutController extends Controller
                 Log::error('Failed to send admin order notification: ' . $e->getMessage());
             }
 
-            // Return success response
-            $response = [
-                'success' => true,
-                'message' => 'Payment processed successfully!',
-                'order_number' => $order->order_number,
-                'total' => number_format($total, 2),
-                'payment_method' => $request->payment_method,
-            ];
-
-            return response()->json($response);
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('Payment processing error: ' . $e->getMessage());
-
             return response()->json([
-                'success' => false,
-                'message' => 'An error occurred while processing your payment. Please try again.'
+                'success' => true,
+                'paid' => true,
+                'message' => 'Payment confirmed!',
+                'order_number' => $order->order_number,
+                'total' => number_format($order->total_amount, 2),
             ]);
         }
-    }
 
-    /**
-     * Process fake payment for demo purposes.
-     */
-    private function processFakePayment($request, $total)
-    {
-        // Simulate processing delay
-        sleep(1);
-
-        if ($request->payment_method === 'manual') {
-            return [
-                'success' => true,
-                'transaction_id' => 'PAY_' . strtoupper(uniqid()),
-                'message' => 'Payment processed successfully!',
-            ];
-        }
-
-        return ['success' => false, 'message' => 'Invalid payment method'];
+        return response()->json([
+            'success' => true,
+            'paid' => false,
+            'expired' => false,
+            'message' => $result['message'] ?? 'Waiting for payment...',
+        ]);
     }
 
     /**
@@ -275,13 +348,8 @@ class CheckoutController extends Controller
      */
     private function calculateShipping($subtotal)
     {
-        // Free shipping over $100
-        if ($subtotal >= 100) {
-            return 0;
-        }
-
-        // Standard shipping rate
-        return 10.00;
+        // Free shipping for all orders
+        return 0.00;
     }
 
     /**
@@ -289,8 +357,8 @@ class CheckoutController extends Controller
      */
     private function calculateTax($subtotal)
     {
-        // 10% tax rate
-        return $subtotal * 0.10;
+        // 0% tax rate
+        return 0.00;
     }
 
     /**

@@ -26,6 +26,9 @@ class Order extends Model
         'payment_method',
         'payment_status',
         'payment_id',
+        'qr_string',
+        'md5_hash',
+        'payment_expires_at',
         'notes',
         'shipped_at',
         'delivered_at',
@@ -39,6 +42,7 @@ class Order extends Model
         'total_amount' => 'decimal:2',
         'billing_address' => 'array',
         'shipping_address' => 'array',
+        'payment_expires_at' => 'datetime',
         'shipped_at' => 'datetime',
         'delivered_at' => 'datetime',
     ];

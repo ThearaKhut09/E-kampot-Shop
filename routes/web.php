@@ -75,6 +75,7 @@ Route::middleware(['customer.auth'])->group(function () {
     // Checkout Routes (Customer only) - Enhanced
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout/process', [CheckoutController::class, 'processPayment'])->name('checkout.process');
+    Route::post('/checkout/payment-status', [CheckoutController::class, 'checkPaymentStatus'])->name('checkout.payment.status');
     Route::post('/checkout/quick', [CheckoutController::class, 'quickCheckout'])->name('checkout.quick');
 });
 
