@@ -328,13 +328,25 @@ function updateQuantity(cartId, newQuantity) {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Accept': 'application/json'
         },
         body: JSON.stringify({
             quantity: newQuantity
         })
     })
-    .then(response => response.json())
+    .then(async response => {
+        const contentType = response.headers.get('content-type') || '';
+        const data = contentType.includes('application/json')
+            ? await response.json()
+            : { success: false, message: 'Unable to update cart right now.' };
+
+        if (!response.ok) {
+            throw new Error(data.message || 'Unable to update cart right now.');
+        }
+
+        return data;
+    })
     .then(data => {
         if (data.success) {
             // Update quantity display
@@ -355,7 +367,7 @@ function updateQuantity(cartId, newQuantity) {
     })
     .catch(error => {
         console.error('Error:', error);
-        showToast('Error updating quantity', 'error');
+        showToast(error.message || 'Error updating quantity', 'error');
     })
     .finally(() => {
         hideLoading();
@@ -373,22 +385,38 @@ function removeItem(cartId) {
 function confirmRemoveItem() {
     if (!currentCartIdToRemove) return;
 
+    const cartId = currentCartIdToRemove;
+
     closeRemoveItemModal();
     showLoading();
 
-    fetch(`/cart/${currentCartIdToRemove}`, {
+    fetch(`/cart/${cartId}`, {
         method: 'DELETE',
         headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Accept': 'application/json'
         }
     })
-    .then(response => response.json())
+    .then(async response => {
+        const contentType = response.headers.get('content-type') || '';
+        const data = contentType.includes('application/json')
+            ? await response.json()
+            : { success: false, message: 'Unable to remove item from cart right now.' };
+
+        if (!response.ok) {
+            throw new Error(data.message || 'Unable to remove item from cart right now.');
+        }
+
+        return data;
+    })
     .then(data => {
         hideLoading();
         if (data.success) {
             // Remove the item from DOM
-            const cartItem = document.querySelector(`[data-cart-id="${currentCartIdToRemove}"]`);
-            cartItem.remove();
+            const cartItem = document.querySelector(`[data-cart-id="${cartId}"]`);
+            if (cartItem) {
+                cartItem.remove();
+            }
 
             // Update cart total
             document.getElementById('cart-total').textContent = '$' + parseFloat(data.cart_total).toFixed(2);
@@ -412,7 +440,7 @@ function confirmRemoveItem() {
     .catch(error => {
         hideLoading();
         console.error('Error:', error);
-        showToast('Error removing item', 'error');
+        showToast(error.message || 'Error removing item', 'error');
     });
 }
 
@@ -427,10 +455,22 @@ function confirmClearCart() {
     fetch('/cart', {
         method: 'DELETE',
         headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Accept': 'application/json'
         }
     })
-    .then(response => response.json())
+    .then(async response => {
+        const contentType = response.headers.get('content-type') || '';
+        const data = contentType.includes('application/json')
+            ? await response.json()
+            : { success: false, message: 'Unable to clear cart right now.' };
+
+        if (!response.ok) {
+            throw new Error(data.message || 'Unable to clear cart right now.');
+        }
+
+        return data;
+    })
     .then(data => {
         hideLoading();
         if (data.success) {
@@ -445,7 +485,7 @@ function confirmClearCart() {
     .catch(error => {
         hideLoading();
         console.error('Error:', error);
-        showToast('Error clearing cart', 'error');
+        showToast(error.message || 'Error clearing cart', 'error');
     });
 }
 

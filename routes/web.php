@@ -64,14 +64,13 @@ Route::get('/category/{slug}', [ProductController::class, 'category'])->name('ca
 // Cart Routes (Available to all users, but functionality may require login)
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count');
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::patch('/cart/{cartItem}', [CartController::class, 'update'])->name('cart.update');
+Route::delete('/cart/{cartItem}', [CartController::class, 'remove'])->name('cart.remove');
+Route::delete('/cart', [CartController::class, 'clear'])->name('cart.clear');
 
-// Cart modification routes (Customer only)
+// Checkout Routes (Customer only)
 Route::middleware(['customer.auth'])->group(function () {
-    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
-    Route::patch('/cart/{cartItem}', [CartController::class, 'update'])->name('cart.update');
-    Route::delete('/cart/{cartItem}', [CartController::class, 'remove'])->name('cart.remove');
-    Route::delete('/cart', [CartController::class, 'clear'])->name('cart.clear');
-
     // Checkout Routes (Customer only) - Enhanced
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout/process', [CheckoutController::class, 'processPayment'])->name('checkout.process');

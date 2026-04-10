@@ -83,15 +83,27 @@ class CartController extends Controller
         ]);
     }
 
-    public function update(Request $request, Cart $cartItem)
+    public function update(Request $request, $cartItem)
     {
         $request->validate([
             'quantity' => 'required|integer|min:1',
         ]);
 
+        $cartItem = Cart::find($cartItem);
+
+        if (!$cartItem) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cart item not found.'
+            ], 404);
+        }
+
         // Verify ownership
         if (!$this->verifyCartItemOwnership($cartItem)) {
-            abort(403);
+            return response()->json([
+                'success' => false,
+                'message' => 'You are not authorized to update this item.'
+            ], 403);
         }
 
         $product = $cartItem->product;
@@ -114,11 +126,23 @@ class CartController extends Controller
         ]);
     }
 
-    public function remove(Cart $cartItem)
+    public function remove($cartItem)
     {
+        $cartItem = Cart::find($cartItem);
+
+        if (!$cartItem) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cart item not found.'
+            ], 404);
+        }
+
         // Verify ownership
         if (!$this->verifyCartItemOwnership($cartItem)) {
-            abort(403);
+            return response()->json([
+                'success' => false,
+                'message' => 'You are not authorized to remove this item.'
+            ], 403);
         }
 
         $cartItem->delete();
