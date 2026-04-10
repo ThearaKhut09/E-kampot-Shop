@@ -189,7 +189,7 @@
         </div>
         @endif
 
-        <!-- Addresses -->
+        <!-- Addresses / Location -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
             <!-- Billing Address -->
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
@@ -198,9 +198,18 @@
                     <p class="font-medium text-gray-900 dark:text-gray-100">
                         {{ $order->billing_address['first_name'] }} {{ $order->billing_address['last_name'] }}
                     </p>
-                    <p>{{ $order->billing_address['address'] }}</p>
-                    <p>{{ $order->billing_address['city'] }}, {{ $order->billing_address['postal_code'] }}</p>
-                    <p>{{ $order->billing_address['country'] }}</p>
+
+                    @if(!empty($order->billing_address['location_name'] ?? null))
+                        <p>{{ $order->billing_address['location_name'] }}</p>
+                        <p>
+                            {{ $order->billing_address['latitude'] }}, {{ $order->billing_address['longitude'] }}
+                        </p>
+                    @else
+                        <p>{{ $order->billing_address['address'] }}</p>
+                        <p>{{ $order->billing_address['city'] }}, {{ $order->billing_address['postal_code'] }}</p>
+                        <p>{{ $order->billing_address['country'] }}</p>
+                    @endif
+
                     <p class="pt-2">
                         <span class="font-medium">Email:</span> {{ $order->billing_address['email'] }}
                     </p>
@@ -217,9 +226,17 @@
                     <p class="font-medium text-gray-900 dark:text-gray-100">
                         {{ $order->shipping_address['first_name'] }} {{ $order->shipping_address['last_name'] }}
                     </p>
-                    <p>{{ $order->shipping_address['address'] }}</p>
-                    <p>{{ $order->shipping_address['city'] }}, {{ $order->shipping_address['postal_code'] }}</p>
-                    <p>{{ $order->shipping_address['country'] }}</p>
+
+                    @if(!empty($order->shipping_address['location_name'] ?? null))
+                        <p>{{ $order->shipping_address['location_name'] }}</p>
+                        <p>
+                            {{ $order->shipping_address['latitude'] }}, {{ $order->shipping_address['longitude'] }}
+                        </p>
+                    @else
+                        <p>{{ $order->shipping_address['address'] }}</p>
+                        <p>{{ $order->shipping_address['city'] }}, {{ $order->shipping_address['postal_code'] }}</p>
+                        <p>{{ $order->shipping_address['country'] }}</p>
+                    @endif
                 </div>
             </div>
         </div>

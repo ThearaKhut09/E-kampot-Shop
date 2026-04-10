@@ -63,6 +63,13 @@ class CheckoutController extends Controller
         $request->validate([
             'payment_method' => 'required|in:bakong_khqr',
             'total' => 'required|numeric|min:0',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:20',
+            'location_name' => 'required|string|max:255',
+            'latitude' => 'required|numeric|between:-90,90',
+            'longitude' => 'required|numeric|between:-180,180',
         ]);
 
         $cartItems = $this->getCartItems();
@@ -104,17 +111,22 @@ class CheckoutController extends Controller
                 ]);
             }
 
-            // Use current user's information for billing
-            $user = Auth::user();
+            $latitude = (float) $request->latitude;
+            $longitude = (float) $request->longitude;
+            $locationName = trim($request->location_name);
+
             $billingAddress = [
-                'first_name' => $user->first_name ?? 'Customer',
-                'last_name' => $user->last_name ?? 'User',
-                'email' => $user->email,
-                'phone' => $user->phone ?? 'N/A',
-                'address' => 'Default Address',
-                'city' => 'Kampot',
-                'postal_code' => '07000',
+                'first_name' => trim($request->first_name),
+                'last_name' => trim($request->last_name),
+                'email' => trim($request->email),
+                'phone' => trim($request->phone),
+                'address' => $locationName,
+                'city' => 'Current Location',
+                'postal_code' => sprintf('%.6f, %.6f', $latitude, $longitude),
                 'country' => 'Cambodia',
+                'location_name' => $locationName,
+                'latitude' => $latitude,
+                'longitude' => $longitude,
             ];
 
             $orderNumber = $this->generateOrderNumber();
@@ -565,4 +577,5 @@ class CheckoutController extends Controller
             return back()->withErrors(['error' => 'An error occurred while processing your order. Please try again.']);
         }
     }
+
 }

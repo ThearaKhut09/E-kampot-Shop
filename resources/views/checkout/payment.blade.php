@@ -1,6 +1,24 @@
 <x-app-layout>
     <x-slot name="title">Payment - E-Kampot Shop</x-slot>
 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    <style>
+        .delivery-map {
+            height: 320px;
+            min-height: 320px;
+            width: 100%;
+        }
+
+        @media (max-width: 640px) {
+            .delivery-map {
+                height: 260px;
+                min-height: 260px;
+            }
+        }
+    </style>
+
     <div class="min-h-screen bg-gradient-to-br from-gray-50 via-emerald-50/30 to-gray-100 dark:from-gray-900 dark:via-emerald-950/20 dark:to-gray-950 py-8 px-4 sm:px-6 lg:px-8">
         <div class="max-w-5xl mx-auto">
 
@@ -108,6 +126,80 @@
                                 <p class="text-xs text-blue-800 dark:text-blue-200">Secured by the National Bank of Cambodia</p>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Delivery Location -->
+                    <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-200/60 dark:border-gray-700/60 p-6">
+                        <div class="flex items-center justify-between gap-4 mb-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-900 dark:text-gray-100">Delivery Location</h3>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">Use your live location or tap the map to pin your drop-off point</p>
+                                </div>
+                            </div>
+                            <div id="location-status" class="text-xs font-semibold px-3 py-2 rounded-full bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+                                Location not selected
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label for="first_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">First Name *</label>
+                                <input type="text" id="first_name" value="" placeholder="Example: Theara" class="delivery-field w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-4 py-3 text-gray-900 dark:text-gray-100 focus:border-emerald-500 focus:ring-emerald-500">
+                            </div>
+                            <div>
+                                <label for="last_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Last Name *</label>
+                                <input type="text" id="last_name" value="" placeholder="Example: Khut" class="delivery-field w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-4 py-3 text-gray-900 dark:text-gray-100 focus:border-emerald-500 focus:ring-emerald-500">
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email *</label>
+                                <input type="email" id="email" value="" placeholder="Example: yourname@gmail.com" class="delivery-field w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-4 py-3 text-gray-900 dark:text-gray-100 focus:border-emerald-500 focus:ring-emerald-500">
+                            </div>
+                            <div>
+                                <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Phone *</label>
+                                <input type="tel" id="phone" value="" placeholder="Example: 068337390" class="delivery-field w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-4 py-3 text-gray-900 dark:text-gray-100 focus:border-emerald-500 focus:ring-emerald-500">
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <button type="button" onclick="useCurrentLocation()" class="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/20 hover:bg-emerald-700 transition-colors">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    Use Current Location
+                                </button>
+                                <button type="button" onclick="resetLocation()" class="inline-flex items-center justify-center rounded-xl bg-gray-100 px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 transition-colors">
+                                    Reset
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="delivery-map-wrapper" class="relative overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-900">
+                            <div id="delivery-map" class="delivery-map w-full"></div>
+                            <div class="pointer-events-none absolute left-4 top-4 rounded-full bg-white/90 dark:bg-gray-900/90 px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-200 shadow-lg">
+                                Tap the map to fine-tune the pin
+                            </div>
+                        </div>
+
+                        <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                            <div class="rounded-xl bg-gray-50 dark:bg-gray-700/40 p-4 sm:col-span-2">
+                                <p class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">Selected location</p>
+                                <p id="location-display" class="mt-1 text-sm font-medium text-gray-900 dark:text-gray-100">No location selected yet</p>
+                            </div>
+                            <div class="rounded-xl bg-gray-50 dark:bg-gray-700/40 p-4">
+                                <p class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">Coordinates</p>
+                                <p id="location-coordinates" class="mt-1 text-sm font-medium text-gray-900 dark:text-gray-100">--</p>
+                            </div>
+                        </div>
+
+                        <input type="hidden" id="location_name" value="">
+                        <input type="hidden" id="latitude" value="">
+                        <input type="hidden" id="longitude" value="">
                     </div>
 
                     <!-- Back to Cart -->
@@ -313,6 +405,8 @@
     </div>
 
     @push('scripts')
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <!-- QRCode.js CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
@@ -345,6 +439,163 @@
             isPolling: false,
         };
 
+        let deliveryMap = null;
+        let deliveryMarker = null;
+        const fallbackLocation = [10.6071, 104.1810];
+        const DELIVERY_DRAFT_KEY = 'checkout_delivery_draft_v1';
+
+        function saveDeliveryDraft() {
+            const payload = {
+                first_name: document.getElementById('first_name')?.value || '',
+                last_name: document.getElementById('last_name')?.value || '',
+                email: document.getElementById('email')?.value || '',
+                phone: document.getElementById('phone')?.value || '',
+                location_name: document.getElementById('location_name')?.value || '',
+                latitude: document.getElementById('latitude')?.value || '',
+                longitude: document.getElementById('longitude')?.value || '',
+            };
+
+            localStorage.setItem(DELIVERY_DRAFT_KEY, JSON.stringify(payload));
+        }
+
+        function restoreDeliveryDraft() {
+            const raw = localStorage.getItem(DELIVERY_DRAFT_KEY);
+            if (!raw) {
+                return;
+            }
+
+            try {
+                const draft = JSON.parse(raw);
+                document.getElementById('first_name').value = draft.first_name || '';
+                document.getElementById('last_name').value = draft.last_name || '';
+                document.getElementById('email').value = draft.email || '';
+                document.getElementById('phone').value = draft.phone || '';
+                document.getElementById('location_name').value = draft.location_name || '';
+                document.getElementById('latitude').value = draft.latitude || '';
+                document.getElementById('longitude').value = draft.longitude || '';
+
+                if (draft.location_name && draft.latitude && draft.longitude) {
+                    const labelBase = String(draft.location_name).split(' (')[0] || 'Saved location';
+                    setLocationState(draft.latitude, draft.longitude, labelBase);
+                }
+            } catch (error) {
+                localStorage.removeItem(DELIVERY_DRAFT_KEY);
+            }
+        }
+
+        function setupDeliveryDraftAutoSave() {
+            ['first_name', 'last_name', 'email', 'phone'].forEach((id) => {
+                const field = document.getElementById(id);
+                if (!field) {
+                    return;
+                }
+
+                field.addEventListener('input', saveDeliveryDraft);
+                field.addEventListener('change', saveDeliveryDraft);
+            });
+        }
+
+        function getDeliveryDetails() {
+            return {
+                first_name: document.getElementById('first_name').value.trim(),
+                last_name: document.getElementById('last_name').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                location_name: document.getElementById('location_name').value.trim(),
+                latitude: document.getElementById('latitude').value.trim(),
+                longitude: document.getElementById('longitude').value.trim(),
+            };
+        }
+
+        function clearFieldErrors() {
+            document.querySelectorAll('.delivery-field').forEach((field) => {
+                field.classList.remove('border-red-500', 'ring-red-500');
+            });
+
+            setLocationErrorState(false);
+        }
+
+        function markFieldErrors(errors) {
+            clearFieldErrors();
+
+            const locationErrorFields = ['location_name', 'latitude', 'longitude'];
+            const hasLocationErrors = locationErrorFields.some((name) => (errors || {})[name]);
+
+            if (hasLocationErrors) {
+                setLocationErrorState(true);
+            }
+
+            Object.keys(errors || {}).forEach((fieldName) => {
+                const field = document.getElementById(fieldName);
+                if (field) {
+                    field.classList.add('border-red-500', 'ring-red-500');
+                }
+            });
+        }
+
+        function resetGenerateButton() {
+            const btn = document.getElementById('generate-qr-btn');
+            const btnText = document.getElementById('generate-btn-text');
+            const btnLoading = document.getElementById('generate-btn-loading');
+
+            btn.disabled = false;
+            btnText.classList.remove('hidden');
+            btnLoading.classList.add('hidden');
+            btnLoading.classList.remove('flex');
+        }
+
+        function validateDeliveryDetails(details) {
+            const missingFields = [];
+
+            if (!details.first_name) missingFields.push('First name');
+            if (!details.last_name) missingFields.push('Last name');
+            if (!details.email) missingFields.push('Email');
+            if (!details.phone) missingFields.push('Phone');
+            if (!details.location_name) missingFields.push('Location');
+            if (!details.latitude || !details.longitude) missingFields.push('Map pin');
+
+            if (missingFields.length > 0) {
+                if (!details.location_name || !details.latitude || !details.longitude) {
+                    setLocationErrorState(true);
+                }
+                return `Please complete your delivery details: ${missingFields.join(', ')}.`;
+            }
+
+            setLocationErrorState(false);
+
+            return null;
+        }
+
+        function setLocationErrorState(hasError) {
+            const status = document.getElementById('location-status');
+            const wrapper = document.getElementById('delivery-map-wrapper');
+
+            if (!status || !wrapper) {
+                return;
+            }
+
+            if (hasError) {
+                status.textContent = 'Location is required';
+                status.className = 'text-xs font-semibold px-3 py-2 rounded-full bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300';
+                wrapper.classList.remove('border-gray-200', 'dark:border-gray-700');
+                wrapper.classList.add('border-red-500', 'dark:border-red-400');
+                return;
+            }
+
+            const hasSelectedLocation = document.getElementById('location_name')?.value;
+
+            if (hasSelectedLocation) {
+                status.textContent = 'Location selected';
+                status.className = 'text-xs font-semibold px-3 py-2 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300';
+            } else {
+                status.textContent = 'Location not selected';
+                status.className = 'text-xs font-semibold px-3 py-2 rounded-full bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300';
+            }
+
+            wrapper.classList.remove('border-red-500', 'dark:border-red-400');
+            wrapper.classList.add('border-gray-200', 'dark:border-gray-700');
+        }
+
         /**
          * Step 1: Generate QR Code via AJAX
          */
@@ -352,6 +603,16 @@
             const btn = document.getElementById('generate-qr-btn');
             const btnText = document.getElementById('generate-btn-text');
             const btnLoading = document.getElementById('generate-btn-loading');
+            const deliveryDetails = getDeliveryDetails();
+            const deliveryValidationMessage = validateDeliveryDetails(deliveryDetails);
+
+            if (deliveryValidationMessage) {
+                clearFieldErrors();
+                showToast(deliveryValidationMessage, 'error');
+                return;
+            }
+
+            clearFieldErrors();
 
             // Show loading
             btn.disabled = true;
@@ -368,10 +629,26 @@
                 },
                 body: JSON.stringify({
                     payment_method: 'bakong_khqr',
-                    total: {{ $total }}
+                    total: {{ $total }},
+                    ...deliveryDetails
                 })
             })
-            .then(r => r.json())
+            .then(async response => {
+                const data = await response.json();
+
+                if (!response.ok) {
+                    if (response.status === 422 && data.errors) {
+                        markFieldErrors(data.errors);
+
+                        const firstError = Object.values(data.errors).flat()[0] || 'Please complete your delivery details.';
+                        throw new Error(firstError);
+                    }
+
+                    throw new Error(data.message || 'Failed to generate QR code.');
+                }
+
+                return data;
+            })
             .then(data => {
                 if (data.success) {
                     // Save state
@@ -398,21 +675,131 @@
                     startPolling();
                 } else {
                     showToast(data.message || 'Failed to generate QR code.', 'error');
-                    // Reset button
-                    btn.disabled = false;
-                    btnText.classList.remove('hidden');
-                    btnLoading.classList.add('hidden');
-                    btnLoading.classList.remove('flex');
+                    resetGenerateButton();
                 }
             })
             .catch(err => {
                 console.error('Error generating QR:', err);
-                showToast('An error occurred. Please try again.', 'error');
-                btn.disabled = false;
-                btnText.classList.remove('hidden');
-                btnLoading.classList.add('hidden');
-                btnLoading.classList.remove('flex');
+                showToast(err.message || 'An error occurred. Please try again.', 'error');
+                resetGenerateButton();
             });
+        }
+
+        function setLocationState(lat, lng, label) {
+            const latitude = Number(lat);
+            const longitude = Number(lng);
+            const locationLabel = `${label} (${latitude.toFixed(5)}, ${longitude.toFixed(5)})`;
+
+            document.getElementById('location_name').value = locationLabel;
+            document.getElementById('latitude').value = latitude.toFixed(6);
+            document.getElementById('longitude').value = longitude.toFixed(6);
+            document.getElementById('location-display').textContent = locationLabel;
+            document.getElementById('location-coordinates').textContent = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
+            document.getElementById('location-status').textContent = 'Location selected';
+            document.getElementById('location-status').className = 'text-xs font-semibold px-3 py-2 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300';
+            setLocationErrorState(false);
+
+            if (!deliveryMarker && deliveryMap) {
+                deliveryMarker = L.marker([latitude, longitude], { draggable: true }).addTo(deliveryMap);
+
+                deliveryMarker.on('dragend', (event) => {
+                    const position = event.target.getLatLng();
+                    setLocationState(position.lat, position.lng, 'Pinned location');
+                });
+            } else if (deliveryMarker) {
+                deliveryMarker.setLatLng([latitude, longitude]);
+            }
+
+            if (deliveryMap) {
+                deliveryMap.setView([latitude, longitude], 15, { animate: true });
+            }
+
+            saveDeliveryDraft();
+        }
+
+        function initDeliveryMap() {
+            if (deliveryMap || typeof L === 'undefined') {
+                return;
+            }
+
+            deliveryMap = L.map('delivery-map', {
+                zoomControl: true,
+            }).setView(fallbackLocation, 13);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(deliveryMap);
+
+            deliveryMap.on('click', (event) => {
+                setLocationState(event.latlng.lat, event.latlng.lng, 'Pinned location');
+            });
+
+            deliveryMap.invalidateSize();
+
+            // Try to center map on user's current position if permission is available.
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        deliveryMap.setView([lat, lng], 15, { animate: true });
+                    },
+                    () => {
+                        // Keep fallback location when permission is denied/unavailable.
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 7000,
+                        maximumAge: 60000,
+                    }
+                );
+            }
+        }
+
+        function useCurrentLocation() {
+            if (!navigator.geolocation) {
+                showToast('Your browser does not support location sharing.', 'error');
+                return;
+            }
+
+            showToast('Requesting your current location...', 'success');
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    setLocationState(position.coords.latitude, position.coords.longitude, 'Current location');
+                },
+                () => {
+                    showToast('Unable to access your location. Please enable permission or tap the map manually.', 'error');
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0,
+                }
+            );
+        }
+
+        function resetLocation() {
+            document.getElementById('location_name').value = '';
+            document.getElementById('latitude').value = '';
+            document.getElementById('longitude').value = '';
+            document.getElementById('location-display').textContent = 'No location selected yet';
+            document.getElementById('location-coordinates').textContent = '--';
+            document.getElementById('location-status').textContent = 'Location not selected';
+            document.getElementById('location-status').className = 'text-xs font-semibold px-3 py-2 rounded-full bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300';
+            setLocationErrorState(false);
+
+            if (deliveryMap) {
+                deliveryMap.setView(fallbackLocation, 13, { animate: true });
+            }
+
+            if (deliveryMarker) {
+                deliveryMap.removeLayer(deliveryMarker);
+                deliveryMarker = null;
+            }
+
+            saveDeliveryDraft();
         }
 
         /**
@@ -547,6 +934,9 @@
             // Launch confetti!
             createConfetti();
 
+            // Clear saved delivery draft after successful payment
+            localStorage.removeItem(DELIVERY_DRAFT_KEY);
+
             // Auto redirect after 10 seconds
             setTimeout(() => {
                 window.location.href = '{{ route("products.index") }}';
@@ -613,6 +1003,12 @@
         window.addEventListener('beforeunload', () => {
             stopPolling();
             if (paymentState.timerInterval) clearInterval(paymentState.timerInterval);
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initDeliveryMap();
+            restoreDeliveryDraft();
+            setupDeliveryDraftAutoSave();
         });
     </script>
     @endpush
