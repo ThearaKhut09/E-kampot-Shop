@@ -166,15 +166,7 @@ class CheckoutController extends Controller
                     'total' => $item->quantity * $item->product->current_price,
                     'product_options' => $item->product_options,
                 ]);
-
-                // Update product stock
-                if ($item->product->manage_stock) {
-                    $item->product->decrement('stock_quantity', $item->quantity);
-                }
             }
-
-            // Clear cart
-            $this->clearCart();
 
             DB::commit();
 
@@ -257,12 +249,47 @@ class CheckoutController extends Controller
         $result = $bakongService->checkPaymentStatus($request->md5);
 
         if ($result['paid']) {
-            // Update order to paid
-            $order->update([
-                'payment_status' => 'paid',
-                'payment_id' => $result['data']['hash'] ?? ('BAKONG_' . strtoupper(uniqid())),
-                'notes' => 'Payment confirmed via Bakong KHQR',
-            ]);
+            DB::beginTransaction();
+
+            try {
+                // Refresh order state inside transaction to avoid double processing.
+                $order->refresh();
+
+                if ($order->payment_status !== 'paid') {
+                    // Update order to paid
+                    $order->update([
+                        'payment_status' => 'paid',
+                        'payment_id' => $result['data']['hash'] ?? ('BAKONG_' . strtoupper(uniqid())),
+                        'notes' => 'Payment confirmed via Bakong KHQR',
+                    ]);
+
+                    // Deduct stock only after successful payment confirmation.
+                    foreach ($order->items()->with('product')->get() as $orderItem) {
+                        $product = $orderItem->product;
+
+                        if ($product && $product->manage_stock) {
+                            $product->decrement('stock_quantity', $orderItem->quantity);
+                        }
+                    }
+
+                    // Clear cart only after successful payment confirmation.
+                    $this->clearCart();
+                }
+
+                DB::commit();
+            } catch (\Exception $e) {
+                DB::rollBack();
+                Log::error('Failed to finalize paid order: ' . $e->getMessage(), [
+                    'order_id' => $order->id,
+                    'trace' => $e->getTraceAsString(),
+                ]);
+
+                return response()->json([
+                    'success' => false,
+                    'paid' => false,
+                    'message' => 'Payment received, but we could not finalize your order. Please contact support.',
+                ], 500);
+            }
 
             // Send order confirmation email (in background)
             try {

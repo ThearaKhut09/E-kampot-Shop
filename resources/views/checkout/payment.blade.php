@@ -250,7 +250,7 @@
                             </div>
                             <div class="p-8 text-center">
                                 <p class="text-sm text-gray-600 dark:text-gray-400 mb-6">
-                                    Your QR code has expired. Please generate a new one to complete your payment. Your order items have been reserved.
+                                    Your QR code has expired. Please generate a new one to complete your payment. If you did not pay, your items are still in your cart.
                                 </p>
                                 <button onclick="window.location.reload()"
                                         class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-3 px-8 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl">
