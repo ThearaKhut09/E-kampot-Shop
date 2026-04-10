@@ -80,10 +80,8 @@
                     <!-- Payment Method Info -->
                     <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-200/60 dark:border-gray-700/60 p-6">
                         <div class="flex items-center space-x-3 mb-4">
-                            <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                                </svg>
+                            <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg bg-white overflow-hidden">
+                                <img src="{{ asset('images/bakong.png') }}" alt="Bakong KHQR" class="w-full h-full object-cover">
                             </div>
                             <div>
                                 <h3 class="font-semibold text-gray-900 dark:text-gray-100">Bakong KHQR</h3>
