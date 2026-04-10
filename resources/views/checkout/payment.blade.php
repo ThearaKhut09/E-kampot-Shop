@@ -161,21 +161,9 @@
                                 <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email *</label>
                                 <input type="email" id="email" value="" placeholder="Example: yourname@gmail.com" class="delivery-field w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-4 py-3 text-gray-900 dark:text-gray-100 focus:border-emerald-500 focus:ring-emerald-500">
                             </div>
-                            <div>
+                            <div class="sm:col-span-2">
                                 <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Phone *</label>
                                 <input type="tel" id="phone" value="" placeholder="Example: 068337390" class="delivery-field w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-4 py-3 text-gray-900 dark:text-gray-100 focus:border-emerald-500 focus:ring-emerald-500">
-                            </div>
-                            <div class="grid grid-cols-2 gap-3">
-                                <button type="button" onclick="useCurrentLocation()" class="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/20 hover:bg-emerald-700 transition-colors">
-                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"></path>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                    </svg>
-                                    Use Current Location
-                                </button>
-                                <button type="button" onclick="resetLocation()" class="inline-flex items-center justify-center rounded-xl bg-gray-100 px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 transition-colors">
-                                    Reset
-                                </button>
                             </div>
                         </div>
 
@@ -184,6 +172,19 @@
                             <div class="pointer-events-none absolute left-4 top-4 rounded-full bg-white/90 dark:bg-gray-900/90 px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-200 shadow-lg">
                                 Tap the map to fine-tune the pin
                             </div>
+                        </div>
+
+                        <div class="mt-4 grid grid-cols-2 gap-3">
+                            <button type="button" onclick="useCurrentLocation()" class="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/20 hover:bg-emerald-700 transition-colors">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                Use Current Location
+                            </button>
+                            <button type="button" onclick="resetLocation()" class="inline-flex items-center justify-center rounded-xl bg-gray-100 px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 transition-colors">
+                                Reset
+                            </button>
                         </div>
 
                         <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
