@@ -6,20 +6,28 @@
 
     <style>
         .delivery-map {
-            height: 320px;
-            min-height: 320px;
+            height: 260px;
+            min-height: 260px;
             width: 100%;
+        }
+
+        /* Keep Leaflet controls/layers below site header and other UI */
+        .leaflet-container,
+        .leaflet-pane,
+        .leaflet-top,
+        .leaflet-bottom {
+            z-index: 10 !important;
         }
 
         @media (max-width: 640px) {
             .delivery-map {
-                height: 260px;
-                min-height: 260px;
+                height: 200px;
+                min-height: 200px;
             }
         }
     </style>
 
-    <div class="min-h-screen bg-gradient-to-br from-gray-50 via-emerald-50/30 to-gray-100 dark:from-gray-900 dark:via-emerald-950/20 dark:to-gray-950 py-8 px-4 sm:px-6 lg:px-8">
+    <div class="min-h-screen bg-gradient-to-br from-gray-50 via-emerald-50/30 to-gray-100 dark:from-gray-900 dark:via-emerald-950/20 dark:to-gray-950 pt-24 pb-8 px-4 sm:px-6 lg:px-8">
         <div class="max-w-5xl mx-auto">
 
             <!-- Header -->
