@@ -12,6 +12,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\Setting;
 use App\Mail\OrderConfirmation;
 use App\Services\BakongService;
 
@@ -384,20 +385,29 @@ class CheckoutController extends Controller
 
     /**
      * Calculate shipping amount.
+     * Returns free shipping if subtotal meets threshold, otherwise uses configured rate.
      */
     private function calculateShipping($subtotal)
     {
-        // Free shipping for all orders
-        return 0.00;
+        $shippingCost = (float) Setting::get('shipping_cost', 0);
+        $freeShippingThreshold = (float) Setting::get('free_shipping_threshold', 0);
+
+        // Free shipping if subtotal meets or exceeds threshold
+        if ($freeShippingThreshold > 0 && $subtotal >= $freeShippingThreshold) {
+            return 0.00;
+        }
+
+        return $shippingCost;
     }
 
     /**
      * Calculate tax amount.
+     * Tax is calculated based on the tax rate percentage stored in settings.
      */
     private function calculateTax($subtotal)
     {
-        // 0% tax rate
-        return 0.00;
+        $taxRate = (float) Setting::get('tax_rate', 0);
+        return ($subtotal * $taxRate) / 100;
     }
 
     /**

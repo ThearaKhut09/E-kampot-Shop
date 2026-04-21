@@ -25,7 +25,7 @@
             <!-- Header -->
             <div class="text-center mb-8">
                 <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-emerald-400 to-teal-600 rounded-2xl shadow-lg mb-4">
-                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-8 h-8 text-black dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                     </svg>
                 </div>
@@ -157,11 +157,11 @@
                                 <label for="last_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Last Name *</label>
                                 <input type="text" id="last_name" value="" placeholder="Example: Khut" class="delivery-field w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-4 py-3 text-gray-900 dark:text-gray-100 focus:border-emerald-500 focus:ring-emerald-500">
                             </div>
-                            <div class="sm:col-span-2">
+                            <div>
                                 <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email *</label>
                                 <input type="email" id="email" value="" placeholder="Example: yourname@gmail.com" class="delivery-field w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-4 py-3 text-gray-900 dark:text-gray-100 focus:border-emerald-500 focus:ring-emerald-500">
                             </div>
-                            <div class="sm:col-span-2">
+                            <div>
                                 <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Phone *</label>
                                 <input type="tel" id="phone" value="" placeholder="Example: 068337390" class="delivery-field w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-4 py-3 text-gray-900 dark:text-gray-100 focus:border-emerald-500 focus:ring-emerald-500">
                             </div>
@@ -169,20 +169,20 @@
 
                         <div id="delivery-map-wrapper" class="relative overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-900">
                             <div id="delivery-map" class="delivery-map w-full"></div>
-                            <div class="pointer-events-none absolute left-4 top-4 rounded-full bg-white/90 dark:bg-gray-900/90 px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-200 shadow-lg">
+                            <div class="pointer-events-none absolute left-4 top-4 rounded-full bg-white/95 dark:bg-gray-900/90 px-3 py-2 text-xs font-bold text-gray-800 dark:text-gray-200 shadow-lg border border-gray-200 dark:border-gray-700">
                                 Tap the map to fine-tune the pin
                             </div>
                         </div>
 
                         <div class="mt-4 grid grid-cols-2 gap-3">
-                            <button type="button" onclick="useCurrentLocation()" class="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/20 hover:bg-emerald-700 transition-colors">
+                            <button type="button" onclick="useCurrentLocation()" class="inline-flex items-center justify-center rounded-xl bg-emerald-700 hover:bg-emerald-800 px-4 py-3 text-sm font-bold text-black dark:text-white shadow-lg shadow-emerald-700/30 transition-colors">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"></path>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                 </svg>
                                 Use Current Location
                             </button>
-                            <button type="button" onclick="resetLocation()" class="inline-flex items-center justify-center rounded-xl bg-gray-100 px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 transition-colors">
+                            <button type="button" onclick="resetLocation()" class="inline-flex items-center justify-center rounded-xl bg-gray-300 hover:bg-gray-400 dark:bg-gray-700 dark:hover:bg-gray-600 px-4 py-3 text-sm font-bold text-gray-950 dark:text-gray-100 shadow-sm transition-colors">
                                 Reset
                             </button>
                         </div>
@@ -205,7 +205,7 @@
 
                     <!-- Back to Cart -->
                     <a href="{{ route('cart.index') }}"
-                       class="flex items-center justify-center w-full py-3 px-6 bg-gray-100 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 font-medium rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200">
+                       class="flex items-center justify-center w-full py-3 px-6 bg-gray-200 dark:bg-gray-700/50 text-gray-900 dark:text-gray-300 font-bold rounded-xl hover:bg-gray-300 dark:hover:bg-gray-700 transition-all duration-200 shadow-sm">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                         </svg>
@@ -224,7 +224,7 @@
                         </div>
                         <div class="p-8 text-center">
                             <div class="w-48 h-48 mx-auto mb-6 bg-gray-100 dark:bg-gray-700/50 rounded-2xl flex items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-600">
-                                <svg class="w-16 h-16 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-16 h-16 text-gray-500 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
                                 </svg>
                             </div>
@@ -237,7 +237,7 @@
 
                             <button type="button" id="generate-qr-btn"
                                     onclick="generateQRCode()"
-                                    class="w-full max-w-sm mx-auto bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-4 px-8 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center">
+                                    class="w-full max-w-sm mx-auto bg-gradient-to-r from-emerald-700 to-teal-800 hover:from-emerald-800 hover:to-teal-900 text-black dark:text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center">
                                 <span id="generate-btn-text" class="flex items-center">
                                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
@@ -280,16 +280,16 @@
 
                                 <!-- Amount -->
                                 <div class="mb-4">
-                                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Amount to pay</p>
+                                    <p class="text-sm text-gray-700 dark:text-gray-400 mb-1 font-medium">Amount to pay</p>
                                     <p class="text-3xl font-bold text-gray-900 dark:text-gray-100">
                                         $<span id="qr-amount">{{ number_format($total, 2) }}</span>
-                                        <span class="text-base font-normal text-gray-400">USD</span>
+                                        <span class="text-base font-normal text-gray-600 dark:text-gray-400">USD</span>
                                     </p>
                                 </div>
 
                                 <!-- Order Number -->
                                 <div class="mb-6">
-                                    <p class="text-xs text-gray-500 dark:text-gray-400">Order: <span id="qr-order-number" class="font-mono font-semibold text-gray-700 dark:text-gray-300">—</span></p>
+                                    <p class="text-xs text-gray-700 dark:text-gray-400 font-medium">Order: <span id="qr-order-number" class="font-mono font-semibold text-gray-900 dark:text-gray-300">—</span></p>
                                 </div>
 
                                 <!-- Instructions -->
@@ -297,26 +297,26 @@
                                     <p class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">How to pay:</p>
                                     <div class="space-y-2">
                                         <div class="flex items-start space-x-3">
-                                            <span class="w-6 h-6 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">1</span>
-                                            <p class="text-sm text-gray-600 dark:text-gray-400">Open your banking app (ABA, ACLEDA, Wing, etc.)</p>
+                                            <span class="w-6 h-6 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">1</span>
+                                            <p class="text-sm text-gray-700 dark:text-gray-400 font-medium">Open your banking app (ABA, ACLEDA, Wing, etc.)</p>
                                         </div>
                                         <div class="flex items-start space-x-3">
-                                            <span class="w-6 h-6 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">2</span>
-                                            <p class="text-sm text-gray-600 dark:text-gray-400">Scan this QR code</p>
+                                            <span class="w-6 h-6 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">2</span>
+                                            <p class="text-sm text-gray-700 dark:text-gray-400 font-medium">Scan this QR code</p>
                                         </div>
                                         <div class="flex items-start space-x-3">
-                                            <span class="w-6 h-6 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">3</span>
-                                            <p class="text-sm text-gray-600 dark:text-gray-400">Confirm the payment in your app</p>
+                                            <span class="w-6 h-6 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">3</span>
+                                            <p class="text-sm text-gray-700 dark:text-gray-400 font-medium">Confirm the payment in your app</p>
                                         </div>
                                         <div class="flex items-start space-x-3">
-                                            <span class="w-6 h-6 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">4</span>
-                                            <p class="text-sm text-gray-600 dark:text-gray-400">This page will update automatically</p>
+                                            <span class="w-6 h-6 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">4</span>
+                                            <p class="text-sm text-gray-700 dark:text-gray-400 font-medium">This page will update automatically</p>
                                         </div>
                                     </div>
                                 </div>
 
                                 <!-- Polling Status -->
-                                <div id="polling-status" class="flex items-center justify-center text-sm text-gray-500 dark:text-gray-400">
+                                <div id="polling-status" class="flex items-center justify-center text-sm text-gray-700 dark:text-gray-400 font-medium">
                                     <svg class="animate-spin w-4 h-4 mr-2 text-emerald-500" fill="none" viewBox="0 0 24 24">
                                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -340,11 +340,11 @@
                                 <p class="text-red-100 text-sm">The payment window has closed</p>
                             </div>
                             <div class="p-8 text-center">
-                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-6">
+                                <p class="text-sm text-gray-700 dark:text-gray-400 mb-6 font-medium">
                                     Your QR code has expired. Please generate a new one to complete your payment. If you did not pay, your items are still in your cart.
                                 </p>
                                 <button onclick="window.location.reload()"
-                                        class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-3 px-8 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl">
+                                        class="bg-gradient-to-r from-emerald-700 to-teal-800 hover:from-emerald-800 hover:to-teal-900 text-white font-bold py-3 px-8 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl">
                                     <svg class="w-5 h-5 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                                     </svg>
@@ -382,7 +382,7 @@
                                     </div>
                                 </div>
 
-                                <p class="text-sm text-gray-500 dark:text-gray-400 text-center mb-6">
+                                <p class="text-sm text-gray-700 dark:text-gray-400 text-center mb-6 font-medium">
                                     A confirmation email has been sent. You will be redirected shortly...
                                 </p>
 
@@ -392,7 +392,7 @@
                                         View Orders
                                     </a>
                                     <a href="{{ route('products.index') }}"
-                                       class="flex-1 text-center bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 shadow-lg">
+                                       class="flex-1 text-center bg-gradient-to-r from-emerald-700 to-teal-800 hover:from-emerald-800 hover:to-teal-900 text-white font-bold py-3 px-6 rounded-xl transition-all duration-200 shadow-lg">
                                         Continue Shopping
                                     </a>
                                 </div>
