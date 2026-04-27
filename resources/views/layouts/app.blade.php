@@ -167,6 +167,15 @@
                             }
                         @endphp
 
+                        <!-- Notifications (For authenticated users) -->
+                        @if ($isAuthenticated)
+                            @if ($showWebUser)
+                                <x-notifications-dropdown />
+                            @elseif ($showAdminUser)
+                                <x-admin-notifications-dropdown />
+                            @endif
+                        @endif
+
                         <!-- Cart (Only for customers and guests) -->
                         @if ($showWebUser || !$isAuthenticated)
                             <a href="{{ route('cart.index') }}"

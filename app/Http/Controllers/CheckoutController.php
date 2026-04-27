@@ -15,6 +15,7 @@ use App\Models\User;
 use App\Models\Setting;
 use App\Mail\OrderConfirmation;
 use App\Services\BakongService;
+use App\Services\NotificationService;
 
 class CheckoutController extends Controller
 {
@@ -276,12 +277,21 @@ class CheckoutController extends Controller
                         'notes' => 'Payment confirmed via Bakong KHQR',
                     ]);
 
+                    // Send payment success notification to customer
+                    NotificationService::notifyPaymentSuccess($order->user_id, $order);
+
+                    // Notify admins about new order
+                    NotificationService::notifyNewOrder($order);
+
                     // Deduct stock only after successful payment confirmation.
                     foreach ($order->items()->with('product')->get() as $orderItem) {
                         $product = $orderItem->product;
 
                         if ($product && $product->manage_stock) {
                             $product->decrement('stock_quantity', $orderItem->quantity);
+
+                            // Check for low stock
+                            NotificationService::notifyLowStock($product);
                         }
                     }
 

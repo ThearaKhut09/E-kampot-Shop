@@ -131,16 +131,18 @@
                             </div>
                         </div>
 
-                        <a href="{{ route('google.redirect') }}"
-                           class="w-full inline-flex items-center justify-center gap-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-semibold py-3 px-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200">
-                            <svg class="w-5 h-5" viewBox="0 0 24 24" aria-hidden="true">
-                                <path fill="#4285F4" d="M21.805 10.023h-9.18v3.955h5.263c-.227 1.27-.909 2.347-1.94 3.066v2.546h3.138c1.838-1.692 2.719-4.186 2.719-7.117 0-.58-.052-1.14-.146-1.676z"/>
-                                <path fill="#34A853" d="M12.625 22c2.625 0 4.826-.87 6.435-2.41l-3.138-2.546c-.87.583-1.984.93-3.297.93-2.534 0-4.68-1.71-5.447-4.01H3.93v2.62A9.724 9.724 0 0012.625 22z"/>
-                                <path fill="#FBBC05" d="M7.178 13.964a5.84 5.84 0 010-3.728v-2.62H3.93a9.724 9.724 0 000 8.968l3.248-2.62z"/>
-                                <path fill="#EA4335" d="M12.625 6.026c1.427 0 2.709.49 3.718 1.454l2.787-2.787C17.446 3.137 15.25 2 12.625 2 8.828 2 5.548 4.16 3.93 7.616l3.248 2.62c.767-2.3 2.913-4.21 5.447-4.21z"/>
-                            </svg>
-                            <span>{{ __('ui.continue_with_google') }}</span>
-                        </a>
+                        @if(config('services.google.client_id') && config('services.google.client_secret'))
+                            <a href="{{ route('google.redirect') }}"
+                               class="w-full inline-flex items-center justify-center gap-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-semibold py-3 px-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path fill="#4285F4" d="M21.805 10.023h-9.18v3.955h5.263c-.227 1.27-.909 2.347-1.94 3.066v2.546h3.138c1.838-1.692 2.719-4.186 2.719-7.117 0-.58-.052-1.14-.146-1.676z"/>
+                                    <path fill="#34A853" d="M12.625 22c2.625 0 4.826-.87 6.435-2.41l-3.138-2.546c-.87.583-1.984.93-3.297.93-2.534 0-4.68-1.71-5.447-4.01H3.93v2.62A9.724 9.724 0 0012.625 22z"/>
+                                    <path fill="#FBBC05" d="M7.178 13.964a5.84 5.84 0 010-3.728v-2.62H3.93a9.724 9.724 0 000 8.968l3.248-2.62z"/>
+                                    <path fill="#EA4335" d="M12.625 6.026c1.427 0 2.709.49 3.718 1.454l2.787-2.787C17.446 3.137 15.25 2 12.625 2 8.828 2 5.548 4.16 3.93 7.616l3.248 2.62c.767-2.3 2.913-4.21 5.447-4.21z"/>
+                                </svg>
+                                <span>{{ __('ui.continue_with_google') }}</span>
+                            </a>
+                        @endif
                     </form>
                 </div>
 

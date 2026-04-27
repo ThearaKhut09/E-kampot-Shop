@@ -10,6 +10,7 @@ use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\UserOrderController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminCategoryController;
@@ -20,6 +21,7 @@ use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\AdminAnalyticsController;
 use App\Http\Controllers\Admin\AdminBulkController;
 use App\Http\Controllers\Admin\AdminSystemController;
+use App\Http\Controllers\Admin\AdminNotificationController;
 use App\Http\Controllers\Admin\Auth\AdminAuthController;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -101,6 +103,12 @@ Route::middleware(['customer.auth'])->group(function () {
     Route::post('/products/{product}/reviews', [App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
     Route::patch('/reviews/{review}', [App\Http\Controllers\ReviewController::class, 'update'])->name('reviews.update');
     Route::delete('/reviews/{review}', [App\Http\Controllers\ReviewController::class, 'destroy'])->name('reviews.destroy');
+
+    // Notification Routes (Customer only)
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{notification}/mark-read', [NotificationController::class, 'markRead'])->name('notifications.mark-read');
+    Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllRead'])->name('notifications.mark-all-read');
+    Route::delete('/notifications/{notification}', [NotificationController::class, 'delete'])->name('notifications.delete');
 });
 
 // Admin Routes (Admin Only)
@@ -150,6 +158,12 @@ Route::middleware(['admin.auth'])->prefix('admin')->name('admin.')->group(functi
     // Settings Management
     Route::get('settings', [AdminSettingController::class, 'index'])->name('settings.index');
     Route::put('settings', [AdminSettingController::class, 'update'])->name('settings.update');
+
+    // Admin Notifications
+    Route::get('notifications', [AdminNotificationController::class, 'index'])->name('notifications.index');
+    Route::post('notifications/{notification}/mark-read', [AdminNotificationController::class, 'markRead'])->name('notifications.mark-read');
+    Route::post('notifications/mark-all-read', [AdminNotificationController::class, 'markAllRead'])->name('notifications.mark-all-read');
+    Route::delete('notifications/{notification}', [AdminNotificationController::class, 'delete'])->name('notifications.delete');
 });
 
 // Debug route to test AJAX responses

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 
 class AdminOrderController extends Controller
@@ -39,13 +40,16 @@ class AdminOrderController extends Controller
 
         $oldStatus = $order->status;
         $order->status = $request->status;
-        
+
         if ($request->has('payment_status')) {
             $order->payment_status = $request->payment_status;
         }
-        
+
         $order->notes = $request->notes;
         $order->save();
+
+        // Send notification about order status change
+        NotificationService::notifyOrderStatusChange($order, $oldStatus, $order->status);
 
         return redirect()->route('admin.orders.show', $order)
             ->with('success', "Order status updated from {$oldStatus} to {$request->status}.");

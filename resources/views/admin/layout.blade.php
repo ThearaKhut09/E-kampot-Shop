@@ -193,6 +193,9 @@
                             </svg>
                         </button>
 
+                        <!-- Notifications -->
+                        <x-admin-notifications-dropdown />
+
                         <!-- User Menu -->
                         <div class="relative" x-data="{ open: false }">
                             <button @click="open = !open"

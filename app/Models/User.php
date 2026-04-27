@@ -98,6 +98,22 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the notifications for the user (as a customer).
+     */
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(Notification::class, 'user_id')->whereNull('admin_id');
+    }
+
+    /**
+     * Get the notifications for the user (as an admin).
+     */
+    public function adminNotifications(): HasMany
+    {
+        return $this->hasMany(Notification::class, 'admin_id')->whereNull('user_id');
+    }
+
+    /**
      * Check if user is admin.
      */
     public function isAdmin(): bool
