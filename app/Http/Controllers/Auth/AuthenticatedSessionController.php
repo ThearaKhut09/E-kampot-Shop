@@ -27,7 +27,15 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
+        // Preserve locale before session regeneration
+        $locale = session('locale');
+
         session()->regenerate();
+
+        // Restore locale after session regeneration
+        if ($locale) {
+            session(['locale' => $locale]);
+        }
 
         // Check user role and redirect accordingly
         $user = Auth::user();

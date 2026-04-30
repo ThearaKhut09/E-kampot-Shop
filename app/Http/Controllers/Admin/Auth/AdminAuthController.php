@@ -42,7 +42,15 @@ class AdminAuthController extends Controller
 
         // Attempt to login using admin guard
         if (Auth::guard('admin')->attempt($credentials, $request->filled('remember'))) {
+            // Preserve locale before session regeneration
+            $locale = session('locale');
+
             $request->session()->regenerate();
+
+            // Restore locale after session regeneration
+            if ($locale) {
+                session(['locale' => $locale]);
+            }
 
             return redirect()->intended(route('admin.dashboard'));
         }

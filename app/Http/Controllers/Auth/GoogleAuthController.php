@@ -90,7 +90,16 @@ class GoogleAuthController extends Controller
         }
 
         Auth::guard('web')->login($user, true);
+
+        // Preserve locale before session regeneration
+        $locale = session('locale');
+
         session()->regenerate();
+
+        // Restore locale after session regeneration
+        if ($locale) {
+            session(['locale' => $locale]);
+        }
 
         if (method_exists($user, 'hasRole') && $user->hasRole('admin')) {
             return redirect()->intended(route('admin.dashboard', absolute: false));
