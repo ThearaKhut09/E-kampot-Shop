@@ -243,7 +243,7 @@
                                             class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                                             {{ __('ui.profile') }}
                                         </a>
-                                        <form method="POST" action="{{ route('logout') }}" onsubmit="return confirmLogoutPrompt(event, this);">
+                                        <form method="POST" action="{{ route('logout') }}" onsubmit="return refreshCsrfAndSubmit(event, this);">
                                             @csrf
                                             <button type="submit"
                                                 class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-b-xl">
@@ -255,7 +255,7 @@
                                             class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-t-xl">
                                             {{ __('ui.admin_dashboard') }}
                                         </a>
-                                        <form method="POST" action="{{ route('admin.logout') }}" onsubmit="return confirmLogoutPrompt(event, this);">
+                                        <form method="POST" action="{{ route('admin.logout') }}" onsubmit="return refreshCsrfAndSubmit(event, this);">
                                             @csrf
                                             <button type="submit"
                                                 class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-b-xl">
@@ -412,7 +412,7 @@
                                             class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
                                             {{ __('ui.profile') }}
                                         </a>
-                                        <form method="POST" action="{{ route('logout') }}" onsubmit="return confirmLogoutPrompt(event, this);">
+                                        <form method="POST" action="{{ route('logout') }}" onsubmit="return refreshCsrfAndSubmit(event, this);">
                                             @csrf
                                             <button type="submit"
                                                 class="block w-full text-left pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
@@ -424,7 +424,7 @@
                                             class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">
                                             {{ __('ui.admin_dashboard') }}
                                         </a>
-                                        <form method="POST" action="{{ route('admin.logout') }}" onsubmit="return confirmLogoutPrompt(event, this);">
+                                        <form method="POST" action="{{ route('admin.logout') }}" onsubmit="return refreshCsrfAndSubmit(event, this);">
                                             @csrf
                                             <button type="submit"
                                                 class="block w-full text-left pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors">

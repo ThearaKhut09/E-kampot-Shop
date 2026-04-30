@@ -36,6 +36,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
 
 // Public Routes
+Route::get('/csrf-token', function () {
+    return response()->json(['token' => csrf_token()]);
+})->name('csrf.token');
+
 Route::post('/language/{locale}', [LanguageController::class, 'switch'])->name('language.switch');
 Route::post('/chatbot/message', [ChatbotController::class, 'message'])
     ->middleware('throttle:20,1')

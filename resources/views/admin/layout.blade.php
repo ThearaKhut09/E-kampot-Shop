@@ -209,7 +209,7 @@
 
                             <div x-show="open" @click.away="open = false"
                                 class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-soft border border-gray-100 dark:border-gray-800 py-1 z-50">
-                                <form method="POST" action="{{ route('admin.logout') }}" onsubmit="return confirmAdminLogout(event, this);">
+                                <form method="POST" action="{{ route('admin.logout') }}" onsubmit="return refreshCsrfAndSubmit(event, this);">
                                     @csrf
                                     <button type="submit"
                                         class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">

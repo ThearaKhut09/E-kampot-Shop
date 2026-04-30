@@ -44,12 +44,12 @@
                         </x-dropdown-link>
 
                         <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
+                        <form method="POST" action="{{ route('logout') }}" onsubmit="return refreshCsrfAndSubmit(event, this);">
                             @csrf
 
                             <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault();
-                                                this.closest('form').submit();">
+                                                refreshCsrfAndSubmit(event, this.closest('form'));">
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
                         </form>
@@ -90,12 +90,12 @@
                 </x-responsive-nav-link>
 
                 <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}">
+                <form method="POST" action="{{ route('logout') }}" onsubmit="return refreshCsrfAndSubmit(event, this);">
                     @csrf
 
                     <x-responsive-nav-link :href="route('logout')"
                             onclick="event.preventDefault();
-                                        this.closest('form').submit();">
+                                        refreshCsrfAndSubmit(event, this.closest('form'));">
                         {{ __('Log Out') }}
                     </x-responsive-nav-link>
                 </form>

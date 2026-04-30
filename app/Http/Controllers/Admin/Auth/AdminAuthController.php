@@ -68,9 +68,9 @@ class AdminAuthController extends Controller
         // Logout from admin guard only
         Auth::guard('admin')->logout();
 
-        // Don't invalidate session - just regenerate token for security
-        // This allows web user to remain logged in if they are
-        $request->session()->regenerateToken();
+        // Keep the same session/token to avoid CSRF mismatch in already-open tabs.
+        // This is important when admin and user are logged in from different pages.
+        $request->session()->save();
 
         return redirect()->route('admin.login');
     }

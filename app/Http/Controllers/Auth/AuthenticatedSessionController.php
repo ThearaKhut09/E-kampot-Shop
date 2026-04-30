@@ -61,9 +61,9 @@ class AuthenticatedSessionController extends Controller
         // Logout from web guard only
         Auth::guard('web')->logout();
 
-        // Don't invalidate session - just regenerate token for security
-        // This allows admin to remain logged in if they are
-        $request->session()->regenerateToken();
+        // Keep the same session/token to avoid CSRF mismatch in already-open tabs.
+        // This is important when admin and user are logged in from different pages.
+        $request->session()->save();
 
         return redirect('/');
     }
