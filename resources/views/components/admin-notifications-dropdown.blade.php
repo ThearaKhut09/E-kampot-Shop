@@ -12,7 +12,7 @@
         </svg>
 
         @if($unreadCount > 0)
-            <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-500 rounded-full shadow-lg animate-pulse">
+            <span class="absolute -top-1 -right-1 inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold leading-none text-white shadow-sm">
                 {{ $unreadCount > 99 ? '99+' : $unreadCount }}
             </span>
         @endif
