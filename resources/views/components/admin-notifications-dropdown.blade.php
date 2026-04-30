@@ -18,7 +18,7 @@
         @endif
     </button>
 
-    <div class="absolute right-0 z-50 w-96 mt-2 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden transition-all duration-200"
+    <div x-cloak class="absolute right-0 z-50 w-96 mt-2 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden transition-all duration-200"
         :class="{ 'opacity-0 invisible scale-95': !open, 'opacity-100 visible scale-100': open }"
         style="transform-origin: top right;">
 

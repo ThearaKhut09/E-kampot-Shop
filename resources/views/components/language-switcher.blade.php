@@ -47,6 +47,7 @@
     </button>
 
     <div
+        x-cloak
         x-show="open"
         @click.away="open = false"
         @keydown.escape.window="open = false"

@@ -20,6 +20,11 @@
 
     <!-- Alpine.js -->
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Hide Alpine elements until ready -->
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
 </head>
 
 <body class="font-sans antialiased bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
@@ -61,7 +66,7 @@
                                             d="M19 9l-7 7-7-7"></path>
                                     </svg>
                                 </button>
-                                <div x-show="open" @click.away="open = false"
+                                <div x-cloak x-show="open" @click.away="open = false"
                                     x-transition:enter="transition ease-out duration-200"
                                     x-transition:enter-start="opacity-0 scale-95"
                                     x-transition:enter-end="opacity-100 scale-100"
@@ -227,7 +232,7 @@
                                         @endif
                                     </div>
                                 </button>
-                                <div x-show="open" @click.away="open = false" x-transition
+                                <div x-cloak x-show="open" @click.away="open = false" x-transition
                                     class="absolute right-0 mt-2 w-52 bg-white dark:bg-gray-800 rounded-xl shadow-soft border border-gray-100 dark:border-gray-800 z-50">
                                     @if ($showWebUser)
                                         <a href="{{ route('dashboard') }}"
@@ -310,7 +315,7 @@
                                         d="M19 9l-7 7-7-7"></path>
                                 </svg>
                             </button>
-                            <div x-show="categoriesOpen" x-transition class="pl-6 space-y-1">
+                            <div x-cloak x-show="categoriesOpen" x-transition class="pl-6 space-y-1">
                                 @php
                                     $mobileCategories = \App\Models\Category::active()
                                         ->parents()
