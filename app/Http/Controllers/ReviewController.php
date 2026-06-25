@@ -109,7 +109,7 @@ class ReviewController extends Controller
         // Update product average rating
         $review->product->updateAverageRating();
 
-        if ($request->ajax()) {
+        if ($request->ajax() || $request->expectsJson()) {
             return response()->json([
                 'success' => true,
                 'message' => 'Review updated successfully.',

@@ -1,0 +1,388 @@
+﻿
+  Dropping all tables ............................................ 7.06ms DONE
+
+   INFO  Preparing database.  
+
+  Creating migration table ....................................... 9.44ms DONE
+
+   INFO  Running migrations.  
+
+  0001_01_01_000000_create_users_table .......................... 18.35ms DONE
+  0001_01_01_000001_create_cache_table ........................... 5.20ms DONE
+  0001_01_01_000002_create_jobs_table ........................... 12.75ms DONE
+  2025_04_27_000000_create_notifications_table .................. 11.85ms DONE
+  2025_06_26_010558_create_permission_tables .................... 31.99ms DONE
+  2025_06_26_010913_create_categories_table ..................... 14.96ms DONE
+  2025_06_26_011000_create_products_table ....................... 16.42ms DONE
+  2025_06_26_011133_create_orders_table ......................... 16.06ms DONE
+  2025_06_26_011233_create_order_items_table ..................... 9.69ms DONE
+  2025_06_26_011314_create_cart_table ............................ 8.86ms DONE
+  2025_06_26_011331_create_reviews_table ......................... 8.34ms DONE
+  2025_06_26_011346_create_wishlists_table ....................... 5.90ms DONE
+  2025_06_26_011355_create_settings_table ........................ 8.30ms DONE
+  2025_06_26_011455_create_product_categories_table .............. 5.79ms DONE
+  2025_06_26_011734_add_fields_to_users_table ................... 35.75ms DONE
+  2025_06_26_080059_add_admin_fields_to_products_table .......... 25.18ms DONE
+  2025_06_26_162824_add_columns_to_contacts_table ................ 0.15ms DONE
+  2025_07_01_070159_add_name_fields_to_users_table ............... 9.41ms DONE
+  2025_07_05_000001_remove_sale_price_from_products_table ........ 6.63ms DONE
+  2025_07_14_151955_remove_sku_from_products_table .............. 10.71ms DONE
+  2025_07_18_150915_create_admin_sessions_table ................. 13.82ms DONE
+  2025_08_05_203757_add_title_to_products_table .................. 5.07ms DONE
+  2026_03_26_120000_add_google_id_to_users_table ................ 12.15ms DONE
+  2026_04_10_add_khqr_fields_to_orders_table .................... 16.08ms DONE
+
+
+   INFO  Seeding database.  
+
+  Database\Seeders\RoleSeeder ........................................ RUNNING  
+  Database\Seeders\RoleSeeder .................................... 807 ms DONE  
+
+  Database\Seeders\AdminUserSeeder ................................... RUNNING  
+Admin user created: admin@ekampot.com / password
+Customer user created: customer@ekampot.com / password
+  Database\Seeders\AdminUserSeeder ............................... 615 ms DONE  
+
+  Database\Seeders\CategorySeeder .................................... RUNNING  
+  Database\Seeders\CategorySeeder ................................ 279 ms DONE  
+
+  Database\Seeders\SettingSeeder ..................................... RUNNING  
+  Database\Seeders\SettingSeeder .................................. 50 ms DONE  
+
+  Database\Seeders\ProductSeeder ..................................... RUNNING  
+  Database\Seeders\ProductSeeder ................................. 109 ms DONE  
+
+
+   PASS  Tests\Unit\ExampleTest
+  Γ£ô that true is true
+
+   PASS  Tests\Feature\Auth\AuthenticationTest
+  Γ£ô login screen can be rendered                                         0.35s  
+  Γ£ô users can authenticate using the login screen                        0.07s  
+  Γ£ô users can not authenticate with invalid password                     0.22s  
+  Γ£ô users can logout                                                     0.03s  
+
+   PASS  Tests\Feature\Auth\EmailVerificationTest
+  Γ£ô email verification screen can be rendered                            0.04s  
+  Γ£ô email can be verified                                                0.04s  
+  Γ£ô email is not verified with invalid hash                              0.03s  
+
+   PASS  Tests\Feature\Auth\PasswordConfirmationTest
+  Γ£ô confirm password screen can be rendered                              0.03s  
+  Γ£ô password can be confirmed                                            0.02s  
+  Γ£ô password is not confirmed with invalid password                      0.22s  
+
+   PASS  Tests\Feature\Auth\PasswordResetTest
+  Γ£ô reset password link screen can be rendered                           0.02s  
+  Γ£ô reset password link can be requested                                 0.22s  
+  Γ£ô reset password screen can be rendered                                0.22s  
+  Γ£ô password can be reset with valid token                               0.23s  
+
+   PASS  Tests\Feature\Auth\PasswordUpdateTest
+  Γ£ô password can be updated                                              0.03s  
+  Γ£ô correct password must be provided to update password                 0.02s  
+
+   PASS  Tests\Feature\Auth\RegistrationTest
+  Γ£ô registration screen can be rendered                                  0.03s  
+  Γ£ô new users can register                                               0.03s  
+
+   FAIL  Tests\Feature\ExampleTest
+  Γ¿» the application returns a successful response                        0.75s  
+
+   FAIL  Tests\Feature\ProfileTest
+  Γ¿» profile page is displayed                                            0.02s  
+  Γ¿» profile information can be updated                                   0.02s  
+  Γ¿» email verification status is unchanged when the email address is unΓÇª 0.02s  
+  Γ¿» user can delete their account                                        0.02s  
+  Γ¿» correct password must be provided to delete account                  0.02s  
+  ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ  
+   FAILED  Tests\Feature\ExampleTest > the application returns a successfulΓÇª    
+  Expected response status code [200] but received 500.
+Failed asserting that 500 is identical to 200.
+
+The following exception occurred during the last request:
+
+PDOException: SQLSTATE[HY000]: General error: 1 no such table: settings in D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Database\Connection.php:404
+Stack trace:
+#0 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Database\Connection.php(404): PDO->prepare()
+#1 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Database\Connection.php(809): Illuminate\Database\Connection->{closure:Illuminate\Database\Connection::select():395}()
+#2 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Database\Connection.php(776): Illuminate\Database\Connection->runQueryCallback()
+#3 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Database\Connection.php(395): Illuminate\Database\Connection->run()
+#4 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php(3131): Illuminate\Database\Connection->select()
+#5 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php(3116): Illuminate\Database\Query\Builder->runSelect()
+#6 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php(3706): Illuminate\Database\Query\Builder->{closure:Illuminate\Database\Query\Builder::get():3115}()
+#7 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php(3115): Illuminate\Database\Query\Builder->onceWithColumns()
+#8 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php(872): Illuminate\Database\Query\Builder->get()
+#9 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php(854): Illuminate\Database\Eloquent\Builder->getModels()
+#10 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Database\Concerns\BuildsQueries.php(366): Illuminate\Database\Eloquent\Builder->get()
+#11 D:\Website\E-kampot Shop\app\Models\Setting.php(24): Illuminate\Database\Eloquent\Builder->first()
+#12 D:\Website\E-kampot Shop\app\Http\Controllers\HomeController.php(18): App\Models\Setting::get()
+#13 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Routing\Controller.php(54): App\Http\Controllers\HomeController->index()
+#14 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(43): Illuminate\Routing\Controller->callAction()
+#15 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Routing\Route.php(265): Illuminate\Routing\ControllerDispatcher->dispatch()
+#16 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Routing\Route.php(211): Illuminate\Routing\Route->runController()
+#17 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Routing\Router.php(808): Illuminate\Routing\Route->run()
+#18 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(169): Illuminate\Routing\Router->{closure:Illuminate\Routing\Router::runRouteWithinStack():807}()
+#19 D:\Website\E-kampot Shop\app\Http\Middleware\AdminSessionManager.php(31): Illuminate\Pipeline\Pipeline->{closure:Illuminate\Pipeline\Pipeline::prepareDestination():167}()
+#20 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): App\Http\Middleware\AdminSessionManager->handle()
+#21 D:\Website\E-kampot Shop\app\Http\Middleware\SetLocale.php(29): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#22 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): App\Http\Middleware\SetLocale->handle()
+#23 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Routing\Middleware\SubstituteBindings.php(50): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#24 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): Illuminate\Routing\Middleware\SubstituteBindings->handle()
+#25 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken.php(87): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#26 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): Illuminate\Foundation\Http\Middleware\VerifyCsrfToken->handle()
+#27 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\View\Middleware\ShareErrorsFromSession.php(48): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#28 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): Illuminate\View\Middleware\ShareErrorsFromSession->handle()
+#29 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Session\Middleware\StartSession.php(120): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#30 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Session\Middleware\StartSession.php(63): Illuminate\Session\Middleware\StartSession->handleStatefulRequest()
+#31 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): Illuminate\Session\Middleware\StartSession->handle()
+#32 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse.php(36): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#33 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse->handle()
+#34 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Cookie\Middleware\EncryptCookies.php(74): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#35 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): Illuminate\Cookie\Middleware\EncryptCookies->handle()
+#36 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(126): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#37 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Routing\Router.php(807): Illuminate\Pipeline\Pipeline->then()
+#38 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Routing\Router.php(786): Illuminate\Routing\Router->runRouteWithinStack()
+#39 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Routing\Router.php(750): Illuminate\Routing\Router->runRoute()
+#40 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Routing\Router.php(739): Illuminate\Routing\Router->dispatchToRoute()
+#41 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(200): Illuminate\Routing\Router->dispatch()
+#42 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(169): Illuminate\Foundation\Http\Kernel->{closure:Illuminate\Foundation\Http\Kernel::dispatchToRouter():197}()
+#43 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TransformsRequest.php(21): Illuminate\Pipeline\Pipeline->{closure:Illuminate\Pipeline\Pipeline::prepareDestination():167}()
+#44 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull.php(31): Illuminate\Foundation\Http\Middleware\TransformsRequest->handle()
+#45 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull->handle()
+#46 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TransformsRequest.php(21): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#47 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TrimStrings.php(51): Illuminate\Foundation\Http\Middleware\TransformsRequest->handle()
+#48 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): Illuminate\Foundation\Http\Middleware\TrimStrings->handle()
+#49 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Http\Middleware\ValidatePostSize.php(27): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#50 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): Illuminate\Http\Middleware\ValidatePostSize->handle()
+#51 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance.php(109): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#52 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance->handle()
+#53 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Http\Middleware\HandleCors.php(48): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#54 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): Illuminate\Http\Middleware\HandleCors->handle()
+#55 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Http\Middleware\TrustProxies.php(58): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#56 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): Illuminate\Http\Middleware\TrustProxies->handle()
+#57 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks.php(22): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#58 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks->handle()
+#59 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Http\Middleware\ValidatePathEncoding.php(26): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#60 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): Illuminate\Http\Middleware\ValidatePathEncoding->handle()
+#61 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(126): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#62 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(175): Illuminate\Pipeline\Pipeline->then()
+#63 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(144): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter()
+#64 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Foundation\Testing\Concerns\MakesHttpRequests.php(607): Illuminate\Foundation\Http\Kernel->handle()
+#65 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Foundation\Testing\Concerns\MakesHttpRequests.php(368): Illuminate\Foundation\Testing\TestCase->call()
+#66 D:\Website\E-kampot Shop\tests\Feature\ExampleTest.php(15): Illuminate\Foundation\Testing\TestCase->get()
+#67 D:\Website\E-kampot Shop\vendor\phpunit\phpunit\src\Framework\TestCase.php(1656): Tests\Feature\ExampleTest->test_the_application_returns_a_successful_response()
+#68 D:\Website\E-kampot Shop\vendor\phpunit\phpunit\src\Framework\TestCase.php(514): PHPUnit\Framework\TestCase->runTest()
+#69 D:\Website\E-kampot Shop\vendor\phpunit\phpunit\src\Framework\TestRunner\TestRunner.php(87): PHPUnit\Framework\TestCase->runBare()
+#70 D:\Website\E-kampot Shop\vendor\phpunit\phpunit\src\Framework\TestCase.php(361): PHPUnit\Framework\TestRunner->run()
+#71 D:\Website\E-kampot Shop\vendor\phpunit\phpunit\src\Framework\TestSuite.php(369): PHPUnit\Framework\TestCase->run()
+#72 D:\Website\E-kampot Shop\vendor\phpunit\phpunit\src\Framework\TestSuite.php(369): PHPUnit\Framework\TestSuite->run()
+#73 D:\Website\E-kampot Shop\vendor\phpunit\phpunit\src\Framework\TestSuite.php(369): PHPUnit\Framework\TestSuite->run()
+#74 D:\Website\E-kampot Shop\vendor\phpunit\phpunit\src\TextUI\TestRunner.php(64): PHPUnit\Framework\TestSuite->run()
+#75 D:\Website\E-kampot Shop\vendor\phpunit\phpunit\src\TextUI\Application.php(210): PHPUnit\TextUI\TestRunner->run()
+#76 D:\Website\E-kampot Shop\vendor\phpunit\phpunit\phpunit(104): PHPUnit\TextUI\Application->run()
+#77 {main}
+
+Next Illuminate\Database\QueryException: SQLSTATE[HY000]: General error: 1 no such table: settings (Connection: sqlite, SQL: select * from "settings" where "key" = featured_products_count limit 1) in D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Database\Connection.php:822
+Stack trace:
+#0 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Database\Connection.php(776): Illuminate\Database\Connection->runQueryCallback()
+#1 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Database\Connection.php(395): Illuminate\Database\Connection->run()
+#2 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php(3131): Illuminate\Database\Connection->select()
+#3 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php(3116): Illuminate\Database\Query\Builder->runSelect()
+#4 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php(3706): Illuminate\Database\Query\Builder->{closure:Illuminate\Database\Query\Builder::get():3115}()
+#5 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php(3115): Illuminate\Database\Query\Builder->onceWithColumns()
+#6 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php(872): Illuminate\Database\Query\Builder->get()
+#7 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php(854): Illuminate\Database\Eloquent\Builder->getModels()
+#8 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Database\Concerns\BuildsQueries.php(366): Illuminate\Database\Eloquent\Builder->get()
+#9 D:\Website\E-kampot Shop\app\Models\Setting.php(24): Illuminate\Database\Eloquent\Builder->first()
+#10 D:\Website\E-kampot Shop\app\Http\Controllers\HomeController.php(18): App\Models\Setting::get()
+#11 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Routing\Controller.php(54): App\Http\Controllers\HomeController->index()
+#12 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(43): Illuminate\Routing\Controller->callAction()
+#13 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Routing\Route.php(265): Illuminate\Routing\ControllerDispatcher->dispatch()
+#14 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Routing\Route.php(211): Illuminate\Routing\Route->runController()
+#15 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Routing\Router.php(808): Illuminate\Routing\Route->run()
+#16 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(169): Illuminate\Routing\Router->{closure:Illuminate\Routing\Router::runRouteWithinStack():807}()
+#17 D:\Website\E-kampot Shop\app\Http\Middleware\AdminSessionManager.php(31): Illuminate\Pipeline\Pipeline->{closure:Illuminate\Pipeline\Pipeline::prepareDestination():167}()
+#18 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): App\Http\Middleware\AdminSessionManager->handle()
+#19 D:\Website\E-kampot Shop\app\Http\Middleware\SetLocale.php(29): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#20 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): App\Http\Middleware\SetLocale->handle()
+#21 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Routing\Middleware\SubstituteBindings.php(50): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#22 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): Illuminate\Routing\Middleware\SubstituteBindings->handle()
+#23 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken.php(87): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#24 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): Illuminate\Foundation\Http\Middleware\VerifyCsrfToken->handle()
+#25 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\View\Middleware\ShareErrorsFromSession.php(48): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#26 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): Illuminate\View\Middleware\ShareErrorsFromSession->handle()
+#27 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Session\Middleware\StartSession.php(120): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#28 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Session\Middleware\StartSession.php(63): Illuminate\Session\Middleware\StartSession->handleStatefulRequest()
+#29 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): Illuminate\Session\Middleware\StartSession->handle()
+#30 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse.php(36): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#31 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse->handle()
+#32 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Cookie\Middleware\EncryptCookies.php(74): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#33 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): Illuminate\Cookie\Middleware\EncryptCookies->handle()
+#34 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(126): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#35 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Routing\Router.php(807): Illuminate\Pipeline\Pipeline->then()
+#36 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Routing\Router.php(786): Illuminate\Routing\Router->runRouteWithinStack()
+#37 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Routing\Router.php(750): Illuminate\Routing\Router->runRoute()
+#38 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Routing\Router.php(739): Illuminate\Routing\Router->dispatchToRoute()
+#39 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(200): Illuminate\Routing\Router->dispatch()
+#40 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(169): Illuminate\Foundation\Http\Kernel->{closure:Illuminate\Foundation\Http\Kernel::dispatchToRouter():197}()
+#41 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TransformsRequest.php(21): Illuminate\Pipeline\Pipeline->{closure:Illuminate\Pipeline\Pipeline::prepareDestination():167}()
+#42 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull.php(31): Illuminate\Foundation\Http\Middleware\TransformsRequest->handle()
+#43 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull->handle()
+#44 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TransformsRequest.php(21): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#45 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TrimStrings.php(51): Illuminate\Foundation\Http\Middleware\TransformsRequest->handle()
+#46 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): Illuminate\Foundation\Http\Middleware\TrimStrings->handle()
+#47 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Http\Middleware\ValidatePostSize.php(27): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#48 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): Illuminate\Http\Middleware\ValidatePostSize->handle()
+#49 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance.php(109): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#50 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance->handle()
+#51 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Http\Middleware\HandleCors.php(48): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#52 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): Illuminate\Http\Middleware\HandleCors->handle()
+#53 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Http\Middleware\TrustProxies.php(58): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#54 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): Illuminate\Http\Middleware\TrustProxies->handle()
+#55 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks.php(22): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#56 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks->handle()
+#57 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Http\Middleware\ValidatePathEncoding.php(26): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#58 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(208): Illuminate\Http\Middleware\ValidatePathEncoding->handle()
+#59 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(126): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():183}:184}()
+#60 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(175): Illuminate\Pipeline\Pipeline->then()
+#61 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(144): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter()
+#62 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Foundation\Testing\Concerns\MakesHttpRequests.php(607): Illuminate\Foundation\Http\Kernel->handle()
+#63 D:\Website\E-kampot Shop\vendor\laravel\framework\src\Illuminate\Foundation\Testing\Concerns\MakesHttpRequests.php(368): Illuminate\Foundation\Testing\TestCase->call()
+#64 D:\Website\E-kampot Shop\tests\Feature\ExampleTest.php(15): Illuminate\Foundation\Testing\TestCase->get()
+#65 D:\Website\E-kampot Shop\vendor\phpunit\phpunit\src\Framework\TestCase.php(1656): Tests\Feature\ExampleTest->test_the_application_returns_a_successful_response()
+#66 D:\Website\E-kampot Shop\vendor\phpunit\phpunit\src\Framework\TestCase.php(514): PHPUnit\Framework\TestCase->runTest()
+#67 D:\Website\E-kampot Shop\vendor\phpunit\phpunit\src\Framework\TestRunner\TestRunner.php(87): PHPUnit\Framework\TestCase->runBare()
+#68 D:\Website\E-kampot Shop\vendor\phpunit\phpunit\src\Framework\TestCase.php(361): PHPUnit\Framework\TestRunner->run()
+#69 D:\Website\E-kampot Shop\vendor\phpunit\phpunit\src\Framework\TestSuite.php(369): PHPUnit\Framework\TestCase->run()
+#70 D:\Website\E-kampot Shop\vendor\phpunit\phpunit\src\Framework\TestSuite.php(369): PHPUnit\Framework\TestSuite->run()
+#71 D:\Website\E-kampot Shop\vendor\phpunit\phpunit\src\Framework\TestSuite.php(369): PHPUnit\Framework\TestSuite->run()
+#72 D:\Website\E-kampot Shop\vendor\phpunit\phpunit\src\TextUI\TestRunner.php(64): PHPUnit\Framework\TestSuite->run()
+#73 D:\Website\E-kampot Shop\vendor\phpunit\phpunit\src\TextUI\Application.php(210): PHPUnit\TextUI\TestRunner->run()
+#74 D:\Website\E-kampot Shop\vendor\phpunit\phpunit\phpunit(104): PHPUnit\TextUI\Application->run()
+#75 {main}
+
+----------------------------------------------------------------------------------
+
+SQLSTATE[HY000]: General error: 1 no such table: settings (Connection: sqlite, SQL: select * from "settings" where "key" = featured_products_count limit 1)
+
+  at tests\Feature\ExampleTest.php:17
+     13Γûò     public function test_the_application_returns_a_successful_response(): void
+     14Γûò     {
+     15Γûò         $response = $this->get('/');
+     16Γûò 
+  Γ₧£  17Γûò         $response->assertStatus(200);
+     18Γûò     }
+     19Γûò }
+     20Γûò
+
+  ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ  
+   FAILED  Tests\Feature\ProfileTest > profile page is displayed                
+  Expected response status code [200] but received 302.
+Failed asserting that 302 is identical to 200.
+
+The following errors occurred during the last request:
+
+Access denied.
+
+  at tests\Feature\ProfileTest.php:21
+     17Γûò         $response = $this
+     18Γûò             ->actingAs($user)
+     19Γûò             ->get('/profile');
+     20Γûò 
+  Γ₧£  21Γûò         $response->assertOk();
+     22Γûò     }
+     23Γûò 
+     24Γûò     public function test_profile_information_can_be_updated(): void
+     25Γûò     {
+
+  ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ  
+   FAILED  Tests\Feature\ProfileTest > profile information can be updated       
+  Session has unexpected errors: 
+
+{
+    "default": [
+        "Access denied."
+    ]
+}
+Failed asserting that true is false.
+
+  at tests\Feature\ProfileTest.php:36
+     32Γûò                 'email' => 'test@example.com',
+     33Γûò             ]);
+     34Γûò 
+     35Γûò         $response
+  Γ₧£  36Γûò             ->assertSessionHasNoErrors()
+     37Γûò             ->assertRedirect('/profile');
+     38Γûò 
+     39Γûò         $user->refresh();
+     40Γûò
+
+  ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ  
+   FAILED  Tests\Feature\ProfileTest > email verification status is unchangeΓÇª   
+  Session has unexpected errors: 
+
+{
+    "default": [
+        "Access denied."
+    ]
+}
+Failed asserting that true is false.
+
+  at tests\Feature\ProfileTest.php:58
+     54Γûò                 'email' => $user->email,
+     55Γûò             ]);
+     56Γûò 
+     57Γûò         $response
+  Γ₧£  58Γûò             ->assertSessionHasNoErrors()
+     59Γûò             ->assertRedirect('/profile');
+     60Γûò 
+     61Γûò         $this->assertNotNull($user->refresh()->email_verified_at);
+     62Γûò     }
+
+  ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ  
+   FAILED  Tests\Feature\ProfileTest > user can delete their account            
+  Session has unexpected errors: 
+
+{
+    "default": [
+        "Access denied."
+    ]
+}
+Failed asserting that true is false.
+
+  at tests\Feature\ProfileTest.php:75
+     71Γûò                 'password' => 'password',
+     72Γûò             ]);
+     73Γûò 
+     74Γûò         $response
+  Γ₧£  75Γûò             ->assertSessionHasNoErrors()
+     76Γûò             ->assertRedirect('/');
+     77Γûò 
+     78Γûò         $this->assertGuest();
+     79Γûò         $this->assertNull($user->fresh());
+
+  ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ  
+   FAILED  Tests\Feature\ProfileTest > correct password must be provided toΓÇª    
+  Session missing error: password
+Failed asserting that false is true.
+
+The following errors occurred during the last request:
+
+Access denied.
+
+  at tests\Feature\ProfileTest.php:94
+     90Γûò                 'password' => 'wrong-password',
+     91Γûò             ]);
+     92Γûò 
+     93Γûò         $response
+  Γ₧£  94Γûò             ->assertSessionHasErrorsIn('userDeletion', 'password')
+     95Γûò             ->assertRedirect('/profile');
+     96Γûò 
+     97Γûò         $this->assertNotNull($user->fresh());
+     98Γûò     }
+
+
+  Tests:    6 failed, 19 passed (46 assertions)
+  Duration: 2.88s
+

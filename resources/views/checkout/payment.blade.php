@@ -365,20 +365,20 @@
                     <!-- STEP 4: Success State (Hidden initially) -->
                     <div id="step-success" class="hidden">
                         <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-xl border border-emerald-200/60 dark:border-emerald-700/60 overflow-hidden">
-                            <div class="bg-gradient-to-r from-emerald-500 to-green-600 p-8 text-center">
-                                <div class="w-20 h-20 mx-auto bg-white/20 rounded-full flex items-center justify-center mb-4 animate-bounce">
-                                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="bg-gradient-to-r from-emerald-500 to-green-600 p-8 text-center" style="background: linear-gradient(to right, #10b981, #16a34a); padding: 2rem; text-align: center;">
+                                <div class="w-20 h-20 mx-auto bg-white/20 rounded-full flex items-center justify-center mb-4 animate-bounce" style="width: 5rem; height: 5rem; margin: 0 auto 1rem; background: rgba(255,255,255,0.2); border-radius: 9999px; display: flex; align-items: center; justify-content: center;">
+                                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 2.5rem; height: 2.5rem; color: white;">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
                                     </svg>
                                 </div>
-                                <h2 class="text-2xl font-bold text-white mb-1">Payment Successful!</h2>
-                                <p class="text-emerald-100">Your order has been confirmed</p>
+                                <h2 class="text-2xl font-bold text-white mb-1" style="font-size: 1.5rem; font-weight: 700; color: white; margin-bottom: 0.25rem;">Payment Successful!</h2>
+                                <p class="text-emerald-100" style="color: #d1fae5;">Your order has been confirmed</p>
                             </div>
                             <div class="p-8">
-                                <div class="bg-emerald-50 dark:bg-emerald-900/20 rounded-xl p-6 mb-6 space-y-3">
+                                <div class="bg-emerald-50 dark:bg-emerald-900/20 rounded-xl p-6 mb-6 space-y-3" style="background: #ecfdf5; border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1.5rem;">
                                     <div class="flex justify-between items-center">
                                         <span class="text-gray-600 dark:text-gray-400 text-sm font-medium">Order Number</span>
-                                        <span id="success-order-number" class="font-mono font-bold text-emerald-600 dark:text-emerald-400">—</span>
+                                        <span id="success-order-number" class="font-mono font-bold text-emerald-600 dark:text-emerald-400" style="font-family: monospace; font-weight: 700; color: #059669;">—</span>
                                     </div>
                                     <div class="flex justify-between items-center">
                                         <span class="text-gray-600 dark:text-gray-400 text-sm font-medium">Amount Paid</span>
@@ -396,11 +396,13 @@
 
                                 <div class="flex flex-col sm:flex-row gap-3">
                                     <a href="{{ route('orders.index') }}"
-                                       class="flex-1 text-center bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 font-semibold py-3 px-6 rounded-xl hover:bg-emerald-100 dark:hover:bg-emerald-900/40 transition-colors">
+                                       class="flex-1 text-center bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 font-semibold py-3 px-6 rounded-xl hover:bg-emerald-100 dark:hover:bg-emerald-900/40 transition-colors"
+                                       style="flex: 1; text-align: center; background: #ecfdf5; color: #059669; font-weight: 600; padding: 0.75rem 1.5rem; border-radius: 0.75rem;">
                                         View Orders
                                     </a>
                                     <a href="{{ route('products.index') }}"
-                                       class="flex-1 text-center bg-gradient-to-r from-emerald-700 to-teal-800 hover:from-emerald-800 hover:to-teal-900 text-white font-bold py-3 px-6 rounded-xl transition-all duration-200 shadow-lg">
+                                       class="flex-1 text-center bg-gradient-to-r from-emerald-700 to-teal-800 hover:from-emerald-800 hover:to-teal-900 text-white font-bold py-3 px-6 rounded-xl transition-all duration-200 shadow-lg"
+                                       style="flex: 1; text-align: center; background: linear-gradient(to right, #047857, #115e59); color: white; font-weight: 700; padding: 0.75rem 1.5rem; border-radius: 0.75rem;">
                                         Continue Shopping
                                     </a>
                                 </div>
